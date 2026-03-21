@@ -16,7 +16,7 @@ const PageLayout = ({ children }: { children: JSXElement }) => {
       </header>
       {children}
       <footer class="mt-8 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} Vike. All rights reserved.
+        The Footer
       </footer>
     </div>
   )
