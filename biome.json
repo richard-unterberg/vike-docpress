@@ -1,4 +1,5 @@
 {
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
     "includes": [
       "**",
@@ -12,22 +13,34 @@
       "!**/.DS_Store"
     ]
   },
-  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "formatter": {
+    "indentWidth": 2,
     "indentStyle": "space"
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "lineWidth": 120,
+      "quoteStyle": "single",
+      "trailingCommas": "all"
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
-    },
-    "domains": {
-      "solid": "recommended"
+      "recommended": false,
+      "style": {
+        "useNodejsImportProtocol": "error"
+      }
     }
   },
   "vcs": {
     "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
+    "clientKind": "git"
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
   }
 }

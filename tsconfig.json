@@ -17,7 +17,16 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "jsxImportSource": "solid-js"
+    "jsxImportSource": "solid-js",
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/pages/*": ["pages/*"],
+      "@/assets/*": ["assets/*"],
+      "@/server/*": ["server/*"],
+      "@/lib/*": ["lib/*"],
+      "@/root/*": ["./*"]
+    }
   },
   "exclude": [
     "dist"

@@ -1,2 +1,9 @@
-onlyBuiltDependencies:
-  - "@biomejs/biome"
+# packages:
+#   - 'packages/*'
+#   - 'docs/'
+#   - 'packages/create-vike-core/boilerplate-*'
+#   - 'examples/*'
+#   - 'test/'
+#   - 'test/*'
+#   - 'test-deprecated-design/*'
+#   - '.github/workflows/ci'
