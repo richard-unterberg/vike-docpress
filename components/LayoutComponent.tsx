@@ -16,7 +16,7 @@ export const layoutComponentSizeMapping: { [key in LayoutSize]: string } = {
   xs: 'max-w-[768px]',
   sm: 'max-w-[960px]',
   md: 'max-w-[1100px]', // 1140 base header width - 2 x 20px padding from header elements..
-  lg: 'max-w-[1280px]',
+  lg: 'max-w-7xl',
   xl: 'max-w-[1440px]',
   full: 'max-w-full',
 } as const
@@ -32,7 +32,7 @@ const LayoutComponent = cm.div.variants<LayoutComponentProps>({
     $size: layoutComponentSizeMapping,
   },
   defaultVariants: {
-    $size: LayoutSize.md,
+    $size: LayoutSize.xl,
   },
 })
 

@@ -25,7 +25,7 @@
       "@/pages/*": ["pages/*"],
       "@/assets/*": ["assets/*"],
       "@/server/*": ["server/*"],
-      "@/docs/*": ["pages/docs/*"],
+      "@/docs/*": ["pages/(docs)/*"],
       "@/lib/*": ["lib/*"],
       "@/root/*": ["./*"]
     }

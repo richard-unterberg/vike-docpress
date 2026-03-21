@@ -1,6 +1,6 @@
 import type { JSXElement } from 'solid-js'
 
-import '@/components/tailwind.css'
+import '@/components/css/tailwind.css'
 
 const Wrapper = ({ children }: { children: JSXElement }) => {
   return children

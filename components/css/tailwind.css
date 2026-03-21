@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import './theme.css';
+
+/* https://daisyui.com/docs/config/ */
+@plugin 'daisyui' {
+  exclude: rootcolor;
+}
+
+@layer base {
+  html,
+  body {
+    @apply font-sans bg-base-300;
+  }
+}
