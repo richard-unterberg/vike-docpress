@@ -2,7 +2,7 @@ import type { JSXElement } from 'solid-js'
 import ThemeSwitch from '@/components/ThemeSwitch'
 import appConfig from '@/lib/config'
 
-const PageLayout = ({ children }: { children: JSXElement }) => {
+const PageLayout = (props: { children: JSXElement }) => {
   return (
     <div>
       <header class="navbar flex justify-between items-center">
@@ -13,10 +13,8 @@ const PageLayout = ({ children }: { children: JSXElement }) => {
         </a>
         <ThemeSwitch />
       </header>
-      {children}
-      <footer class="mt-8 text-center text-sm text-gray-500">
-        The Footer
-      </footer>
+      {props.children}
+      <footer class="mt-8 text-center text-sm text-gray-500">The Footer</footer>
     </div>
   )
 }
