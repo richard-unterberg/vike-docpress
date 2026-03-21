@@ -1,7 +1,7 @@
 Generated with [vike.dev/new](https://vike.dev/new) ([version 599](https://www.npmjs.com/package/create-vike/v/0.0.599)) using this command:
 
 ```sh
-pnpm create vike@latest --solid
+pnpm create vike@latest --solid --biome
 ```
 
 ## Contents
