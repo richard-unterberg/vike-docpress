@@ -3,7 +3,7 @@ import vikeLogo from '@/assets/vike.svg'
 import vikeLogoDark from '@/assets/vike-dark.svg'
 import ThemeSwitch from '@/components/ThemeSwitch'
 
-const PageLayout = ({ children }: { children: JSXElement }) => {
+const PageLayout = (props: { children: JSXElement }) => {
   return (
     <div class="p-4">
       <header class="flex justify-between items-center">
@@ -14,10 +14,8 @@ const PageLayout = ({ children }: { children: JSXElement }) => {
         </a>
         <ThemeSwitch />
       </header>
-      {children}
-      <footer class="mt-8 text-center text-sm text-gray-500">
-        The Footer
-      </footer>
+      {props.children}
+      <footer class="mt-8 text-center text-sm text-gray-500">The Footer</footer>
     </div>
   )
 }
