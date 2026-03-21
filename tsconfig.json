@@ -10,6 +10,7 @@
       "ESNext"
     ],
     "types": [
+      "node",
       "vite/client",
       "vike-solid/client"
     ],
@@ -24,6 +25,7 @@
       "@/pages/*": ["pages/*"],
       "@/assets/*": ["assets/*"],
       "@/server/*": ["server/*"],
+      "@/docs/*": ["pages/docs/*"],
       "@/lib/*": ["lib/*"],
       "@/root/*": ["./*"]
     }

@@ -39,6 +39,9 @@
     "clientKind": "git"
   },
   "css": {
+    "parser": {
+      "tailwindDirectives": true
+    },
     "formatter": {
       "quoteStyle": "single"
     }
