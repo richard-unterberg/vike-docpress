@@ -6,12 +6,18 @@
 
 @plugin 'daisyui/theme' {
   name: 'vike-light';
+  --color-grey-100: oklch(70% 0.01 260);
+  --color-grey-200: oklch(50% 0.01 260);
+  --color-grey-300: oklch(30% 0.01 260);
   --color-grey: oklch(85% 0.01 260);
 }
 
 @plugin 'daisyui/theme' {
   name: 'vike-dark';
-  --color-grey: oklch(30% 0.01 260);
+  --color-grey-100: oklch(80% 0.01 260);
+  --color-grey-200: oklch(70% 0.01 260);
+  --color-grey-300: oklch(60% 0.01 260);
+  --color-grey: oklch(25% 0.01 260);
 }
 
 @plugin 'daisyui/theme' {
@@ -92,5 +98,8 @@
 
 @theme inline {
   --color-vike-grey: var(--color-grey);
+  --color-vike-grey-100: var(--color-grey-100);
+  --color-vike-grey-200: var(--color-grey-200);
+  --color-vike-grey-300: var(--color-grey-300);
   --font-sans: 'Inter', 'Helvetica Neue', 'sans-serif';
 }
