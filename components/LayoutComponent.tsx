@@ -1,4 +1,4 @@
-import cm from '@classmatejs/solid'
+import cm from '@classmatejs/react'
 
 export const LayoutSize = {
   xxs: 'xxs',

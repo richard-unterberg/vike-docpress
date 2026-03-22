@@ -1,14 +1,12 @@
 // https://vike.dev/Head
 
-import { createEffect, createMemo } from 'solid-js'
-import { PageContext } from 'vike/types'
-import { usePageContext } from 'vike-solid/usePageContext'
+import { usePageContext } from 'vike-react/usePageContext'
 import appConfig from '@/lib/config'
 
 export const Head = () => {
   const context = usePageContext()
-  const locale = createMemo(() => context.locale || 'en')
-  const isChinese = locale() === 'zh'
+  const locale = context.locale || 'en'
+  const isChinese = locale === 'zh'
 
   return (
     <>

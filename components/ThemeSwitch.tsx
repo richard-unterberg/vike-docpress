@@ -1,10 +1,9 @@
-import { cmMerge } from '@classmatejs/solid'
-import Moon from 'lucide-solid/icons/moon'
-import Sun from 'lucide-solid/icons/sun'
-import { createSignal, onMount } from 'solid-js'
+import { cmMerge } from '@classmatejs/react'
+import { Moon, Sun } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const ThemeSwitch = () => {
-  const [isLight, setIsLight] = createSignal(false)
+  const [isLight, setIsLight] = useState(false)
 
   const updateTheme = (isLight: boolean) => {
     const html = document.documentElement
@@ -12,20 +11,20 @@ const ThemeSwitch = () => {
     setIsLight(isLight)
   }
 
-  onMount(() => {
+  useEffect(() => {
     setIsLight(document.documentElement.getAttribute('data-theme') === 'vike-light')
-  })
+  }, [])
 
   return (
-    <label class="cursor-pointer swap swap-rotate rounded-full bg-base-100 p-1.5 border border-base-100">
+    <label className="cursor-pointer swap swap-rotate rounded-full bg-base-100 p-1.5 border border-base-100">
       <input
         type="checkbox"
-        checked={isLight()}
+        checked={isLight}
         aria-label="Toggle light theme"
         onChange={(event) => updateTheme(event.currentTarget.checked)}
       />
-      <Sun class={cmMerge('h-4 w-4', 'swap-on')} />
-      <Moon class={cmMerge('h-4 w-4', 'swap-off')} />
+      <Sun className={cmMerge('h-4 w-4', 'swap-on')} />
+      <Moon className={cmMerge('h-4 w-4', 'swap-off')} />
     </label>
   )
 }

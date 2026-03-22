@@ -1,21 +1,21 @@
-import Languages from 'lucide-solid/icons/languages'
-import { createMemo, For } from 'solid-js'
-import { usePageContext } from 'vike-solid/usePageContext'
+import type { ChangeEvent } from 'react'
+import { Languages } from 'lucide-react'
+import { usePageContext } from 'vike-react/usePageContext'
 import { localeLabels, locales } from '@/lib/i18n/config'
 import { getLogicalPathname, localizeHref, stripLocaleFromPathname } from '@/lib/i18n/routing'
 
 const LanguageSwitch = () => {
   const pageContext = usePageContext()
-  const currentLocalizedPathname = createMemo(() => pageContext.urlPathnameLocalized ?? pageContext.urlPathname)
-  const logicalPathname = createMemo(() => getLogicalPathname(currentLocalizedPathname()))
-  const currentLocale = createMemo(() => stripLocaleFromPathname(currentLocalizedPathname()).locale)
+  const currentLocalizedPathname = pageContext.urlPathnameLocalized ?? pageContext.urlPathname
+  const logicalPathname = getLogicalPathname(currentLocalizedPathname)
+  const currentLocale = stripLocaleFromPathname(currentLocalizedPathname).locale
 
-  const onChange = async (event: Event) => {
-    const select = event.target as HTMLSelectElement
+  const onChange = async (event: ChangeEvent<HTMLSelectElement>) => {
+    const select = event.currentTarget
     const selectedLocale = select.value as (typeof locales)[number]
-    const newHref = localizeHref(logicalPathname(), selectedLocale)
+    const newHref = localizeHref(logicalPathname, selectedLocale)
 
-    if (newHref === currentLocalizedPathname()) return
+    if (newHref === currentLocalizedPathname) return
     // await navigate(newHref, { pageContext: { clientRouting: false } })
 
     // do full reload to ensure the new locale is properly loaded, including all translations and locale-specific data
@@ -23,18 +23,16 @@ const LanguageSwitch = () => {
   }
 
   return (
-    <label class="select select-sm">
-      <span class="label">
-        <Languages class="w-3 h-3" />
+    <label className="select select-sm">
+      <span className="label">
+        <Languages className="w-3 h-3" />
       </span>
-      <select value={currentLocale()} onChange={(event) => void onChange(event)} aria-label="Switch language">
-        <For each={locales}>
-          {(locale) => (
-            <option value={locale} selected={currentLocale() === locale}>
-              {localeLabels[locale]}
-            </option>
-          )}
-        </For>
+      <select value={currentLocale} onChange={(event) => void onChange(event)} aria-label="Switch language">
+        {locales.map((locale) => (
+          <option key={locale} value={locale}>
+            {localeLabels[locale]}
+          </option>
+        ))}
       </select>
     </label>
   )

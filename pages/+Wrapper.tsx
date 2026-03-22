@@ -1,9 +1,9 @@
-import type { JSXElement } from 'solid-js'
+import type { ReactNode } from 'react'
 
 import '@/components/css/tailwind.css'
 
-const Wrapper = ({ children }: { children: JSXElement }) => {
-  return children
+const Wrapper = ({ children }: { children: ReactNode }) => {
+  return <>{children}</>
 }
 
 export default Wrapper

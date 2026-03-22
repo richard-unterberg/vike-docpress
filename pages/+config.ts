@@ -1,5 +1,5 @@
 import type { Config } from 'vike/types'
-import vikeSolid from 'vike-solid/config'
+import vikeReact from 'vike-react/config'
 
 // Default config (can be overridden by pages)
 // https://vike.dev/config
@@ -10,5 +10,5 @@ export default {
   description: 'Docs re-amp',
   htmlAttributes: { 'data-theme': 'vike-dark' },
   passToClient: ['locale', 'urlPathnameLocalized'],
-  extends: [vikeSolid],
+  extends: [vikeReact],
 } satisfies Config

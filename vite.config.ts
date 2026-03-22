@@ -2,8 +2,8 @@ import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import mdx from '@mdx-js/rollup'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
 import vike from 'vike/plugin'
-import vikeSolid from 'vike-solid/vite'
 import { defineConfig, type PluginOption } from 'vite'
 import { rehypeDocHeadings } from './lib/docs/rehypeDocHeadings'
 import tsConf from './lib/tsconf'
@@ -28,9 +28,9 @@ const plugins: PluginOption[] = [
     }),
     enforce: 'pre',
   },
+  react(),
   vike(),
   tailwindcss() as PluginOption,
-  vikeSolid(),
 ]
 
 export default defineConfig({

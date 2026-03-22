@@ -1,13 +1,13 @@
-import type { Component } from 'solid-js'
+import type { ComponentType } from 'react'
 import { type DocHeading, extractDocHeadings } from '@/lib/docs/headings'
 import { DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config'
 
 type MdxModule = {
-  default: Component
+  default: ComponentType
 }
 
 type DocContentModule = {
-  Page?: Component
+  Page?: ComponentType
   headings?: DocHeading[]
 }
 

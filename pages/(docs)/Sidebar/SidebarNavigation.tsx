@@ -1,21 +1,21 @@
-import { cmMerge } from '@classmatejs/solid'
-import type { LucideIcon } from 'lucide-solid'
-import { createMemo, For, type JSXElement } from 'solid-js'
+import { cmMerge } from '@classmatejs/react'
+import type { LucideIcon } from 'lucide-react'
+import { Fragment, type ReactNode } from 'react'
 import { getLogicalPathname } from '@/lib/i18n/routing'
 
 export type SidebarHeading = {
-  title: JSXElement
+  title: ReactNode
   href: string
 }
 
 export type SidebarCategory = {
-  title: JSXElement
+  title: ReactNode
   children?: SidebarHeading[]
 }
 
 export type SidebarGroup = {
   icon?: LucideIcon
-  title: JSXElement
+  title: ReactNode
   links?: (SidebarHeading | SidebarCategory)[]
 }
 
@@ -37,16 +37,20 @@ const hasActiveChild = (items: (SidebarHeading | SidebarCategory)[], currentPath
   )
 }
 
-export const renderInlineMarkdown = (title: JSXElement): JSXElement => {
+export const renderInlineMarkdown = (title: ReactNode): ReactNode => {
   if (typeof title !== 'string') return title
 
-  return title.split(/(`[^`]+`)/g).map((part) => {
+  return title.split(/(`[^`]+`)/g).map((part, index) => {
     if (part.startsWith('`') && part.endsWith('`')) {
-      return <code>{part.slice(1, -1)}</code>
+      return <code key={index}>{part.slice(1, -1)}</code>
     }
 
-    return part
+    return <Fragment key={index}>{part}</Fragment>
   })
+}
+
+const getSidebarItemKey = (item: SidebarHeading | SidebarCategory, index: number) => {
+  return 'href' in item ? item.href : `category-${index}`
 }
 
 const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
@@ -54,7 +58,7 @@ const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
     <li>
       <a
         href={props.href}
-        class={cmMerge(
+        className={cmMerge(
           'text-vike-grey-300 justify-start',
           isActiveHref(props.currentPathname, props.href) && 'menu-active',
         )}
@@ -66,16 +70,16 @@ const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
 }
 
 const SidebarCategoryComponent = (props: SidebarCategory & { currentPathname: string }) => {
-  const isOpen = createMemo(() => (props.children ? hasActiveChild(props.children, props.currentPathname) : false))
+  const isOpen = props.children ? hasActiveChild(props.children, props.currentPathname) : false
 
   return (
     <li>
-      <details open={isOpen()}>
-        <summary class="text-vike-grey-200">{renderInlineMarkdown(props.title)}</summary>
+      <details open={isOpen}>
+        <summary className="text-vike-grey-200">{renderInlineMarkdown(props.title)}</summary>
         <ul>
-          <For each={props.children}>
-            {(item) => <SidebarItem item={item} currentPathname={props.currentPathname} />}
-          </For>
+          {props.children?.map((item, index) => (
+            <SidebarItem key={getSidebarItemKey(item, index)} item={item} currentPathname={props.currentPathname} />
+          ))}
         </ul>
       </details>
     </li>
@@ -94,18 +98,20 @@ const SidebarGroupComponent = (props: SidebarGroup & { currentPathname: string; 
   const Icon = props.icon
 
   return (
-    <li class="pb-4">
+    <li className="pb-4">
       <details open>
-        <summary class="text-vike-grey-100">
-          {Icon && <Icon class="inline w-3 h-3" />}
-          <span class="text-base-content font-semibold">{renderInlineMarkdown(props.title)}</span>
+        <summary className="text-vike-grey-100">
+          {Icon && <Icon className="inline w-3 h-3" />}
+          <span className="text-base-content font-semibold">{renderInlineMarkdown(props.title)}</span>
         </summary>
         <ul>
-          <For each={props.links}>{(item) => <SidebarItem item={item} currentPathname={props.currentPathname} />}</For>
+          {props.links?.map((item, index) => (
+            <SidebarItem key={getSidebarItemKey(item, index)} item={item} currentPathname={props.currentPathname} />
+          ))}
         </ul>
       </details>
       {props.showSeparator && (
-        <span class="pointer-events-none absolute -bottom-1 border-b border-base-200 block rounded-none w-full mx-auto mb-3"></span>
+        <span className="pointer-events-none absolute -bottom-1 border-b border-base-200 block rounded-none w-full mx-auto mb-3"></span>
       )}
     </li>
   )
@@ -113,16 +119,15 @@ const SidebarGroupComponent = (props: SidebarGroup & { currentPathname: string; 
 
 const SidebarNavigation = (props: { groups: SidebarGroup[]; currentPathname: string }) => {
   return (
-    <ul class="menu w-full px-0 py-5 li:last-child:border-0">
-      <For each={props.groups}>
-        {(group, index) => (
-          <SidebarGroupComponent
-            {...group}
-            currentPathname={props.currentPathname}
-            showSeparator={index() !== props.groups.length - 1}
-          />
-        )}
-      </For>
+    <ul className="menu w-full px-0 py-5 li:last-child:border-0">
+      {props.groups.map((group, index) => (
+        <SidebarGroupComponent
+          key={`sidebar-group-${index}`}
+          {...group}
+          currentPathname={props.currentPathname}
+          showSeparator={index !== props.groups.length - 1}
+        />
+      ))}
     </ul>
   )
 }

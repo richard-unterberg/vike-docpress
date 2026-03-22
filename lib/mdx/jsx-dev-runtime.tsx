@@ -1,1 +1,2 @@
-export { Fragment, jsx, jsxDEV, jsxs } from './jsx-runtime'
+export { Fragment, jsxDEV } from 'react/jsx-dev-runtime'
+export { jsx, jsxs } from 'react/jsx-runtime'

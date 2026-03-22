@@ -1,10 +1,5 @@
-import Compass from 'lucide-solid/icons/compass'
-import Map from 'lucide-solid/icons/map'
-import Plug from 'lucide-solid/icons/plug'
-import Rocket from 'lucide-solid/icons/rocket'
-import Sprout from 'lucide-solid/icons/sprout'
-import { createMemo } from 'solid-js'
-import { usePageContext } from 'vike-solid/usePageContext'
+import { Compass, Map, Plug, Rocket, Sprout } from 'lucide-react'
+import { usePageContext } from 'vike-react/usePageContext'
 import { getHeadingData } from '@/lib/headings-flat'
 import { t } from '@/lib/i18n/messages'
 import SidebarNavigation, { type SidebarGroup } from '@/pages/(docs)/Sidebar/SidebarNavigation'
@@ -123,10 +118,10 @@ const getMenu = (locale: 'en' | 'zh'): SidebarGroup[] => [
 
 const MenuTab = () => {
   const pageContext = usePageContext()
-  const menu = createMemo(() => getMenu(pageContext.locale))
+  const menu = getMenu(pageContext.locale)
 
   return (
-    <SidebarNavigation groups={menu()} currentPathname={pageContext.urlPathnameLocalized ?? pageContext.urlPathname} />
+    <SidebarNavigation groups={menu} currentPathname={pageContext.urlPathnameLocalized ?? pageContext.urlPathname} />
   )
 }
 
