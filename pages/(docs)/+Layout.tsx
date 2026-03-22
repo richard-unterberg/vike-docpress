@@ -38,11 +38,11 @@ const DocsLayout = (props: { children: ReactNode }) => {
           />
         </div>
       </div>
-      <LayoutComponent className="flex mx-auto gap-10 xl:gap-14">
-        <div className="w-90 shrink-0 relative">
+      <LayoutComponent className="lg:flex mx-auto gap-10 xl:gap-14">
+        <div className="w-90 shrink-0 relative hidden lg:block">
           <Sidebar />
         </div>
-        <div className="pt-16 mt-10 relative">
+        <div className="mt-10 relative">
           <ProseContainer className="min-w-0 flex-1 z-1 relative" data-doc-content>
             {props.children}
           </ProseContainer>

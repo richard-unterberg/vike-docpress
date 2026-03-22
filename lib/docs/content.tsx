@@ -32,11 +32,18 @@ const getRawDocSource = (module: RawContentModule) => {
 }
 
 const getDocModuleMeta = (path: string) => {
-  const match = path.match(/\/pages\/\(docs\)\/(.+)\/content\.([^.]+)\.mdx$/)
+  const match = path.match(/\/pages\/(.+)\/content\.([^.]+)\.mdx$/)
   if (!match) return null
 
-  const [, routeId, locale] = match
+  const [, rawRouteId, locale] = match
   if (!isLocale(locale)) return null
+
+  const routeId = rawRouteId
+    .split('/')
+    .filter((segment) => !(segment.startsWith('(') && segment.endsWith(')')))
+    .join('/')
+
+  if (!routeId) return null
 
   return { locale, routeId }
 }

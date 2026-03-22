@@ -8,11 +8,11 @@ const DocsFooter = () => {
   return (
     <footer className="mb-8 mt-12 text-sm text-base-content/60">
       <div className="mb-16 flex items-center gap-2">
-        <a href="edit" className="btn btn-sm btn-ghost border-vike-grey">
-          <Pencil /> {t(locale, 'docs', 'edit')}
+        <a href="edit" className="btn btn-sm btn-ghost border-vike-grey-300 text-vike-grey-200">
+          <Pencil className='w-3 h-3' /> {t(locale, 'docs', 'edit')}
         </a>
-        <a href="edit" className="btn btn-sm btn-ghost border-vike-grey">
-          <Bug /> {t(locale, 'docs', 'reportIssue')}
+        <a href="edit" className="btn btn-sm btn-ghost border-vike-grey-300 text-vike-grey-200">
+          <Bug className='w-3 h-3' /> {t(locale, 'docs', 'reportIssue')}
         </a>
       </div>
       <a href="vike.dev" className="text-primary">

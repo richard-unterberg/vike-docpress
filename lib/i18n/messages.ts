@@ -9,12 +9,12 @@ export const messages = {
   },
   home: {
     title: {
-      en: 'Welcome',
-      zh: '欢迎',
+      en: 'Framework for<br className="hidden sm:block" /> Stability and Freedom',
+      zh: '稳定与自由的框架',
     },
     subtitle: {
-      en: 'A Vike docs prototype with locale-aware routing and localized MDX content.',
-      zh: '一个带有多语言路由和本地化 MDX 内容的 Vike 文档原型。',
+      en: "Vike is a minimal-lock-in framework that prioritizes application stability and development freedom, powered by an open foundation built for JavaScript's rapidly evolving ecosystem.",
+      zh: 'Vike 是一个极简锁定的框架，优先考虑应用程序的稳定性和开发自由度，由一个开放的基础构建，为 JavaScript 快速发展的生态系统而构建。',
     },
     cta: {
       en: 'Get started',

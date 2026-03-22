@@ -1,6 +1,7 @@
 import { cmMerge } from '@classmatejs/react'
 import type { LucideIcon } from 'lucide-react'
 import { Fragment, type ReactNode } from 'react'
+import appConfig from '@/lib/config'
 import { getLogicalPathname } from '@/lib/i18n/routing'
 
 export type SidebarHeading = {

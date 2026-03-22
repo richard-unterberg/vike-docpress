@@ -16,8 +16,8 @@ const PageLayout = (props: { children: ReactNode }) => {
         <LayoutComponent className="h-full">
           <header className="py-4 flex justify-between items-center h-full">
             <a href={localizeHref('/', pageContext.locale)} className="flex gap-2 items-center">
-              <img src={`${appConfig.publicAssets}vike.svg`} alt="Vike Logo" className="w-6 dark:hidden" />
-              <img src={`${appConfig.publicAssets}vike-dark.svg`} alt="Vike Logo" className="w-6 hidden dark:block" />
+              <img src={`${appConfig.publicAssets}vike.svg`} alt="Vike Logo" className="w-6 h-6 dark:hidden" />
+              <img src={`${appConfig.publicAssets}vike-dark.svg`} alt="Vike Logo" className="w-6 h-6 hidden dark:block" />
               <span className="font-medium">Vike {t(pageContext.locale, 'header', 'docsHome')}</span>
             </a>
             <div className="flex items-center gap-2">
@@ -27,7 +27,7 @@ const PageLayout = (props: { children: ReactNode }) => {
           </header>
         </LayoutComponent>
       </header>
-      <div className="pt-0">{props.children}</div>
+      <div className="pt-16">{props.children}</div>
     </>
   )
 }

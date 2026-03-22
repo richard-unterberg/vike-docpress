@@ -1,19 +1,34 @@
+import { memo } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
+import LayoutComponent from '@/components/LayoutComponent'
+import { createDocPage } from '@/docs/(components)/DocPage'
 import { t } from '@/lib/i18n/messages'
 import { localizeHref } from '@/lib/i18n/routing'
 
-const LandingPage = () => {
-  const pageContext = usePageContext()
+const DocPage = memo(createDocPage('index'))
+
+const Page = () => {
+  const { locale } = usePageContext()
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <h1 className="text-4xl font-bold">{t(pageContext.locale, 'home', 'title')}</h1>
-      <p className="max-w-xl text-center text-base-content/70">{t(pageContext.locale, 'home', 'subtitle')}</p>
-      <a href={localizeHref('/get-started', pageContext.locale)} className="btn btn-outline btn-primary">
-        {t(pageContext.locale, 'home', 'cta')} ✨
-      </a>
-    </div>
+    <LayoutComponent>
+      <div className="prose prose-neutral max-w-none dark:prose-invert">
+        <div className="text-center w-4/5 lg:w-3/5 mx-auto mt-20">
+          <h1
+            className="text-4xl lg:text-5xl xl:text-6xl"
+            dangerouslySetInnerHTML={{ __html: t(locale, 'home', 'title') }}
+          ></h1>
+          <p className="font-medium text-vike-grey-300 text-lg lg:text-xl">{t(locale, 'home', 'subtitle')}</p>
+          <a
+            href={localizeHref('/get-started', locale)}
+            className="btn btn-outline btn-lg border-vike-grey-300 text-vike-grey-100 mx-auto"
+          >
+            {t(locale, 'home', 'cta')} ✨
+          </a>
+        </div>
+      </div>
+    </LayoutComponent>
   )
 }
 
-export default LandingPage
+export default Page

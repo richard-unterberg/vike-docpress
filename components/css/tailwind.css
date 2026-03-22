@@ -11,6 +11,7 @@
   html,
   body {
     @apply font-sans bg-base-300 text-base-content;
+    @apply antialiased md:subpixel-antialiased;
   }
 
   code {
