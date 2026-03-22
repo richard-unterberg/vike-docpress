@@ -43,7 +43,7 @@ export const renderInlineMarkdown = (title: ReactNode): ReactNode => {
 
   return title.split(/(`[^`]+`)/g).map((part, index) => {
     if (part.startsWith('`') && part.endsWith('`')) {
-      return <code key={index}>{part.slice(1, -1)}</code>
+      return <code className='text-xs!' key={index}>{part.slice(1, -1)}</code>
     }
 
     return <Fragment key={index}>{part}</Fragment>
@@ -51,7 +51,7 @@ export const renderInlineMarkdown = (title: ReactNode): ReactNode => {
 }
 
 const getSidebarItemKey = (item: SidebarHeading | SidebarCategory, index: number) => {
-  return 'href' in item ? item.href : `category-${index}`
+  return 'href' in item ? `${item.href}::${index}` : `category-${index}`
 }
 
 const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {

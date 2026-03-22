@@ -12,7 +12,7 @@ const PageLayout = (props: { children: ReactNode }) => {
 
   return (
     <>
-      <header className="bg-base-300 fixed z-10 w-full h-16 border-vike-grey border-b">
+      <header className="bg-base-300 fixed z-10 w-full h-16 border-vike-grey border-b dark:shadow">
         <LayoutComponent className="h-full">
           <header className="py-4 flex justify-between items-center h-full">
             <a href={localizeHref('/', pageContext.locale)} className="flex gap-2 items-center">

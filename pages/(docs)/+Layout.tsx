@@ -28,7 +28,7 @@ const DocsLayout = (props: { children: ReactNode }) => {
   return (
     <>
       <div className="absolute w-full h-full top-0 left-0 overflow-hidden">
-        <div className="w-500 h-300 absolute -top-70 -right-100 z-0">
+        <div className="w-500 h-300 absolute top-16 -right-100 z-0 opacity-66">
           <img
             src={`${appConfig.publicAssets}decorators/dot.png`}
             alt=""
