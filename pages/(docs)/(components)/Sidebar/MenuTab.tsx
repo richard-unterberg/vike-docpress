@@ -6,9 +6,7 @@ const MenuTab = () => {
   const { locale, urlPathnameLocalized, urlPathname } = usePageContext()
   const menu = getMenuNavigation(locale)
 
-  return (
-    <SidebarNavigation groups={menu} currentPathname={urlPathnameLocalized ?? urlPathname} />
-  )
+  return <SidebarNavigation groups={menu} currentPathname={urlPathnameLocalized ?? urlPathname} />
 }
 
 export default MenuTab

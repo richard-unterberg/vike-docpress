@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import LayoutComponent from '@/components/LayoutComponent'
 import DocsMenu from '@/components/Navbar/DocsMenu'
@@ -6,7 +7,7 @@ import Search from '@/components/Navbar/Search'
 import ThemeSwitch from '@/components/Navbar/ThemeSwitch'
 import SocialIcons from '@/components/SocialIcons'
 import appConfig from '@/lib/config'
-import { Locale } from '@/lib/i18n/config'
+import type { Locale } from '@/lib/i18n/config'
 import { t } from '@/lib/i18n/messages'
 import { localizeHref } from '@/lib/i18n/routing'
 
@@ -20,8 +21,15 @@ const VikeLogo = ({ locale, isLanding = false }: { locale: Locale; isLanding?: b
 
 const Navbar = () => {
   const { locale, urlPathname } = usePageContext()
-  console.log('Current URL Pathname:', urlPathname)
   const isLandingPage = urlPathname === '/'
+
+  const _piCalculator = useMemo(() => {
+    return locale
+  }, [locale])
+
+  useEffect(() => {
+    console.log('Current URL Pathname:', urlPathname)
+  }, [urlPathname])
 
   return (
     <header className="bg-base-300 fixed z-10 w-full h-16 border-vike-grey border-b dark:shadow">
@@ -32,7 +40,6 @@ const Navbar = () => {
               <VikeLogo locale={locale} isLanding />
             </div>
             <div className="flex flex-1 items-center justify-center gap-4 top-0 left-0 w-full">
-              <DocsMenu />
               <Search />
             </div>
             <div className="flex-1 flex items-center justify-end gap-2">

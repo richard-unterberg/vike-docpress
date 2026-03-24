@@ -27,7 +27,7 @@ const SocialIcons = () => {
   return (
     <ul className="flex gap-1 items-center">
       {Object.entries(icons).map(([key, { icon, href }]) => (
-        <li key={key} className='m-0 p-0'>
+        <li key={key} className="m-0 p-0">
           <a
             href={href}
             target="_blank"

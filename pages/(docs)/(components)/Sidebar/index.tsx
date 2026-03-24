@@ -26,6 +26,7 @@ const Sidebar = () => {
             <button
               className={selectedTab === 'menu' ? 'justify-start menu-active' : 'justify-start'}
               onClick={() => setSelectedTab('menu')}
+              type="button"
             >
               {t(locale, 'docs', 'documentation')}
             </button>
@@ -34,6 +35,7 @@ const Sidebar = () => {
             <button
               className={selectedTab === 'api' ? 'justify-start menu-active' : 'justify-start'}
               onClick={() => setSelectedTab('api')}
+              type="button"
             >
               {t(locale, 'docs', 'apiReference')}
             </button>
@@ -42,6 +44,7 @@ const Sidebar = () => {
             <button
               className={selectedTab === 'dev' ? 'justify-start menu-active' : 'justify-start'}
               onClick={() => setSelectedTab('dev')}
+              type="button"
             >
               {t(locale, 'docs', 'devDocsReference')}
             </button>

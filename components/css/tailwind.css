@@ -24,10 +24,12 @@
     @apply text-accent;
   }
 
-  .prose, a, li, p {
+  .prose,
+  a,
+  li,
+  p {
     @apply select-text;
   }
-  
 
   .prose pre.shiki {
     /* background-color: var(--shiki-light-bg) !important; */

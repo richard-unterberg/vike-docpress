@@ -97,17 +97,17 @@ function NoteGeneric({
     className = `${className} ${classColor}`
   }
   return (
-    <div className='bg-base-300'>
-    <blockquote className={className} style={style}>
-      {icon && (
-        <>
-          <span style={{ fontFamily: 'emoji' }} className="mr-1 mt-0.5">
-            {icon}
-          </span>
-        </>
-      )}
-      <div className="flex-1">{children}</div>
-    </blockquote>
+    <div className="bg-base-300">
+      <blockquote className={className} style={style}>
+        {icon && (
+          <>
+            <span style={{ fontFamily: 'emoji' }} className="mr-1 mt-0.5">
+              {icon}
+            </span>
+          </>
+        )}
+        <div className="flex-1">{children}</div>
+      </blockquote>
     </div>
   )
 }

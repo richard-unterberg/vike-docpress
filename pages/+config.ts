@@ -11,4 +11,5 @@ export default {
   htmlAttributes: { 'data-theme': 'vike-dark' },
   passToClient: ['locale', 'urlPathnameLocalized', 'themePreference'],
   extends: [vikeReact],
+  ssr: false,
 } satisfies Config

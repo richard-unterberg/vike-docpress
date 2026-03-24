@@ -1,28 +1,7 @@
-// https://vike.dev/Head
-
 import { usePageContext } from 'vike-react/usePageContext'
 import appConfig from '@/lib/config'
-import { DEFAULT_THEME_PREFERENCE, getDataTheme, THEME_STORAGE_KEY } from '@/lib/theme'
+import { themeBootstrapScript } from '@/lib/theme'
 
-const themeBootstrapScript = `(() => {
-  const storageKey = ${JSON.stringify(THEME_STORAGE_KEY)};
-  const themes = {
-    light: ${JSON.stringify(getDataTheme('light'))},
-    dark: ${JSON.stringify(getDataTheme('dark'))}
-  };
-
-  try {
-    const storedThemePreference = window.localStorage.getItem(storageKey);
-    const themePreference =
-      storedThemePreference === 'light' || storedThemePreference === 'dark'
-        ? storedThemePreference
-        : ${JSON.stringify(DEFAULT_THEME_PREFERENCE)};
-
-    document.documentElement.setAttribute('data-theme', themes[themePreference]);
-  } catch {
-    document.documentElement.setAttribute('data-theme', themes[${JSON.stringify(DEFAULT_THEME_PREFERENCE)}]);
-  }
-})();`
 
 export const Head = () => {
   const context = usePageContext()

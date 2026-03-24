@@ -4,7 +4,7 @@ import { usePageContext } from 'vike-react/usePageContext'
 import { t } from '@/lib/i18n/messages'
 
 const MenuItem = cm.a.variants<{ $active?: boolean }>({
-  base: 'btn btn-sm btn-neutral px-3 uppercase',
+  base: 'btn btn-sm btn-neutral px-2 uppercase whitespace-nowrap',
   variants: {
     $active: {
       true: '',
@@ -21,26 +21,26 @@ const DocsMenu = () => {
 
   return (
     <ul className="flex items-center font-semibold gap-2">
-      <li tabIndex={0}>
-        <MenuItem $active>
+      <li>
+        <MenuItem $active tabIndex={0}>
           <BookText className="w-4 h-4" />
           {t(locale, 'header', 'docsHome')}
         </MenuItem>
       </li>
-      <li tabIndex={0}>
-        <MenuItem>
+      <li>
+        <MenuItem tabIndex={0}>
           <Cpu className="w-4 h-4" />
           {t(locale, 'header', 'apiHome')}
         </MenuItem>
       </li>
-      <li tabIndex={0}>
-        <MenuItem>
+      <li>
+        <MenuItem tabIndex={0}>
           <Code className="w-4 h-4" />
           {t(locale, 'header', 'docsForDevs')}
         </MenuItem>
       </li>
-      <li tabIndex={0}>
-        <MenuItem>
+      <li>
+        <MenuItem tabIndex={0}>
           <Megaphone className="w-4 h-4" />
           {t(locale, 'header', 'blogHome')}
         </MenuItem>

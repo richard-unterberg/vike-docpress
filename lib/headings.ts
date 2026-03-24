@@ -401,7 +401,7 @@ const devHeadingTitle = {
     zh: '简介与要素',
   },
   devDosDonts: {
-    en: 'Dos & Don\'ts',
+    en: "Dos & Don'ts",
     zh: '注意事项',
   },
   devTypography: {
