@@ -12,9 +12,7 @@ export const Link = (props: { href: string; children?: ReactNode; doNotInferSect
     currentPathname === '/' ? currentPathname === targetPathname : currentPathname.startsWith(targetPathname)
   const label =
     props.children ??
-    (props.doNotInferSectionTitle
-      ? props.href
-      : (getHeadingTitleFromHref(props.href, locale) ?? props.href))
+    (props.doNotInferSectionTitle ? props.href : (getHeadingTitleFromHref(props.href, locale) ?? props.href))
 
   return (
     <a href={href} className={isActive ? 'is-active' : undefined}>

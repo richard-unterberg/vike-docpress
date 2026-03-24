@@ -63,9 +63,9 @@ const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
       <a
         href={props.href}
         className={cmMerge(
-          'text-vike-grey-300 justify-start hover:text-accent/80 dark:hover:text-secondary/80 hover:bg-base-200',
+          'text-vike-grey-300 justify-start hover:bg-base-200',
           isActiveHref(props.currentPathname, props.href) &&
-            'menu-active text-accent dark:text-secondary font-semibold',
+            'menu-active text-accent font-semibold bg-base-200',
         )}
       >
         {renderInlineMarkdown(props.title)}
@@ -80,7 +80,7 @@ const SidebarCategoryComponent = (props: SidebarCategory & { currentPathname: st
   return (
     <li>
       <details open={isOpen}>
-        <summary className="text-vike-grey-300 hover:text-accent/80 dark:hover:text-secondary/80  hover:bg-base-200">
+        <summary className="text-vike-grey-300 bg-transparent!">
           {renderInlineMarkdown(props.title)}
         </summary>
         <ul>

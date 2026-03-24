@@ -15,14 +15,14 @@ const Search = () => {
       onMouseLeave={() => setIsSearchHovered(false)}
     >
       <button className="absolute z-2 inset-0 cursor-pointer " />
-      <label className={cmMerge('input input-sm', isSearchHovered ? 'border-secondary' : '')}>
+      <label className={cmMerge('input input-sm', isSearchHovered ? 'border-accent' : '')}>
         <span className="floating-label">
-          <SearchIcon className={cmMerge('w-4 h-4', isSearchHovered ? 'text-secondary' : '')} />
+          <SearchIcon className={cmMerge('w-4 h-4', isSearchHovered ? 'text-accent' : '')} />
         </span>
         <input
           type="text"
           placeholder={t(locale, 'header', 'searchPlaceholder')}
-          className={cmMerge('w-fit', isSearchHovered && 'placeholder:text-secondary')}
+          className={cmMerge('w-fit', isSearchHovered && 'placeholder:text-accent')}
         />
       </label>
     </div>

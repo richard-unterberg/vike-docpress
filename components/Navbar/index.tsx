@@ -11,7 +11,7 @@ import { t } from '@/lib/i18n/messages'
 import { localizeHref } from '@/lib/i18n/routing'
 
 const VikeLogo = ({ locale, isLanding = false }: { locale: Locale; isLanding?: boolean }) => (
-  <a href={localizeHref('/', locale)} className="flex gap-2 items-center">
+  <a href={localizeHref('/', locale)} className="flex gap-2 items-center text-base-content">
     <img src={`${appConfig.publicAssets}vike.svg`} alt="Vike Logo" className="w-6 h-6 dark:hidden" />
     <img src={`${appConfig.publicAssets}vike-dark.svg`} alt="Vike Logo" className="w-6 h-6 hidden dark:block" />
     <span className="font-semibold">Vike {!isLanding ? t(locale, 'header', 'docsHome') : null}</span>

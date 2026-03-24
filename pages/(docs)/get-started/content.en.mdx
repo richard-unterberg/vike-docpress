@@ -1,83 +1,47 @@
-import { Advanced, Danger, Warning, Construction, NoteWithoutIcon, Contribution, Info } from "@/components/Note"
+import { Alert } from '@/components/Alert'
 
-# Get Started
+<br />
 
-This page demonstrates the localization strategy used in this repo.
-Each docs route stays a normal Vike page, but the route component renders MDX content from a locale-aware registry. That means `/get-started` resolves to English and `/zh/get-started` resolves to Chinese when `content.zh.mdx` exists next to the route.
+<Alert>
+This page should provide an overview about all used elements and how they fit together. It should be a high-level introduction to the documentation, and should link to more detailed pages about each element.
+</Alert>
 
-## Why This Structure
+<br />
 
-- Vike keeps one stable route tree.
-- Every doc can have `content.en.mdx`, `content.zh.mdx`, or both.
-- Missing translations fall back to English automatically.
-- Shared UI such as the sidebar, header, and language switcher use the same locale from `pageContext`.
+# Heading 1
+The H1 Heading is the most important heading and should be used for the main title of a page. It should only be used once per page to maintain a clear hierarchy.
 
-## File Layout
-
-```text
-pages/
-  (docs)/
-    get-started/
-      +Page.tsx
-      content.en.mdx
-      content.zh.mdx
-    bodyAttributes/
-      +Page.tsx
-      content.en.mdx
-  +onBeforeRoute.ts
-  +lang.ts
+```mdx
+# Heading 1
 ```
 
-## Adding Another Translation
-
-1. Create `pages/(docs)/<route>/content.zh.mdx`.
-2. Keep the route wrapper unchanged.
-3. The page will start rendering Chinese at `/zh/<route>`.
-
-If `content.zh.mdx` is missing, the page still works and renders the English file.
-
-### Deeper Dive: How It Works
-
-The route component imports a helper that picks the best MDX file based on the current locale. The helper looks for `content.<locale>.mdx` and falls back to `content.en.mdx` if the specific locale file is missing.
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
 
 
-<Advanced>
-Advanced
-</Advanced>
 
-<Construction>
-Construction
-</Construction>
+## Typography
 
-<Warning>
-Warning
-</Warning>
+<div class="grid grid-cols-2 -mt-6">
+  <div>
+  ### Basic List
+  - Item 1
+  - Item 2
+  - Item 3
+  </div>
 
-<Danger>
-Danger
-</Danger>
+  <div>
+  ### Ordered List
+  1. First item
+  2. Second item
+  3. Third item
+  </div>
 
-<Contribution>
-Contribution
-</Contribution>
-
-<Info>
-Info
-</Info>
-
-<NoteWithoutIcon>
-Note without icon
-</NoteWithoutIcon>
-
-
-#### Why Not Duplicate `+Page.mdx` Per Locale
-
-Duplicating routed files for every language makes fallback harder and grows the route tree quickly.
-
-Using colocated content modules instead keeps routing and localization separate:
-
-- Vike handles locale-prefixed URLs.
-- The page component picks the best MDX file.
-- Fallback logic stays in one place.
-
-
+  <div className='col-span-2'>
+  ### Blockquote
+  > This is a blockquote. It is used to highlight important information or to quote someone else's words.
+  </div>
+</div>

@@ -20,7 +20,45 @@
     @apply bg-base-200;
   }
 
+  a {
+    @apply text-accent;
+  }
+
   .prose, a, li, p {
     @apply select-text;
+  }
+  
+
+  .prose pre.shiki {
+    /* background-color: var(--shiki-light-bg) !important; */
+    color: var(--shiki-light) !important;
+    @apply rounded-lg border border-vike-grey;
+  }
+
+  .prose pre.shiki {
+    @apply leading-5!;
+  }
+
+  [data-theme='vike-dark'] .prose pre.shiki {
+    /* background-color: var(--shiki-dark-bg) !important; */
+    color: var(--shiki-dark) !important;
+  }
+
+  .prose pre.shiki code {
+    background-color: transparent !important;
+    color: inherit !important;
+    padding: 0;
+  }
+
+  .prose pre.shiki span {
+    color: var(--shiki-light);
+  }
+
+  [data-theme='vike-dark'] .prose pre.shiki span {
+    color: var(--shiki-dark);
+  }
+
+  .prose pre.shiki .line {
+    @apply text-xs!;
   }
 }

@@ -16,10 +16,10 @@ const Page = () => {
           ></h1>
           <p className="font-semibold text-vike-grey-300 text-lg lg:text-xl">{t(locale, 'home', 'subtitle')}</p>
           <a
-            href={localizeHref('/get-started', locale)}
-            className="btn btn-soft btn-lg btn-accent dark:btn-secondary mx-auto"
+            href={localizeHref('/dev-elements', locale)}
+            className="btn btn-soft btn-lg btn-neutral mx-auto"
           >
-            {t(locale, 'home', 'cta')} ✨
+            {t(locale, 'home', 'cta')}
           </a>
         </div>
       </div>

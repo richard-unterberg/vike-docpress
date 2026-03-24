@@ -9,6 +9,10 @@ const createUntranslatedHeadings = <const T extends Record<string, string>>(titl
 }
 
 const baseHeadingTitles = {
+  getStarted: {
+    en: 'Get Started',
+    zh: '快速开始',
+  },
   scaffoldNewVikeApp: {
     en: 'Scaffold new Vike app',
     zh: '创建新的 Vike 应用',
@@ -391,14 +395,35 @@ const apiHeadingTitles = {
   },
 } as const
 
+const devHeadingTitle = {
+  devElements: {
+    en: 'Intro & Elements',
+    zh: '简介与要素',
+  },
+  devDosDonts: {
+    en: 'Dos & Don\'ts',
+    zh: '注意事项',
+  },
+  devTypography: {
+    en: 'Typography',
+    zh: '排版',
+  },
+  devSettingsUtils: {
+    en: 'Settings & Utils',
+    zh: '设置与工具',
+  },
+}
+
 export const headingTitles = {
   ...baseHeadingTitles,
   ...apiHeadingTitles,
+  ...devHeadingTitle,
 } as const
 
 export type HeadingKey = keyof typeof headingTitles
 
 const baseHeadingLinks = {
+  getStarted: '/get-started',
   scaffoldNewVikeApp: '/new',
   addSsrSsgToVite: '/add',
   newCore: '/new/core',
@@ -557,9 +582,17 @@ const apiHeadingLinks = {
   apiClientOnlyHelper: '/clientOnly-helper',
 } as const
 
+const devHeadingLinks = {
+  devElements: '/dev-elements',
+  devDosDonts: '/dev-dos-donts',
+  devTypography: '/dev-typography',
+  devSettingsUtils: '/dev-settings-utils',
+} as const
+
 const headingLinks: Record<HeadingKey, string> = {
   ...baseHeadingLinks,
   ...apiHeadingLinks,
+  ...devHeadingLinks,
 }
 
 export const getHeadingTitle = (headingKey: HeadingKey, locale: Locale = DEFAULT_LOCALE) => {

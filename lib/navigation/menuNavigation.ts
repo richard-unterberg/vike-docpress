@@ -24,7 +24,7 @@ const menuGroups: MenuGroupDefinition[] = [
   {
     icon: Sprout,
     titleKey: 'getStarted',
-    links: ['scaffoldNewVikeApp', 'addSsrSsgToVite'],
+    links: ['getStarted', 'scaffoldNewVikeApp', 'addSsrSsgToVite'],
   },
   {
     icon: Compass,

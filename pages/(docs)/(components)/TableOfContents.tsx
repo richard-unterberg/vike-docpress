@@ -148,7 +148,7 @@ const TableOfContents = (props: { headings: DocHeading[] }) => {
   return (
     <aside className="hidden xl:block w-64 shrink-0">
       {hasHeadings && (
-        <div className="sticky top-24 max-h-[calc(100svh-7rem)] overflow-y-auto pb-8">
+        <div className="sticky top-16 pt-10 max-h-[calc(100svh-7rem)] overflow-y-auto pb-8">
           <p className="mb-4 text-xs font-semibold tracking-widest text-vike-grey-300 uppercase flex gap-2 items-center">
             <ListTree className="w-3 h-3" />
             {t(locale, 'docs', 'onThisPage')}

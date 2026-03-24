@@ -14,15 +14,14 @@ const ProseContainer = cm.section`
   prose 
   prose-neutral
   max-w-none
-  dark:prose-invert 
-  prose-a:text-primary
+  dark:prose-invert
+  prose-a:text-accent
   prose-code:bg-base-200!
   prose-pre:bg-base-200!
   prose-p:after:content-none
   prose-p:before:content-none
   prose-blockquote:not-italic
   [&_blockquote_p]:mt-0
-  [&_blockquote_p]:leading-6
   [&_blockquote_p]:mb-2
   [&_blockquote_ul]:pl-4
   [&_blockquote_ul]:mt-2
@@ -44,7 +43,7 @@ const DocsLayout = (props: { children: ReactNode }) => {
   return (
     <>
       <div className="absolute w-full h-full top-0 left-0 overflow-hidden">
-        <div className="w-500 h-300 absolute top-16 -right-100 z-0 opacity-40 dark:opacity-100">
+        <div className="w-500 h-300 absolute top-16 -right-100 z-0 opacity-40 dark:opacity-70">
           <img
             src={`${appConfig.publicAssets}decorators/dot.png`}
             alt=""

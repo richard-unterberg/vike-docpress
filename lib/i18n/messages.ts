@@ -6,6 +6,18 @@ export const messages = {
       en: 'Docs',
       zh: '文档',
     },
+    apiHome: {
+      en: 'API',
+      zh: 'API',
+    },
+    blogHome: {
+      en: 'Blog',
+      zh: '博客',
+    },
+    docsForDevs: {
+      en: '4 Devs',
+      zh: '开发者',
+    },
     searchPlaceholder: {
       en: 'Search the docs...',
       zh: '搜索文档...',
@@ -127,6 +139,10 @@ export const messages = {
     apiReference: {
       en: 'API Reference',
       zh: 'API 参考',
+    },
+    devDocsReference: {
+      en: 'Docs for Devs',
+      zh: '开发文档参考',
     },
   },
   error: {

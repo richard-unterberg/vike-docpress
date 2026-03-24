@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react'
 import vike from 'vike/plugin'
 import { defineConfig, type PluginOption } from 'vite'
 import { rehypeDocHeadings } from './lib/docs/rehypeDocHeadings'
+import { rehypeShiki } from './lib/docs/rehypeShiki'
 import tsConf from './lib/tsconf'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -24,7 +25,7 @@ const plugins: PluginOption[] = [
   {
     ...mdx({
       jsxImportSource: '@/lib/mdx',
-      rehypePlugins: [rehypeDocHeadings],
+      rehypePlugins: [rehypeShiki, rehypeDocHeadings],
     }),
     enforce: 'pre',
   },
