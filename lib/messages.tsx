@@ -40,9 +40,43 @@ const messages = {
       en: 'Blog',
       zh: '博客',
     },
-    searchPlaceholder: {
-      en: 'Search the page...',
-      zh: '搜索页面内容...',
+  },
+  search: {
+    placeholder: {
+      en: 'Search docs...',
+      zh: '搜索文档...',
+    },
+    prompt: {
+      en: 'Search by title, heading, or body text.',
+      zh: '按标题、小节或正文搜索。',
+    },
+    loading: {
+      en: 'Loading search index...',
+      zh: '正在加载搜索索引...',
+    },
+    empty: {
+      en: 'No matching docs found.',
+      zh: '没有找到匹配的文档。',
+    },
+    usefulLinks: {
+      en: 'Useful links',
+      zh: '实用链接',
+    },
+    usefulGetStarted: {
+      en: 'Get started',
+      zh: '开始使用',
+    },
+    usefulIntroduction: {
+      en: 'Introduction',
+      zh: '介绍',
+    },
+    usefulHome: {
+      en: 'Home',
+      zh: '首页',
+    },
+    usefulGithub: {
+      en: 'GitHub repository',
+      zh: 'GitHub 仓库',
     },
   },
   home: {
@@ -55,8 +89,8 @@ const messages = {
       zh: '开发者',
     },
     subtitle: {
-      en: 'mdex is a developer-focused documentation starter kit built on top of Vike, optimized for performance and developer experience.',
-      zh: 'mdex 是一个以开发者为中心的文档入门套件，构建在 Vike 之上，并针对性能与开发体验进行了优化。',
+      en: 'is a developer-focused documentation starter kit built on top of Vike, optimized for performance and developer experience.',
+      zh: '是一个以开发者为中心的文档入门套件，构建在 Vike 之上，并针对性能与开发体验进行了优化。',
     },
     cta: {
       en: 'See it in action',

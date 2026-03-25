@@ -1,7 +1,7 @@
-import type { Locale } from '@/lib/i18n/config'
 import type { MdexSystemConfig } from '@/lib/docs/systemConfig'
-import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
 import { getDocPath } from '@/lib/docs/systemConfig'
+import type { Locale } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
 import { localizeHref } from '@/lib/i18n/routing'
 
 type HeadingDefinition = {
@@ -25,21 +25,21 @@ export const headingDefinitions = {
     },
   },
   overview: {
-    docPath: 'components/overview',
+    docPath: 'components',
     title: {
       en: 'Overview',
       zh: '概览',
     },
   },
   components: {
-    docPath: 'components/overview',
+    docPath: 'components',
     title: {
       en: 'Components',
       zh: '组件',
     },
   },
   guides: {
-    docPath: 'guides/overview',
+    docPath: 'guides',
     title: {
       en: 'Guides',
       zh: '指南',

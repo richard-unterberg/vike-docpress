@@ -11,7 +11,7 @@
 
 - Stack: Vike + `vike-react`, React 19, Vite 7, MDX via `@mdx-js/rollup`, Tailwind CSS 4, DaisyUI 5, Zustand, and `@classmatejs/react`.
 - Global app config lives in `pages/+config.ts`. It enables global `mdex` config, prerendering, `vike-react`, `htmlAttributes.data-theme = 'mdex-dark'`, and passes `locale` plus `urlPathnameLocalized` to the client.
-- App-wide docs system config lives in `pages/+mdex.ts`. Current values are `basePath: ''`, `defaultSlug: 'get-started'`, and `defaultDocConfig.tableOfContents: true`.
+- App-wide docs system config lives in `pages/+mdex.ts`. Current values are `basePath: ''`, `defaultSlug: 'get-started'`, `defaultDocConfig.tableOfContents: true`, and `search.indexedWordsPerDoc: 120`.
 - Current URL model: `/` is the landing page from `pages/index/+Page.tsx`. Docs pages are served from the single dynamic Vike subtree at `pages/(docs)/(config)`. Because `basePath` is currently `''`, docs resolve at root-level slugs like `/get-started` and `/intro` instead of under `/docs`.
 - Locales are defined in `lib/i18n/config.ts` as `en` and `zh`, with `en` as the default locale. Non-default locale URLs use a pathname prefix like `/zh/...`; default locale URLs stay unprefixed.
 - Routing locale behavior is handled in `pages/+onBeforeRoute.ts`. For non-prefixed URLs, the app may redirect on the client to a stored non-default locale preference. The URL remains the source of truth for the render-time locale.
@@ -29,12 +29,14 @@
 - Current config merge order in `getDocPage()` is: `defaultDocConfig` from `pages/+mdex.ts`, then inherited `content.config.*`, then `docConfig` exported by the default-locale MDX module, then `docConfig` exported by the active-locale MDX module.
 - `DocConfig` currently supports `tableOfContents?: boolean` only. Example: `pages/(docs)/(content)/intro/content.config.ts` disables the table of contents for the intro page.
 - Headings are extracted from raw MDX in `lib/docs/headings.ts` for heading depths 2-3. The Table of Contents also re-syncs headings from the rendered DOM on the client and auto-assigns missing heading IDs.
+- Search text is also extracted from raw MDX. The current search index includes title, slug, headings, and a locale-aware body excerpt limited by `pages/+mdex.ts -> search.indexedWordsPerDoc`.
 - Docs layout is defined in `pages/(docs)/(config)/+Layout.tsx`. It composes `LayoutComponent`, `Sidebar`, a prose-styled content column, `DocsFooter`, and an optional right-side `TableOfContents`.
 - Global shell layout is defined in `pages/+Layout.tsx`. It always renders `Navbar` plus a `pt-16` page offset to clear the fixed header.
 - Navigation is manually defined, not generated from the filesystem. Top-level heading metadata lives in `lib/headings.ts`, and sidebar group structure lives in `lib/navigation/menuNavigation.ts`.
 - Current manual navigation includes links for `get-started`, `components/overview`, and `guides/overview`. Only `get-started` currently exists as real content among those linked destinations; missing linked docs will 404 until content is added.
 - Reusable shared UI currently lives under `/components`, including `Alert`, navbar parts, sidebar parts, footer, TOC, social icons, and link helpers. Existing MDX already imports shared components directly, for example `Alert` in `pages/(docs)/(content)/intro/content.en.mdx`.
-- The current search control in `components/Navbar/Search.tsx` is UI-only. It renders an input shell with hover styling but has no implemented search indexing or query behavior yet.
+- The navbar search in `components/Navbar/Search.tsx` is implemented. It lazy-loads a locale-specific search index on focus, scores matches client-side, and links directly to matched documents or heading anchors.
+- Search asset generation is handled by `lib/search/vitePlugin.ts`. In dev it serves JSON from `/@search-index/<locale>.json`; in build it emits `dist/client/assets/search-index.<locale>.json` and patches `dist/assets.json` so deployments can reference the files through the normal asset manifest.
 - The current docs footer in `components/Footer.tsx` contains placeholder `href="edit"` links for edit/report actions and is not wired to a repository integration yet.
 
 - Per-document config under `pages/(docs)/(content)/**` cannot use real Vike `+config.ts` resolution with the current architecture.

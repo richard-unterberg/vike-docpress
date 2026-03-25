@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <div className="-ml-4 sticky top-16 shadow-lg shadow-base-300 ">
       <img
-        src={`${baseAssets}decorators/nav-shade.png`}
+        src={`${baseAssets}decorators/nav-shade.avif`}
         alt=""
         width={400}
         height={400}

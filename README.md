@@ -38,15 +38,16 @@ If your main goal is "spin up a conventional docs portal with the biggest plugin
 - Per-document inherited config through `content.config.ts` / `content.config.js`
 - Locale-aware routing with `en` and `zh`
 - Light/dark theme support with pre-hydration theme bootstrapping
+- Built-in localized search with build-time index generation and lazy client loading
 - Landing page plus docs layout in one app
 - Sidebar navigation, docs footer, and right-side table of contents
 
 ## Current Non-Goals / Missing Pieces
 
-- Search is not implemented yet
 - Edit-on-GitHub and report-issue links are placeholders
 - Navigation is currently manual
 - Docs versioning is not implemented
+- Search ranking is intentionally simple and the current search index only includes the first `n` parsed words per doc
 - This repo currently uses a custom docs content runtime instead of native per-doc Vike page config
 
 Those constraints are deliberate for now. The template favors application control and a simple internal model over trying to imitate the entire feature set of established docs platforms.
@@ -65,6 +66,11 @@ lib/docs/
   content.tsx               # docs discovery and runtime loading
   systemConfig.ts           # docs URL and config resolution
   headings.ts               # heading extraction
+
+lib/search/
+  buildIndex.ts             # build-time search index generation from raw MDX
+  vitePlugin.ts             # dev/build asset wiring for search indexes
+  index.ts                  # client-side loading and scoring
 
 components/
   Navbar/
@@ -94,7 +100,7 @@ This is the main tradeoff in the current architecture: you get a straightforward
 Use `pages/+mdex.ts` for app-wide docs behavior:
 
 ```ts
-import type { MdexSystemConfig } from '@/lib/docs/systemConfig'
+import type { MdexSystemConfig } from '../lib/docs/systemConfig'
 
 export default {
   basePath: '',
@@ -102,10 +108,15 @@ export default {
   defaultDocConfig: {
     tableOfContents: true,
   },
+  search: {
+    indexedWordsPerDoc: 120,
+  },
 } satisfies MdexSystemConfig
 ```
 
 With `basePath: ''`, docs currently resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
+
+`search.indexedWordsPerDoc` controls how many parsed words from each doc are included in the generated search index.
 
 ### Per-document shared settings
 
@@ -120,6 +131,15 @@ export default {
 ```
 
 These config files inherit by logical doc path, so higher-level configs can apply defaults to nested docs.
+
+## Search
+
+Search indexes are generated from raw MDX content, not from rendered HTML.
+
+- In dev, the Vite plugin serves locale-specific JSON at `/@search-index/<locale>.json`.
+- In production builds, the same plugin emits `dist/client/assets/search-index.en.json` and `dist/client/assets/search-index.zh.json`.
+- The plugin also patches `dist/assets.json` so deployments that rely on the asset manifest can discover those files.
+- The navbar search loads the active locale index on demand and ranks matches on the client using title, slug, headings, and truncated body text.
 
 ## Getting Started
 
@@ -146,7 +166,7 @@ Available scripts:
 
 ## Who Should Probably Use Something Else
 
-- Teams that want built-in search, docs versioning, and a mature docs plugin ecosystem on day one
+- Teams that want advanced search, docs versioning, and a mature docs plugin ecosystem on day one
 - Projects that are primarily a documentation site and only a documentation site
 - Developers who want docs navigation and structure generated entirely from filesystem conventions
 

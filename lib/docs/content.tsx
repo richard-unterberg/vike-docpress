@@ -24,6 +24,7 @@ type DocContentModule = {
   Page?: ComponentType
   headings?: DocHeading[]
   config?: DocConfig
+  source?: string
 }
 
 type DocEntry = Partial<Record<Locale, DocContentModule>>
@@ -160,6 +161,7 @@ for (const [path, source] of Object.entries(rawContentModules)) {
   if (localizedDoc) {
     const rawSource = getRawDocSource(source)
     localizedDoc.headings = extractDocHeadings(rawSource)
+    localizedDoc.source = rawSource
   }
 }
 

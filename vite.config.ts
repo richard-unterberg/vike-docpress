@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react'
 import vike from 'vike/plugin'
 import { defineConfig, type PluginOption } from 'vite'
 import { rehypeDocHeadings } from './lib/docs/rehypeDocHeadings'
+import { searchIndexPlugin } from './lib/search/vitePlugin'
 import tsConf from './lib/tsconf'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -31,6 +32,7 @@ const plugins: PluginOption[] = [
   react(),
   vike(),
   tailwindcss() as PluginOption,
+  searchIndexPlugin(),
 ]
 
 export default defineConfig({
@@ -38,9 +40,6 @@ export default defineConfig({
   resolve: {
     alias: [...pathAliases],
   },
-  // build: {
-  //   cssCodeSplit: false,
-  // },
   server: {
     port: 5555,
   },

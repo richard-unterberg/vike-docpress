@@ -1,16 +1,24 @@
-import type { DocConfig } from '@/lib/docs/config'
-import mdex from '@/pages/+mdex'
+import mdex from '../../pages/+mdex'
+import type { DocConfig } from './config'
+
+export type MdexSearchConfig = {
+  indexedWordsPerDoc?: number
+}
 
 export type MdexSystemConfig = {
   basePath?: string
   defaultSlug?: string
   defaultDocConfig?: DocConfig
+  search?: MdexSearchConfig
 }
 
 export type ResolvedMdexSystemConfig = {
   basePath: string
   defaultSlug: string
   defaultDocConfig: DocConfig
+  search: {
+    indexedWordsPerDoc: number
+  }
 }
 
 const normalizeBasePath = (value: string | undefined) => {
@@ -32,6 +40,9 @@ export const resolveMdexSystemConfig = (config?: MdexSystemConfig): ResolvedMdex
     basePath: normalizeBasePath(config?.basePath),
     defaultSlug: normalizeDocSlug(config?.defaultSlug) || 'get-started',
     defaultDocConfig: config?.defaultDocConfig ?? { tableOfContents: true },
+    search: {
+      indexedWordsPerDoc: Math.max(1, Math.floor(config?.search?.indexedWordsPerDoc ?? 120)),
+    },
   }
 }
 

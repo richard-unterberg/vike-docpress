@@ -18,15 +18,15 @@ const DocsFooter = () => {
         </a>
       </div>
       <div className="flex justify-between items-center">
+        <SocialIcons />
         <div className="flex gap-2 items-center">
+          <LanguageSwitch />
           <p>
-            <a href="unterberg.dev" className="text-neutral">
-              <Sticker className="w-8 h-8" />
+            <a href="unterberg.dev" className="text-base-content">
+              <Sticker className="w-7 h-7" />
             </a>
           </p>
-          <SocialIcons />
         </div>
-        <LanguageSwitch />
       </div>
     </footer>
   )

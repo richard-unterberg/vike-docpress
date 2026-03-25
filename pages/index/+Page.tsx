@@ -17,7 +17,7 @@ const Page = () => {
         <LayoutComponent className="relative">
           <div className="z-1 object-center absolute w-300 h-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
             <img
-              src={`${baseAssets}decorators/mascot-bg.png`}
+              src={`${baseAssets}decorators/mascot-bg.avif`}
               alt=""
               width={300}
               height={300}
@@ -29,7 +29,10 @@ const Page = () => {
               {t(locale, 'home', 'titlePrefix')}{' '}
               <GradientText className="underline">{t(locale, 'home', 'titleAccent')}</GradientText>
             </h1>
-            <p className="font-normal text-vike-grey-300 text-lg lg:text-2xl mt-8">{t(locale, 'home', 'subtitle')}</p>
+            <p className="font-normal text-vike-grey-300 text-lg lg:text-2xl mt-10">
+              <GradientText className="font-semibold text-base-content">mdex</GradientText>{' '}
+              {t(locale, 'home', 'subtitle')}
+            </p>
             <a
               href={localizeHref(getDocsIndexPath(config.mdex), locale)}
               className="btn  btn-lg btn-neutral mx-auto mt-8"

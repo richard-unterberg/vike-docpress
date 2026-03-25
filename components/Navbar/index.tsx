@@ -4,8 +4,8 @@ import { usePageContext } from 'vike-react/usePageContext'
 import LayoutComponent from '@/components/LayoutComponent'
 import DocsMenu from '@/components/Navbar/DocsMenu'
 import LanguageSwitch from '@/components/Navbar/LanguageSwitch'
-import Search from '@/components/Navbar/Search'
 import ThemeSwitch from '@/components/Navbar/ThemeSwitch'
+import Search from '@/components/Search'
 import SocialIcons from '@/components/SocialIcons'
 import type { Locale } from '@/lib/i18n/config'
 import { localizeHref } from '@/lib/i18n/routing'
@@ -41,7 +41,7 @@ const Navbar = () => {
               <BrandLogo locale={locale} isLanding />
             </div>
             <div className="flex flex-1 items-center justify-center gap-4 top-0 left-0 w-full">
-              <Search />
+              <Search inputSize={isLandingPage ? 'md' : 'sm'} />
             </div>
             <div className="flex-1 flex items-center justify-end gap-2">
               <div className="hidden xl:block">

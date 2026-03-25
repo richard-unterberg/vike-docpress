@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, isLocale, type Locale, resolveLocale } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, isLocale, type Locale, resolveLocale } from './config'
 
 type LocalePath = {
   locale: Locale
