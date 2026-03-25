@@ -8,19 +8,12 @@ export type SidebarHeading = {
   href: string
 }
 
-export type SidebarCategory = {
-  title: ReactNode
-  children?: SidebarHeading[]
-}
-
 export type SidebarGroup = {
   id: string
   icon?: LucideIcon
   title: ReactNode
-  links?: (SidebarHeading | SidebarCategory)[]
+  links?: SidebarHeading[]
 }
-
-const isCategory = (item: SidebarHeading | SidebarCategory): item is SidebarCategory => 'children' in item
 
 const isActiveHref = (currentPathname: string, href: string) => {
   const currentLogicalPathname = getLogicalPathname(currentPathname)
@@ -28,14 +21,6 @@ const isActiveHref = (currentPathname: string, href: string) => {
   return hrefLogicalPathname === '/'
     ? currentLogicalPathname === hrefLogicalPathname
     : currentLogicalPathname.startsWith(hrefLogicalPathname)
-}
-
-const hasActiveChild = (items: (SidebarHeading | SidebarCategory)[], currentPathname: string): boolean => {
-  return items.some((item) =>
-    isCategory(item)
-      ? Boolean(item.children) && hasActiveChild(item.children as SidebarHeading[], currentPathname)
-      : isActiveHref(currentPathname, item.href),
-  )
 }
 
 export const renderInlineMarkdown = (title: ReactNode): ReactNode => {
@@ -56,9 +41,7 @@ export const renderInlineMarkdown = (title: ReactNode): ReactNode => {
   })
 }
 
-const getSidebarItemKey = (item: SidebarHeading | SidebarCategory, index: number) => {
-  return 'href' in item ? `${item.href}::${index}` : `category-${index}`
-}
+const getSidebarItemKey = (item: SidebarHeading, index: number) => `${item.href}::${index}`
 
 const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
   return (
@@ -76,31 +59,6 @@ const SidebarLink = (props: SidebarHeading & { currentPathname: string }) => {
   )
 }
 
-const SidebarCategoryComponent = (props: SidebarCategory & { currentPathname: string }) => {
-  const isOpen = props.children ? hasActiveChild(props.children, props.currentPathname) : false
-
-  return (
-    <li>
-      <details open={isOpen}>
-        <summary className="text-vike-grey-300 bg-transparent!">{renderInlineMarkdown(props.title)}</summary>
-        <ul>
-          {props.children?.map((item, index) => (
-            <SidebarItem key={getSidebarItemKey(item, index)} item={item} currentPathname={props.currentPathname} />
-          ))}
-        </ul>
-      </details>
-    </li>
-  )
-}
-
-const SidebarItem = (props: { item: SidebarHeading | SidebarCategory; currentPathname: string }) => {
-  return isCategory(props.item) ? (
-    <SidebarCategoryComponent {...props.item} currentPathname={props.currentPathname} />
-  ) : (
-    <SidebarLink {...props.item} currentPathname={props.currentPathname} />
-  )
-}
-
 const SidebarGroupComponent = (props: SidebarGroup & { currentPathname: string; showSeparator: boolean }) => {
   const Icon = props.icon
 
@@ -112,7 +70,7 @@ const SidebarGroupComponent = (props: SidebarGroup & { currentPathname: string; 
       </span>
       <ul>
         {props.links?.map((item, index) => (
-          <SidebarItem key={getSidebarItemKey(item, index)} item={item} currentPathname={props.currentPathname} />
+          <SidebarLink key={getSidebarItemKey(item, index)} {...item} currentPathname={props.currentPathname} />
         ))}
       </ul>
       {props.showSeparator && (
