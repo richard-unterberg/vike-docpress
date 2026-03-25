@@ -5,7 +5,5 @@
     "lib/mdx/jsx-runtime.tsx",
     "public/**/*"
   ],
-  "tags": [
-    "-lintignore"
-  ]
+  "tags": ["-lintignore"]
 }

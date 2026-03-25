@@ -3,10 +3,12 @@
     "dev": "vike dev",
     "build": "vike build",
     "preview": "vike build && vike preview",
+    "prepare": "lefthook install",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
-    "knip": "knip"
+    "knip": "knip",
+    "knip:staged": "node scripts/knip-staged.mjs"
   },
   "dependencies": {
     "@classmatejs/react": "^0.2.1",
@@ -28,6 +30,7 @@
     "@vitejs/plugin-react": "^5.0.2",
     "daisyui": "^5.5.19",
     "knip": "^6.0.5",
+    "lefthook": "^2.1.4",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
