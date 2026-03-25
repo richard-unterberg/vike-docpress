@@ -1,11 +1,11 @@
 import MenuTab from '@/components/Sidebar/MenuTab'
-import appConfig from '@/lib/config'
+import baseAssets from '@/lib/baseAssets'
 
 const Sidebar = () => {
   return (
     <div className="-ml-4 sticky top-16 shadow-lg shadow-base-300 ">
       <img
-        src={`${appConfig.publicAssets}decorators/nav-shade.png`}
+        src={`${baseAssets}decorators/nav-shade.png`}
         alt=""
         width={400}
         height={400}

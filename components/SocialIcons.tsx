@@ -1,4 +1,4 @@
-import appConfig from '@/lib/config'
+import baseAssets from '@/lib/baseAssets'
 
 const icons = {
   github: {
@@ -35,7 +35,7 @@ const SocialIcons = () => {
             className="rounded-full flex items-center justify-center border bg-base-200 border-base-content/10 w-8 h-8"
           >
             <img
-              src={`${appConfig.publicAssets}brands/${icon}`}
+              src={`${baseAssets}brands/${icon}`}
               alt={`${key} icon`}
               className="w-auto h-3 dark:invert opacity-75"
             />

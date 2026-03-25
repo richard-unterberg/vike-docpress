@@ -1,5 +1,5 @@
 import { usePageContext } from 'vike-react/usePageContext'
-import appConfig from '@/lib/config'
+import baseAssets from '@/lib/baseAssets'
 import { themeBootstrapScript } from '@/lib/theme'
 
 export const Head = () => {
@@ -11,27 +11,27 @@ export const Head = () => {
     <>
       <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
       {/* add manifest */}
-      <link rel="manifest" href={`${appConfig.publicAssets}favicon/site.webmanifest`} />
-      <link rel="icon" href={`${appConfig.publicAssets}favicon/favicon.ico`} />
+      <link rel="manifest" href={`${baseAssets}favicon/site.webmanifest`} />
+      <link rel="icon" href={`${baseAssets}favicon/favicon.ico`} />
       {isChinese ? (
         <>
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/noto-sans-sc-v40-chinese-simplified-regular.woff2`}
+            href={`${baseAssets}fonts/noto-sans-sc-v40-chinese-simplified-regular.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/noto-sans-sc-v40-chinese-simplified-600.woff2`}
+            href={`${baseAssets}fonts/noto-sans-sc-v40-chinese-simplified-600.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/noto-sans-sc-v40-chinese-simplified-800.woff2`}
+            href={`${baseAssets}fonts/noto-sans-sc-v40-chinese-simplified-800.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
@@ -41,21 +41,21 @@ export const Head = () => {
         <>
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/inter-v20-latin-regular.woff2`}
+            href={`${baseAssets}fonts/inter-v20-latin-regular.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/inter-v20-latin-600.woff2`}
+            href={`${baseAssets}fonts/inter-v20-latin-600.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
           />
           <link
             rel="preload"
-            href={`${appConfig.publicAssets}fonts/inter-v20-latin-800.woff2`}
+            href={`${baseAssets}fonts/inter-v20-latin-800.woff2`}
             as="font"
             type="font/woff2"
             crossOrigin="anonymous"
@@ -64,7 +64,7 @@ export const Head = () => {
       )}
       <link
         rel="stylesheet"
-        href={`${appConfig.publicAssets}${isChinese ? 'fonts-noto-sans-sc.css' : 'fonts-inter.css'}`}
+        href={`${baseAssets}${isChinese ? 'fonts-noto-sans-sc.css' : 'fonts-inter.css'}`}
       />
     </>
   )

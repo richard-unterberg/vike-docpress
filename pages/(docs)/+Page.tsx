@@ -1,14 +1,16 @@
 import { usePageContext } from 'vike-react/usePageContext'
-import { DEFAULT_DOC_SLUG, getDocPage } from '@/lib/docs/content'
+import { getDocPage } from '@/lib/docs/content'
+import { getDocsSystemConfig } from '@/lib/docs/systemConfig'
 
 const normalizeSlug = (value: string) => value.replace(/^\/+|\/+$/g, '')
 
 const Page = () => {
   const pageContext = usePageContext()
+  const docsConfig = getDocsSystemConfig(pageContext)
   const routeParams = pageContext.routeParams as { slug?: string }
   const requestedSlug = normalizeSlug(routeParams.slug ?? '')
-  const docSlug = requestedSlug || DEFAULT_DOC_SLUG
-  const entry = getDocPage(`docs/${docSlug}`, pageContext.locale)
+  const docSlug = requestedSlug || docsConfig.defaultSlug
+  const entry = getDocPage(docSlug, pageContext.locale, docsConfig)
   const MdxPage = entry?.Page
 
   if (!MdxPage) {

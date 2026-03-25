@@ -1,15 +1,23 @@
 import type { ComponentType } from 'react'
+import type { DocConfig } from '@/lib/docs/config'
 import { type DocHeading, extractDocHeadings } from '@/lib/docs/headings'
+import {
+  docsSystemConfig,
+  getDocPath,
+  getDocsIndexPath,
+  type DocsSystemConfig,
+  resolveDocsSystemConfig,
+} from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, isLocale, type Locale, locales } from '@/lib/i18n/config'
 import { localizeHref } from '@/lib/i18n/routing'
-
-export type DocConfig = {
-  tableOfContents?: boolean
-}
 
 type MdxModule = {
   default: ComponentType
   docConfig?: DocConfig
+}
+
+type DocConfigModule = {
+  default?: DocConfig
 }
 
 type DocContentModule = {
@@ -19,8 +27,10 @@ type DocContentModule = {
 }
 
 type DocEntry = Partial<Record<Locale, DocContentModule>>
-
-export const DEFAULT_DOC_SLUG = 'get-started'
+type PagePathInfo = {
+  segments: string[]
+  filename: string
+}
 
 const pageModules = import.meta.glob<MdxModule>('../../pages/**/content.*.mdx', {
   eager: true,
@@ -34,30 +44,99 @@ const rawContentModules = import.meta.glob<RawContentModule>('../../pages/**/con
   query: '?raw',
 })
 
+const docConfigModules = import.meta.glob<DocConfigModule>('../../pages/**/docs.config.{ts,js}', {
+  eager: true,
+})
+
 const getRawDocSource = (module: RawContentModule) => {
   if (typeof module === 'string') return module
   if (typeof module?.default === 'string') return module.default
   return ''
 }
 
-const getDocModuleMeta = (path: string) => {
-  const match = path.match(/\/pages\/(.+)\/content\.([^.]+)\.mdx$/)
+const getLogicalSegments = (segments: string[]) => {
+  return segments
+    .filter((segment) => segment !== '' && !(segment.startsWith('(') && segment.endsWith(')')))
+}
+
+const getPagePathInfo = (path: string): PagePathInfo | null => {
+  const match = path.match(/\/pages\/(.+)$/)
   if (!match) return null
 
-  const [, rawRouteId, locale] = match
+  const parts = match[1].split('/').filter(Boolean)
+  const filename = parts.at(-1)
+  if (!filename) return null
+
+  return {
+    segments: parts.slice(0, -1),
+    filename,
+  }
+}
+
+const getDocSlugFromSegments = (segments: string[]) => {
+  const contentIndex = segments.indexOf('(content)')
+  if (contentIndex < 0) return null
+
+  return getLogicalSegments(segments.slice(contentIndex + 1)).join('/')
+}
+
+const getDocsRootSegments = () => {
+  const docModulePath = Object.keys(pageModules)[0]
+  const pathInfo = docModulePath ? getPagePathInfo(docModulePath) : null
+  if (!pathInfo) return []
+
+  const contentIndex = pathInfo.segments.indexOf('(content)')
+  if (contentIndex < 0) return []
+
+  return pathInfo.segments.slice(0, contentIndex)
+}
+
+const docsRootSegments = getDocsRootSegments()
+
+const getDocModuleMeta = (path: string) => {
+  const pathInfo = getPagePathInfo(path)
+  if (!pathInfo) return null
+
+  const localeMatch = pathInfo.filename.match(/^content\.([^.]+)\.mdx$/)
+  if (!localeMatch) return null
+
+  const [, locale] = localeMatch
   if (!isLocale(locale)) return null
 
-  const routeId = rawRouteId
-    .split('/')
-    .filter((segment) => !(segment.startsWith('(') && segment.endsWith(')')))
-    .join('/')
-
-  if (!routeId) return null
+  const routeId = getDocSlugFromSegments(pathInfo.segments)
+  if (routeId === null) return null
 
   return { locale, routeId }
 }
 
+const getDocConfigRouteId = (path: string) => {
+  const pathInfo = getPagePathInfo(path)
+  if (!pathInfo || !/^docs\.config\.[^.]+$/.test(pathInfo.filename)) return null
+
+  const contentRouteId = getDocSlugFromSegments(pathInfo.segments)
+  if (contentRouteId !== null) return contentRouteId
+
+  if (docsRootSegments.length === 0) return null
+
+  const isWithinDocsRoot = docsRootSegments.every((segment, index) => pathInfo.segments[index] === segment)
+  if (!isWithinDocsRoot) return null
+
+  return getLogicalSegments(pathInfo.segments.slice(docsRootSegments.length)).join('/')
+}
+
+const getRouteLineage = (routeId: string) => {
+  const segments = routeId.split('/').filter(Boolean)
+  const lineage = ['']
+
+  for (let index = 0; index < segments.length; index += 1) {
+    lineage.push(segments.slice(0, index + 1).join('/'))
+  }
+
+  return lineage
+}
+
 const docs = {} as Record<string, DocEntry>
+const sharedDocConfigs = new Map<string, DocConfig>()
 
 for (const [path, mod] of Object.entries(pageModules)) {
   const meta = getDocModuleMeta(path)
@@ -85,7 +164,29 @@ for (const [path, source] of Object.entries(rawContentModules)) {
   }
 }
 
-export const getDocPage = (slug: string, locale: Locale) => {
+for (const [path, mod] of Object.entries(docConfigModules)) {
+  const routeId = getDocConfigRouteId(path)
+  if (routeId === null) continue
+
+  if (sharedDocConfigs.has(routeId)) {
+    throw new Error(
+      `Duplicate docs.config for logical route "${routeId || '/'}". Keep only one config file for that docs path.`,
+    )
+  }
+
+  sharedDocConfigs.set(routeId, mod.default ?? {})
+}
+
+const getSharedDocConfig = (routeId: string) => {
+  return getRouteLineage(routeId).reduce<DocConfig>((config, prefix) => {
+    return {
+      ...config,
+      ...(sharedDocConfigs.get(prefix) ?? {}),
+    }
+  }, {})
+}
+
+export const getDocPage = (slug: string, locale: Locale, docsConfig?: DocsSystemConfig) => {
   const doc = docs[slug]
   if (!doc) {
     return null
@@ -96,7 +197,10 @@ export const getDocPage = (slug: string, locale: Locale) => {
     return null
   }
 
+  const resolvedDocsConfig = resolveDocsSystemConfig(docsConfig ?? docsSystemConfig)
   const config = {
+    ...resolvedDocsConfig.defaultDocConfig,
+    ...getSharedDocConfig(slug),
     ...(doc[DEFAULT_LOCALE]?.config ?? {}),
     ...(doc[locale]?.config ?? {}),
   }
@@ -109,22 +213,26 @@ export const getDocPage = (slug: string, locale: Locale) => {
   }
 }
 
-export const getAllDocSlugs = () => {
-  return Object.keys(docs)
-    .filter((routeId) => routeId.startsWith('docs/'))
-    .map((routeId) => routeId.replace(/^docs\/+/, ''))
-    .sort((left, right) => left.localeCompare(right))
+export const hasDocSlug = (slug: string) => {
+  return getAllDocSlugs().includes(slug.replace(/^\/+|\/+$/g, ''))
 }
 
-export const getPrerenderDocUrls = () => {
+export const getAllDocSlugs = () => {
+  return Object.keys(docs).sort((left, right) => left.localeCompare(right))
+}
+
+export const getPrerenderDocUrls = (docsConfig?: DocsSystemConfig) => {
+  const resolvedDocsConfig = resolveDocsSystemConfig(docsConfig ?? docsSystemConfig)
   const urls = new Set<string>()
   const docSlugs = getAllDocSlugs()
 
   for (const locale of locales) {
-    urls.add(localizeHref('/docs', locale))
+    if (resolvedDocsConfig.basePath !== '') {
+      urls.add(localizeHref(getDocsIndexPath(resolvedDocsConfig), locale))
+    }
 
     for (const slug of docSlugs) {
-      urls.add(localizeHref(`/docs/${slug}`, locale))
+      urls.add(localizeHref(getDocPath(slug, resolvedDocsConfig), locale))
     }
   }
 

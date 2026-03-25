@@ -5,9 +5,9 @@ import DocsFooter from '@/components/Footer'
 import LayoutComponent from '@/components/LayoutComponent'
 import Sidebar from '@/components/Sidebar'
 import TableOfContents from '@/components/TableOfContents'
-import appConfig from '@/lib/config'
+import baseAssets from '@/lib/baseAssets'
 import { getDocPage } from '@/lib/docs/content'
-import { getLogicalPathname } from '@/lib/i18n/routing'
+import { getDocsSystemConfig } from '@/lib/docs/systemConfig'
 
 const ProseContainer = cm.section`
   min-h-[calc(100svh-92*var(--spacing))]
@@ -34,10 +34,12 @@ const ProseContainer = cm.section`
 `
 
 const DocsLayout = ({ children }: { children: ReactNode }) => {
-  const { urlPathnameLocalized, urlPathname, locale } = usePageContext()
-  const pathname = urlPathnameLocalized ?? urlPathname
-  const docSlug = getLogicalPathname(pathname).replace(/^\/+/, '')
-  const doc = getDocPage(docSlug, locale)
+  const pageContext = usePageContext()
+  const { locale } = pageContext
+  const docsConfig = getDocsSystemConfig(pageContext)
+  const routeParams = pageContext.routeParams as { slug?: string }
+  const docSlug = (routeParams.slug ?? '').replace(/^\/+|\/+$/g, '') || docsConfig.defaultSlug
+  const doc = getDocPage(docSlug, locale, docsConfig)
   const showTableOfContents = doc?.config.tableOfContents ?? true
 
   return (
@@ -45,7 +47,7 @@ const DocsLayout = ({ children }: { children: ReactNode }) => {
       <div className="absolute w-full h-full top-0 left-0 overflow-hidden">
         <div className="w-500 h-300 absolute top-16 -right-100 z-0 opacity-40 dark:opacity-70">
           <img
-            src={`${appConfig.publicAssets}decorators/dot.png`}
+            src={`${baseAssets}decorators/dot.png`}
             alt=""
             width={400}
             height={400}

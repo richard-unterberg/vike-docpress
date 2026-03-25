@@ -1,63 +1,82 @@
 import type { Locale } from '@/lib/i18n/config'
+import type { DocsSystemConfig } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
+import { getDocPath } from '@/lib/docs/systemConfig'
 import { localizeHref, stripLocaleFromPathname } from '@/lib/i18n/routing'
 
-const mainMenuHeadingTitles = {
+type HeadingDefinition = {
+  docPath: string
+  title: Record<Locale, string>
+}
+
+export const headingDefinitions = {
+  docsHome: {
+    docPath: '',
+    title: {
+      en: 'Docs',
+      zh: '文档',
+    },
+  },
   getStarted: {
-    en: 'Welcome',
-    de: 'Willkommen',
-    zh: '欢迎',
+    docPath: 'get-started',
+    title: {
+      en: 'Welcome',
+      zh: '欢迎',
+    },
   },
   overview: {
-    en: 'Overview',
-    de: 'Überblick',
-    zh: '概览',
+    docPath: 'components/overview',
+    title: {
+      en: 'Overview',
+      zh: '概览',
+    },
   },
-} as const
-
-const baseHeadingLinks = {
-  getStarted: '/docs/get-started',
-  overview: '/docs/components/overview',
-} as const
-
-const subMenuHeadingTitles = {
-  anotherPage: {
-    en: 'Another Page',
-    de: 'Eine andere Seite',
-    zh: '另一页',
+  components: {
+    docPath: 'components/overview',
+    title: {
+      en: 'Components',
+      zh: '组件',
+    },
   },
-} as const
+  guides: {
+    docPath: 'guides/overview',
+    title: {
+      en: 'Guides',
+      zh: '指南',
+    },
+  },
+} as const satisfies Record<string, HeadingDefinition>
 
-const subMenuHeadingLinks = {
-  anotherPage: '/docs/another-page',
-} as const
-
-export const headingTitles = {
-  ...mainMenuHeadingTitles,
-  ...subMenuHeadingTitles,
-} as const
-
-const headingLinks: Record<HeadingKey, string> = {
-  ...baseHeadingLinks,
-  ...subMenuHeadingLinks,
-}
-
-export type HeadingKey = keyof typeof headingTitles
+export type HeadingKey = keyof typeof headingDefinitions
 
 export const getHeadingTitle = (headingKey: HeadingKey, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
-  return headingTitles[headingKey][resolveLocale(locale)]
+  return headingDefinitions[headingKey].title[resolveLocale(locale)]
 }
 
-export const getHeadingData = (headingKey: HeadingKey, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
+export const getHeadingLink = (headingKey: HeadingKey, docsConfig?: DocsSystemConfig) => {
+  return getDocPath(headingDefinitions[headingKey].docPath, docsConfig)
+}
+
+export const getHeadingData = (
+  headingKey: HeadingKey,
+  locale: Locale | string | undefined = DEFAULT_LOCALE,
+  docsConfig?: DocsSystemConfig,
+) => {
   return {
     title: getHeadingTitle(headingKey, locale),
-    href: localizeHref(headingLinks[headingKey], locale),
+    href: localizeHref(getHeadingLink(headingKey, docsConfig), locale),
   }
 }
 
-export const getHeadingTitleFromHref = (href: string, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
+export const getHeadingTitleFromHref = (
+  href: string,
+  locale: Locale | string | undefined = DEFAULT_LOCALE,
+  docsConfig?: DocsSystemConfig,
+) => {
   const pathname = stripLocaleFromPathname(href.split('#')[0]?.split('?')[0] ?? href).pathname
-  const match = Object.entries(headingLinks).find(([, headingHref]) => headingHref === pathname)
+  const match = Object.entries(headingDefinitions).find(
+    ([headingKey]) => getHeadingLink(headingKey as HeadingKey, docsConfig) === pathname,
+  )
   if (!match) return null
 
   const [headingKey] = match
