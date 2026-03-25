@@ -3,7 +3,7 @@ import { ListTree } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import { createHeadingSlugger, type DocHeading, normalizeHeadingTitle } from '@/lib/docs/headings'
-import { t } from '@/lib/i18n/messages'
+import { t } from '@/lib/messages'
 
 const TocLink = cm.a<{ $isActive?: boolean; $isNested?: boolean }>`
   block
@@ -88,7 +88,7 @@ const updateActiveHeadingFromScroll = (setActiveHeadingId: (value: string) => vo
   setActiveHeadingId(nextActiveHeadingId)
 }
 
-const TableOfContents = ({ headings } : { headings: DocHeading[] }) => {
+const TableOfContents = ({ headings }: { headings: DocHeading[] }) => {
   const { locale } = usePageContext()
   const [activeHeadingId, setActiveHeadingId] = useState('')
   const [domHeadings, setDomHeadings] = useState<DocHeading[]>(headings)

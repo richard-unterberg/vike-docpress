@@ -1,6 +1,6 @@
 import { Frown } from 'lucide-react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { t } from '@/lib/i18n/messages'
+import { t } from '@/lib/messages'
 
 const Page = () => {
   const { locale, is404 } = usePageContext()

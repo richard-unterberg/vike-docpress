@@ -1,4 +1,4 @@
-import { Smile } from 'lucide-react'
+import { Sticker } from 'lucide-react'
 import { useEffect, useMemo } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import LayoutComponent from '@/components/LayoutComponent'
@@ -8,13 +8,18 @@ import Search from '@/components/Navbar/Search'
 import ThemeSwitch from '@/components/Navbar/ThemeSwitch'
 import SocialIcons from '@/components/SocialIcons'
 import type { Locale } from '@/lib/i18n/config'
-import { t } from '@/lib/i18n/messages'
 import { localizeHref } from '@/lib/i18n/routing'
+import { t } from '@/lib/messages'
 
-const VikeLogo = ({ locale, isLanding = false }: { locale: Locale; isLanding?: boolean }) => (
+const BrandLogo = ({ locale, isLanding = false }: { locale: Locale; isLanding?: boolean }) => (
   <a href={localizeHref('/', locale)} className="flex gap-2 items-center text-base-content">
-    <Smile className="w-6 h-6" />
-    <span className="font-semibold">Vike {!isLanding ? t(locale, 'header', 'docsHome') : null}</span>
+    <Sticker className="w-6 h-6" />
+    <span className="font-bold uppercase">
+      mdex{' '}
+      <span className="font-normal text-vike-grey-300 text-xs lowercase">
+        {!isLanding ? t(locale, 'header', 'docsHome') : null}
+      </span>
+    </span>
   </a>
 )
 
@@ -36,7 +41,7 @@ const Navbar = () => {
         {isLandingPage ? (
           <div className="py-4 flex justify-between items-center h-full relative z-3">
             <div className="flex-1 flex items-center gap-4">
-              <VikeLogo locale={locale} isLanding />
+              <BrandLogo locale={locale} isLanding />
             </div>
             <div className="flex flex-1 items-center justify-center gap-4 top-0 left-0 w-full">
               <Search />
@@ -52,7 +57,7 @@ const Navbar = () => {
         ) : (
           <div className="py-4 flex justify-between items-center h-full relative z-3">
             <div className="flex-1 lg:flex-none flex items-center justify-between gap-2 w-90">
-              <VikeLogo locale={locale} />
+              <BrandLogo locale={locale} />
               <Search />
             </div>
             <div className="flex flex-1 items-center justify-center lg:justify-start lg:pl-10 xl:pl-14 gap-4 top-0 left-0 w-full">

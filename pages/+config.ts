@@ -6,9 +6,10 @@ import vikeReact from 'vike-react/config'
 
 export default {
   // https://vike.dev/head-tags
-  title: 'Vike',
-  description: 'Docs re-amp',
+  title: 'mdex',
+  description: 'mdex docs starter kit',
   htmlAttributes: { 'data-theme': 'vike-dark' },
   passToClient: ['locale', 'urlPathnameLocalized'],
   extends: [vikeReact],
+  prerender: true,
 } satisfies Config

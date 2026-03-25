@@ -10,7 +10,9 @@ export const Head = () => {
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
-      <link rel="icon" href={`${appConfig.publicAssets}favicon.svg`} />
+      {/* add manifest */}
+      <link rel="manifest" href={`${appConfig.publicAssets}favicon/site.webmanifest`} />
+      <link rel="icon" href={`${appConfig.publicAssets}favicon/favicon.ico`} />
       {isChinese ? (
         <>
           <link

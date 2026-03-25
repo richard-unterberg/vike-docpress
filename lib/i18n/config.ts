@@ -17,3 +17,7 @@ export const localeHtmlLang: Record<Locale, string> = {
 export const isLocale = (value: string): value is Locale => {
   return locales.includes(value as Locale)
 }
+
+export const resolveLocale = (value: string | null | undefined): Locale => {
+  return value && isLocale(value) ? value : DEFAULT_LOCALE
+}

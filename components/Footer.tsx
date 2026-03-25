@@ -1,8 +1,8 @@
-import { Bug, Pencil, Smile } from 'lucide-react'
+import { Bug, Pencil, Sticker } from 'lucide-react'
 import { usePageContext } from 'vike-react/usePageContext'
 import LanguageSwitch from '@/components/Navbar/LanguageSwitch'
 import SocialIcons from '@/components/SocialIcons'
-import { t } from '@/lib/i18n/messages'
+import { t } from '@/lib/messages'
 
 const DocsFooter = () => {
   const { locale } = usePageContext()
@@ -20,8 +20,8 @@ const DocsFooter = () => {
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <p>
-            <a href="vike.dev" className='text-neutral'>
-              <Smile className="w-8 h-8" />
+            <a href="unterberg.dev" className="text-neutral">
+              <Sticker className="w-8 h-8" />
             </a>
           </p>
           <SocialIcons />

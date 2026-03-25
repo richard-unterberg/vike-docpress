@@ -1,7 +1,5 @@
 import { usePageContext } from 'vike-react/usePageContext'
-import { getDocPage } from '@/lib/docs/content'
-
-const DEFAULT_DOC_SLUG = 'get-started'
+import { DEFAULT_DOC_SLUG, getDocPage } from '@/lib/docs/content'
 
 const normalizeSlug = (value: string) => value.replace(/^\/+|\/+$/g, '')
 

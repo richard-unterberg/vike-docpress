@@ -2,7 +2,7 @@ import { cmMerge } from '@classmatejs/react'
 import { Search as SearchIcon } from 'lucide-react'
 import { useState } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { t } from '@/lib/i18n/messages'
+import { t } from '@/lib/messages'
 
 const Search = () => {
   const { locale } = usePageContext()

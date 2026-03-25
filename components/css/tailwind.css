@@ -25,6 +25,12 @@
     @apply text-accent;
   }
 
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
   .prose,
   a,
   li,

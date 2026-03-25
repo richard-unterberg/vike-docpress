@@ -1,4 +1,4 @@
-import type { Locale } from '@/lib/i18n/config'
+import { type Locale, resolveLocale } from '@/lib/i18n/config'
 
 export const messages = {
   header: {
@@ -6,31 +6,27 @@ export const messages = {
       en: 'Docs',
       zh: '文档',
     },
-    apiHome: {
-      en: 'API',
-      zh: 'API',
+    componentsHome: {
+      en: 'Components',
+      zh: '组件',
     },
     blogHome: {
       en: 'Blog',
       zh: '博客',
     },
-    docsForDevs: {
-      en: '4 Devs',
-      zh: '开发者',
-    },
     searchPlaceholder: {
-      en: 'Search the docs...',
-      zh: '搜索文档...',
+      en: 'Search the page...',
+      zh: '搜索页面内容...',
     },
   },
   home: {
     title: {
-      en: 'Framework for<br className="hidden sm:block" /> Stability and Freedom',
-      zh: '稳定与自由的框架',
+      en: 'Document anything',
+      zh: '记录一切，遗忘无物',
     },
     subtitle: {
-      en: "Vike is a minimal-lock-in framework that prioritizes application stability and development freedom, powered by an open foundation built for JavaScript's rapidly evolving ecosystem.",
-      zh: 'Vike 是一个极简锁定的框架，优先考虑应用程序的稳定性和开发自由度，由一个开放的基础构建，为 JavaScript 快速发展的生态系统而构建。',
+      en: 'mdex is a developer-focused documentation starter kit built on top of Vike, optimized for performance and developer experience.',
+      zh: 'mdex 是一个以开发者为中心的文档入门套件，构建在 Vike 之上，并针对性能与开发体验进行了优化。',
     },
     cta: {
       en: 'Get started',
@@ -42,9 +38,9 @@ export const messages = {
       en: 'Get Started',
       zh: '开始',
     },
-    overview: {
-      en: 'Overview',
-      zh: '概览',
+    components: {
+      en: 'Components',
+      zh: '组件',
     },
     guides: {
       en: 'Guides',
@@ -61,26 +57,6 @@ export const messages = {
     more: {
       en: 'More',
       zh: '更多',
-    },
-    deploy: {
-      en: 'Deploy',
-      zh: '部署',
-    },
-    staticHosts: {
-      en: 'Static hosts',
-      zh: '静态托管',
-    },
-    serverless: {
-      en: 'Full-stack (serverless)',
-      zh: '全栈 (Serverless)',
-    },
-    selfHosted: {
-      en: 'Full-stack (self-hosted)',
-      zh: '全栈（自托管）',
-    },
-    integration: {
-      en: 'Integration',
-      zh: '集成',
     },
   },
   docs: {
@@ -100,9 +76,9 @@ export const messages = {
       en: 'Documentation',
       zh: '文档',
     },
-    apiReference: {
-      en: 'API Reference',
-      zh: 'API 参考',
+    componentReference: {
+      en: 'Component Reference',
+      zh: '块引用',
     },
   },
   error: {
@@ -130,10 +106,10 @@ type MessageGroup = keyof Messages
 type MessageKey<TGroup extends MessageGroup> = keyof Messages[TGroup]
 
 export const t = <TGroup extends MessageGroup, TKey extends MessageKey<TGroup>>(
-  locale: Locale,
+  locale: Locale | string | undefined,
   group: TGroup,
   key: TKey,
 ) => {
   const entry = messages[group][key] as Record<Locale, string>
-  return entry[locale]
+  return entry[resolveLocale(locale)]
 }

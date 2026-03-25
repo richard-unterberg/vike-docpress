@@ -1,5 +1,4 @@
-import type { Locale } from '@/lib/i18n/config'
-import { DEFAULT_LOCALE, isLocale } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, isLocale, type Locale, resolveLocale } from '@/lib/i18n/config'
 
 type LocalePath = {
   locale: Locale
@@ -52,15 +51,17 @@ const isExternalHref = (href: string) => {
   return /^(?:[a-z]+:)?\/\//i.test(href) || href.startsWith('mailto:') || href.startsWith('tel:')
 }
 
-export const localizeHref = (href: string, locale: Locale) => {
-  if (locale === DEFAULT_LOCALE || href === '' || href.startsWith('#') || isExternalHref(href)) {
+export const localizeHref = (href: string, locale: Locale | string | undefined) => {
+  const localeResolved = resolveLocale(locale)
+
+  if (localeResolved === DEFAULT_LOCALE || href === '' || href.startsWith('#') || isExternalHref(href)) {
     return href
   }
 
   const [hrefWithoutHash, hash = ''] = href.split('#')
   const [pathname, search = ''] = hrefWithoutHash.split('?')
   const pathnameLocalized = getLogicalPathname(pathname)
-  const pathnameWithLocale = pathnameLocalized === '/' ? `/${locale}` : `/${locale}${pathnameLocalized}`
+  const pathnameWithLocale = pathnameLocalized === '/' ? `/${localeResolved}` : `/${localeResolved}${pathnameLocalized}`
 
   return `${pathnameWithLocale}${search ? `?${search}` : ''}${hash ? `#${hash}` : ''}`
 }

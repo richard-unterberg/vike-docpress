@@ -14,6 +14,7 @@ export type SidebarCategory = {
 }
 
 export type SidebarGroup = {
+  id: string
   icon?: LucideIcon
   title: ReactNode
   links?: (SidebarHeading | SidebarCategory)[]
@@ -126,7 +127,7 @@ const SidebarNavigation = (props: { groups: SidebarGroup[]; currentPathname: str
     <ul className="menu w-full px-0 py-5 li:last-child:border-0">
       {props.groups.map((group, index) => (
         <SidebarGroupComponent
-          key={`sidebar-group-${group.title}`}
+          key={`sidebar-group-${group.id}`}
           {...group}
           currentPathname={props.currentPathname}
           showSeparator={index !== props.groups.length - 1}

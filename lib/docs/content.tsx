@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { type DocHeading, extractDocHeadings } from '@/lib/docs/headings'
-import { DEFAULT_LOCALE, isLocale, type Locale } from '@/lib/i18n/config'
+import { DEFAULT_LOCALE, isLocale, type Locale, locales } from '@/lib/i18n/config'
+import { localizeHref } from '@/lib/i18n/routing'
 
 export type DocConfig = {
   tableOfContents?: boolean
@@ -18,6 +19,8 @@ type DocContentModule = {
 }
 
 type DocEntry = Partial<Record<Locale, DocContentModule>>
+
+export const DEFAULT_DOC_SLUG = 'get-started'
 
 const pageModules = import.meta.glob<MdxModule>('../../pages/**/content.*.mdx', {
   eager: true,
@@ -104,4 +107,26 @@ export const getDocPage = (slug: string, locale: Locale) => {
     config,
     resolvedLocale: doc[locale] ? locale : DEFAULT_LOCALE,
   }
+}
+
+export const getAllDocSlugs = () => {
+  return Object.keys(docs)
+    .filter((routeId) => routeId.startsWith('docs/'))
+    .map((routeId) => routeId.replace(/^docs\/+/, ''))
+    .sort((left, right) => left.localeCompare(right))
+}
+
+export const getPrerenderDocUrls = () => {
+  const urls = new Set<string>()
+  const docSlugs = getAllDocSlugs()
+
+  for (const locale of locales) {
+    urls.add(localizeHref('/docs', locale))
+
+    for (const slug of docSlugs) {
+      urls.add(localizeHref(`/docs/${slug}`, locale))
+    }
+  }
+
+  return [...urls]
 }

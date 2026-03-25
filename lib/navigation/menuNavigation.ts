@@ -1,9 +1,9 @@
 import type { LucideIcon } from 'lucide-react'
-import { Compass, Map as MapIcon, Plug, Rocket, Sprout } from 'lucide-react'
+import { Compass, Map as MapIcon, Sprout } from 'lucide-react'
+import type { SidebarCategory, SidebarGroup } from '@/components/Sidebar/SidebarNavigation'
 import { getHeadingData, type HeadingKey } from '@/lib/headings'
 import type { Locale } from '@/lib/i18n/config'
-import { t } from '@/lib/i18n/messages'
-import type { SidebarCategory, SidebarGroup } from '@/pages/docs/(components)/Sidebar/SidebarNavigation'
+import { t } from '@/lib/messages'
 
 type MenuCategoryDefinition = {
   titleKey: 'basics'
@@ -13,8 +13,9 @@ type MenuCategoryDefinition = {
 type MenuItemDefinition = HeadingKey | MenuCategoryDefinition
 
 type MenuGroupDefinition = {
+  id: string
   icon?: LucideIcon
-  titleKey: 'getStarted' | 'overview' | 'guides' | 'deploy' | 'integration'
+  titleKey: 'getStarted' | 'components' | 'guides'
   links: MenuItemDefinition[]
 }
 
@@ -22,28 +23,21 @@ const isCategoryDefinition = (item: MenuItemDefinition): item is MenuCategoryDef
 
 const menuGroups: MenuGroupDefinition[] = [
   {
+    id: 'get-started',
     icon: Sprout,
     titleKey: 'getStarted',
     links: ['getStarted'],
   },
   {
+    id: 'components',
     icon: Compass,
-    titleKey: 'overview',
-    links: [],
+    titleKey: 'components',
+    links: ['overview'],
   },
   {
+    id: 'guides',
     icon: MapIcon,
     titleKey: 'guides',
-    links: [],
-  },
-  {
-    icon: Rocket,
-    titleKey: 'deploy',
-    links: [],
-  },
-  {
-    icon: Plug,
-    titleKey: 'integration',
     links: [],
   },
 ]
@@ -63,6 +57,7 @@ const resolveMenuItem = (item: MenuItemDefinition, locale: Locale) => {
 
 export const getMenuNavigation = (locale: Locale): SidebarGroup[] => {
   return menuGroups.map((group) => ({
+    id: group.id,
     icon: group.icon,
     title: t(locale, 'sidebar', group.titleKey),
     links: group.links.map((item) => resolveMenuItem(item, locale)),
