@@ -10,7 +10,7 @@ import { getDocPage } from '@/lib/docs/content'
 import { getMdexSystemConfig } from '@/lib/docs/systemConfig'
 
 // .prose pre {
-//   @apply rounded-lg border border-vike-grey leading-5!;
+//   @apply rounded-lg border border-mdex-grey leading-5!;
 // }
 
 const ProseContainer = cm.section`
@@ -21,7 +21,7 @@ const ProseContainer = cm.section`
   dark:prose-invert
   prose-a:text-accent
 
-  prose-code:text-vike-grey-100
+  prose-code:text-mdex-grey-100
 
   prose-code:rounded!
   prose-code:inset-shadow-2xs
@@ -35,7 +35,7 @@ const ProseContainer = cm.section`
   prose-pre:bg-base-200!
   prose-pre:rounded-box
   prose-pre:border
-  prose-pre:border-vike-grey
+  prose-pre:border-mdex-grey
   prose-pre:leading-5!
   prose-pre:overflow-x-auto
 

@@ -11,8 +11,8 @@ const MenuItem = cm.a.variants<{ $active?: boolean }>({
   base: 'btn btn-sm btn-neutral px-2 uppercase whitespace-nowrap',
   variants: {
     $active: {
-      true: '',
-      false: 'btn-soft ',
+      true: 'btn-soft ',
+      false: 'btn-ghost',
     },
   },
   defaultVariants: {

@@ -50,7 +50,7 @@ const StyledLink = cm.a`
   prose max-w-none prose-h2:mt-0 prose-h2:mb-0 
   flex flex-col p-4 
   rounded-box 
-  border border-vike-grey 
+  border border-mdex-grey 
   bg-base-200/40 dark:bg-base-200/60
   transition-colors duration-200
   shadow-lg

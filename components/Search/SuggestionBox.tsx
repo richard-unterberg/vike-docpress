@@ -67,7 +67,7 @@ const SuggestionBox = ({
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
         />
-        <div className="px-4 h-7 flex items-center text-xs text-vike-grey-300">
+        <div className="px-4 h-7 flex items-center text-xs text-mdex-grey-300">
           {isLoading ? (
             <span className="flex gap-1 items-center">
               <span className="loading loading-dots loading-xs" />
@@ -90,19 +90,19 @@ const SuggestionBox = ({
                       <li key={result.href}>
                         <a
                           href={result.href}
-                          className="block p-4 bg-base-300 border border-vike-grey transition-colors hover:bg-base-200 rounded-box shadow-md shadow-primary/30 hover:border-primary/60"
+                          className="block p-4 bg-base-300 border border-mdex-grey transition-colors hover:bg-base-200 rounded-box shadow-md shadow-primary/30 hover:border-primary/60"
                           onClick={onClose}
                         >
                           <div className="flex justify-start items-center gap-2 mb-2">
                             <div className="text font-bold text-base-content">{result.title}</div>
                             {result.sectionTitle ? (
-                              <div className="text-sm text-vike-grey-300 flex gap-1 items-center">
+                              <div className="text-sm text-mdex-grey-300 flex gap-1 items-center">
                                 <ArrowRightFromLine className="w-3 h-3" /> {result.sectionTitle}
                               </div>
                             ) : null}
                           </div>
                           {result.excerpt ? (
-                            <p className="text-xs leading-5 text-vike-grey-300">{result.excerpt}</p>
+                            <p className="text-xs leading-5 text-mdex-grey-300">{result.excerpt}</p>
                           ) : null}
                         </a>
                       </li>
@@ -110,11 +110,11 @@ const SuggestionBox = ({
                   </ul>
                 </div>
               ) : (
-                <div className="text-sm text-vike-grey-300 rounded">{t(locale, 'search', 'empty')}</div>
+                <div className="text-sm text-mdex-grey-300 rounded">{t(locale, 'search', 'empty')}</div>
               )
             ) : null}
           </div>
-          <div className="col-span-4 p-4 bg-base-300 border border-vike-grey rounded-box h-fit">
+          <div className="col-span-4 p-4 bg-base-300 border border-mdex-grey rounded-box h-fit">
             <h3 className="mb-3 font-semibold">{t(locale, 'search', 'usefulLinks')}</h3>
             <ul className="flex flex-col gap-2">
               {usefulLinks.map((link) => (

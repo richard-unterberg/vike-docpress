@@ -96,10 +96,10 @@
 }
 
 @theme inline {
-  --color-vike-grey: var(--color-grey);
-  --color-vike-grey-100: var(--color-grey-100);
-  --color-vike-grey-200: var(--color-grey-200);
-  --color-vike-grey-300: var(--color-grey-300);
+  --color-mdex-grey: var(--color-grey);
+  --color-mdex-grey-100: var(--color-grey-100);
+  --color-mdex-grey-200: var(--color-grey-200);
+  --color-mdex-grey-300: var(--color-grey-300);
   --font-sans: 'Inter', 'Helvetica Neue', sans-serif;
   --font-mono:
     'Monaco', 'SF Mono', SF Mono, SF Mono Regular, Consolas, 'Liberation Mono',
