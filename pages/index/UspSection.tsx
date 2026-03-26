@@ -5,14 +5,14 @@ import { t } from '@/lib/messages'
 
 const usps = [
   {
-    title: 'uspDesignSytemTitle',
-    description: 'uspDesignSystemDescription',
-    icon: SwatchBook,
-  },
-  {
     title: 'uspVikePoweredTitle',
     description: 'uspVikePoweredDescription',
     icon: Hammer,
+  },
+  {
+    title: 'uspDesignSytemTitle',
+    description: 'uspDesignSystemDescription',
+    icon: SwatchBook,
   },
   {
     title: 'uspDeveloperExperienceTitle',

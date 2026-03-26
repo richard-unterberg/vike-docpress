@@ -72,7 +72,7 @@ export default {
     tableOfContents: true,
   },
   search: {
-    indexedWordsPerDoc: 120,
+    indexedWordsPerDoc: 240,
   },
 } satisfies MdexSystemConfig
 ```
