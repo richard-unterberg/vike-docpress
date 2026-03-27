@@ -8,12 +8,12 @@ import { t } from '@/lib/messages'
 const TocLink = cm.a<{ $isActive?: boolean; $isNested?: boolean }>`
   block
   border-l
-  border-base-light
+  border-base-muted-light
   py-1.5
   text-sm
-  text-base-dark
+  text-base-muted
   transition-colors
-  hover:border-primary/80
+  hover:border-primary-muted
   hover:text-base-content
   ${(props) => (props.$isNested ? 'pl-6' : 'pl-4')}
   ${(props) => (props.$isActive ? 'border-l-2 border-primary text-base-content font-semibold' : '')}
@@ -148,7 +148,7 @@ const TableOfContents = ({ headings }: { headings: DocHeading[] }) => {
     <aside className="hidden xl:block w-64 shrink-0">
       {hasHeadings && (
         <div className="sticky top-16 pt-10 max-h-[calc(100svh-7rem)] overflow-y-auto pb-8">
-          <p className="mb-4 text-xs font-semibold tracking-widest text-base-dark uppercase flex gap-2 items-center">
+          <p className="mb-4 text-xs font-semibold tracking-widest text-base-muted uppercase flex gap-2 items-center">
             <TableOfContentsIcon className="w-3 h-3" />
             {t(locale, 'docs', 'onThisPage')}
           </p>

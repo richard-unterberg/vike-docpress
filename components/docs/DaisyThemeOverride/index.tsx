@@ -1,4 +1,6 @@
-import { useEffect, useId, useState } from 'react'
+import { cmMerge } from '@classmatejs/react'
+import { useEffect, useState } from 'react'
+import { Presenter } from '@/components/docs'
 import { useUserSettingsStore } from '@/lib/settings-store'
 import { applyThemePreference } from '@/lib/theme'
 
@@ -55,10 +57,68 @@ const DAISY_DEFAULT_THEMES: DaisyThemeMeta[] = [
 const LIGHT_THEMES = DAISY_DEFAULT_THEMES.filter((theme) => theme.scheme === 'light')
 const DARK_THEMES = DAISY_DEFAULT_THEMES.filter((theme) => theme.scheme === 'dark')
 
+const ThemePresenter = ({
+  theme,
+  setTemporaryTheme,
+  hoveredTheme,
+  setHoveredTheme,
+}: {
+  theme: DaisyThemeMeta
+  setTemporaryTheme: (themeName: string) => void
+  hoveredTheme: string | null
+  setHoveredTheme: (themeName: string | null) => void
+}) => {
+  return (
+    <Presenter key={theme.name} elevated className="relative m-0 p-0 overflow-hidden">
+      <div data-theme={theme.name}>
+        <div
+          className={cmMerge(
+            hoveredTheme === theme.name ? 'opacity-50' : 'opacity-100',
+            'transition-opacity bg-linear-to-t via-base-100/50 to-base-100 absolute left-0 top-0 h-full w-full',
+          )}
+        />
+        <div className="bg-base-muted-superlight text-base-muted text-xs text-center relative z-2 py-1">
+          {theme.name}
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-4 gap-x-1 gap-y-1">
+            <div className="col-span-4 flex gap-1">
+              <button type="button" className="btn btn-xs btn-primary flex-1">
+                P
+              </button>
+              <button type="button" className="btn btn-xs btn-secondary flex-1">
+                S
+              </button>
+              <button type="button" className="btn btn-xs btn-accent flex-1">
+                A
+              </button>
+            </div>
+            <div className="h-2 bg-base-100" />
+            <div className="h-2 bg-base-200" />
+            <div className="h-2 bg-base-300" />
+            <div className="h-2 bg-base-content" />
+            <div className="h-2 bg-success" />
+            <div className="h-2 bg-warning" />
+            <div className="h-2 bg-error" />
+            <div className="h-2 bg-info" />
+          </div>
+        </div>
+        <button
+          type="button"
+          className="absolute inset-0 z-4 cursor-pointer"
+          onClick={() => setTemporaryTheme(theme.name)}
+          onMouseEnter={() => setHoveredTheme(theme.name)}
+          onMouseLeave={() => setHoveredTheme(null)}
+        />
+      </div>
+    </Presenter>
+  )
+}
+
 export const DaisyThemeOverride = () => {
-  const selectId = useId()
   const themePreference = useUserSettingsStore((state) => state.themePreference)
   const [temporaryTheme, setTemporaryTheme] = useState('')
+  const [hoveredTheme, setHoveredTheme] = useState<string | null>(null)
 
   useEffect(() => {
     void ensureOverrideStyles()
@@ -82,65 +142,50 @@ export const DaisyThemeOverride = () => {
   }, [temporaryTheme, themePreference])
 
   return (
-    <section className="not-prose my-8">
-      <div className="rounded-box border border-base-light bg-base-200 p-4 shadow-sm">
-        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-          <div className="space-y-2">
-            <h2 className="text-xl font-semibold">Temporary Global Theme Override</h2>
-            <p className="max-w-2xl text-sm text-base-dark">
-              Selecting a DaisyUI theme updates the app-wide <code>data-theme</code> attribute on the main layout.
-              Disable it to go back to the stored light or dark preference.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-            <label className="block">
-              <span className="mb-2 block text-xs font-semibold uppercase tracking-wide text-base-dark">
-                DaisyUI theme
-              </span>
-              <select
-                id={selectId}
-                className="select select-bordered w-full min-w-64"
-                value={temporaryTheme}
-                onChange={(event) => setTemporaryTheme(event.target.value)}
-              >
-                <option value="">Stored app theme</option>
-                <optgroup label="Light themes">
-                  {LIGHT_THEMES.map((theme) => (
-                    <option key={theme.name} value={theme.name}>
-                      {theme.name}
-                    </option>
-                  ))}
-                </optgroup>
-                <optgroup label="Dark themes">
-                  {DARK_THEMES.map((theme) => (
-                    <option key={theme.name} value={theme.name}>
-                      {theme.name}
-                    </option>
-                  ))}
-                </optgroup>
-              </select>
-            </label>
-
-            <button
-              type="button"
-              className="btn btn-outline"
-              onClick={() => setTemporaryTheme('')}
-              disabled={!temporaryTheme}
-            >
-              Disable temporary theme
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className={`badge ${temporaryTheme ? 'badge-primary' : 'badge-outline'}`}>
-            {temporaryTheme || 'stored preference'}
-          </span>
-          {temporaryTheme && <span className="badge badge-secondary badge-outline">temporary override active</span>}
-          <span className="badge badge-outline">global layout</span>
-        </div>
+    <section className="grid grid-cols-4 gap-3 prose-headings:mt-0 mt-10">
+      <div className="flex col-span-full items-center justify-between">
+        <h3 className="scroll-mt-24">Dark Themes</h3>
+        <button
+          type="button"
+          className="btn btn-sm btn-secondary"
+          disabled={!temporaryTheme}
+          onClick={() => setTemporaryTheme('')}
+        >
+          Disable temporary theme
+        </button>
       </div>
+      {DARK_THEMES.map((theme) => (
+        <ThemePresenter
+          key={theme.name}
+          theme={theme}
+          setTemporaryTheme={setTemporaryTheme}
+          hoveredTheme={hoveredTheme}
+          setHoveredTheme={setHoveredTheme}
+        />
+      ))}
+
+      <div className="flex col-span-full items-center justify-between mt-8">
+        <h3 className="scroll-mt-24">Light Themes</h3>
+        <button
+          type="button"
+          className="btn btn-sm btn-secondary"
+          disabled={!temporaryTheme}
+          onClick={() => setTemporaryTheme('')}
+        >
+          Disable temporary theme
+        </button>
+      </div>
+      {LIGHT_THEMES.map((theme) => (
+        <ThemePresenter
+          key={theme.name}
+          theme={theme}
+          setTemporaryTheme={setTemporaryTheme}
+          hoveredTheme={hoveredTheme}
+          setHoveredTheme={setHoveredTheme}
+        />
+      ))}
+
+      <div className="col-span-full"></div>
     </section>
   )
 }

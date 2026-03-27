@@ -39,11 +39,12 @@
   color-scheme: 'light';
   --color-base-100: oklch(98% 0 0);
   --color-base-200: oklch(96% 0 0);
-  --color-base-300: oklch(98% 0 0); /* bg */
+  --color-base-300: oklch(92% 0 0);
+  /* bg */
   --color-base-content: oklch(20% 0 0);
   --color-primary: #3d3da5;
   --color-primary-content: oklch(95% 0 0);
-  --color-secondary: #fff000;
+  --color-secondary: #7373f4;
   --color-secondary-content: oklch(95% 0 0);
   --color-accent: #3d3da5;
   --color-accent-content: oklch(95% 0 0);
@@ -76,11 +77,11 @@
   --color-base-200: oklch(20% 0 0);
   --color-base-300: oklch(30% 0 0);
   --color-base-content: oklch(85% 0 0);
-  --color-primary: #7373f4;
+  --color-primary: #9292ff;
   --color-primary-content: oklch(15% 0 0);
-  --color-secondary: #fff000;
-  --color-secondary-content: oklch(85% 0 0);
-  --color-accent: #7373f4;
+  --color-secondary: #b0a1ff;
+  --color-secondary-content: oklch(15% 0 0);
+  --color-accent: green;
   --color-accent-content: oklch(85% 0 0);
   --color-neutral: oklch(85% 0 0);
   --color-neutral-content: oklch(13% 0 0);
@@ -103,26 +104,48 @@
 }
 
 @theme inline {
-  --color-base-superlight: color-mix(
-    in oklab,
-    var(--color-base-content) 5%,
-    transparent
-  );
-  --color-base-light: color-mix(
-    in oklab,
-    var(--color-base-content) 15%,
-    transparent
-  );
-  --color-base-medium: color-mix(
-    in oklab,
-    var(--color-base-content) 40%,
-    transparent
-  );
-  --color-base-dark: color-mix(
+  --color-base-muted: color-mix(
     in oklab,
     var(--color-base-content) 65%,
     transparent
   );
+  --color-base-muted-medium: color-mix(
+    in oklab,
+    var(--color-base-content) 40%,
+    transparent
+  );
+  --color-base-muted-light: color-mix(
+    in oklab,
+    var(--color-base-content) 15%,
+    transparent
+  );
+  --color-base-muted-superlight: color-mix(
+    in oklab,
+    var(--color-base-content) 5%,
+    transparent
+  );
+
+  --color-primary-muted: color-mix(
+    in oklab,
+    var(--color-primary) 80%,
+    transparent
+  );
+  --color-primary-muted-medium: color-mix(
+    in oklab,
+    var(--color-primary) 50%,
+    transparent
+  );
+  --color-primary-muted-light: color-mix(
+    in oklab,
+    var(--color-primary) 20%,
+    transparent
+  );
+  --color-primary-muted-superlight: color-mix(
+    in oklab,
+    var(--color-primary) 10%,
+    transparent
+  );
+
   --font-sans: 'Inter', 'Helvetica Neue', sans-serif;
   --font-mono:
     'Monaco', 'SF Mono', SF Mono, SF Mono Regular, Consolas, 'Liberation Mono',

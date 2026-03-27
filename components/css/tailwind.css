@@ -49,7 +49,7 @@
   }
 
   .doc-code-pre {
-    @apply bg-base-200! dark:bg-base-superlight!;
+    @apply bg-base-200! dark:bg-base-muted-superlight!;
   }
 
   :is(

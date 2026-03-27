@@ -20,10 +20,10 @@ const ProseContainer = cm.section`
   prose-pre:bg-base-200!
 
   prose-code:rounded!
-  prose-code:inset-shadow-2xs
+  prose-code:dark:inset-shadow-2xs
 
   prose-code:bg-primary/5!
-  prose-code:border-primary/20!
+  prose-code:border-primary/15!
 
   prose-code:dark:bg-primary/10!
   prose-code:dark:border-primary/20!

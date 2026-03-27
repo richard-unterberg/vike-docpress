@@ -62,11 +62,11 @@ const SuggestionBox = ({
           placeholder={t(locale, 'search', 'placeholder')}
           ref={inputRef}
           type="text"
-          className="input input-primary input-xl w-full shadow-lg shadow-primary/30 dark:shadow-primary/50"
+          className="input input-primary input-xl w-full shadow-lg shadow-primary-muted-light"
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
         />
-        <div className="px-4 h-7 flex items-center text-xs text-base-dark">
+        <div className="px-4 h-7 flex items-center text-xs text-base-muted">
           {isLoading ? (
             <span className="flex gap-1 items-center">
               <span className="loading loading-dots loading-xs" />
@@ -79,7 +79,7 @@ const SuggestionBox = ({
             </span>
           )}
         </div>
-        <div className="grid grid-cols-12 gap-4">
+        <div className="grid grid-cols-12 ">
           <div className="col-span-8 -translate-x-3 -translate-y-3">
             {query.trim() && !isLoading ? (
               results.length > 0 ? (
@@ -89,29 +89,31 @@ const SuggestionBox = ({
                       <li key={result.href}>
                         <a
                           href={result.href}
-                          className="block p-4 bg-base-300 border border-base-medium transition-colors hover:bg-base-200 rounded-box shadow-md shadow-primary/30 hover:border-primary/60"
+                          className="block p-4 bg-base-100 border border-primary-muted-medium transition-colors hover:bg-base-200 rounded-box shadow-md shadow-primary-muted-light hover:border-primary-muted-medium"
                           onClick={onClose}
                         >
                           <div className="flex justify-start items-center gap-2 mb-2">
                             <div className="text font-bold text-base-content">{result.title}</div>
                             {result.sectionTitle ? (
-                              <div className="text-sm text-base-medium flex gap-1 items-center">
+                              <div className="text-sm text-base-muted-medium flex gap-1 items-center">
                                 <ArrowRightFromLine className="w-3 h-3" /> {result.sectionTitle}
                               </div>
                             ) : null}
                           </div>
-                          {result.excerpt ? <p className="text-xs leading-5 text-base-dark">{result.excerpt}</p> : null}
+                          {result.excerpt ? (
+                            <p className="text-xs leading-5 text-base-muted">{result.excerpt}</p>
+                          ) : null}
                         </a>
                       </li>
                     ))}
                   </ul>
                 </div>
               ) : (
-                <div className="text-sm text-base-dark rounded">{t(locale, 'search', 'empty')}</div>
+                <div className="text-sm text-base-muted rounded">{t(locale, 'search', 'empty')}</div>
               )
             ) : null}
           </div>
-          <div className="col-span-4 p-4 bg-base-100 border border-base-light rounded-box h-fit">
+          <div className="col-span-4 p-4 bg-base-100 border border-base-muted-light rounded-box h-fit">
             <h3 className="mb-3 font-semibold">{t(locale, 'search', 'usefulLinks')}</h3>
             <ul className="flex flex-col gap-2">
               {usefulLinks.map((link) => (

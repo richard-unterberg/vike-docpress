@@ -12,7 +12,7 @@ const MenuItem = cm.a.variants<{ $active?: boolean }>({
   variants: {
     $active: {
       true: '',
-      false: 'btn-soft',
+      false: 'btn-soft text-base-content hover:text-primary-content',
     },
   },
   defaultVariants: {

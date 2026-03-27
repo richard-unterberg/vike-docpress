@@ -1,11 +1,22 @@
-import { CodeGroup, DaisyThemeOverride } from '@/components/docs'
+import { CodeGroup, DaisyThemeOverride, Alert, DaisyUiComponents } from '@/components/docs'
 
 # Design & Theming
 
-This page now includes a temporary global theme override so you can test the real app shell against the built-in DaisyUI themes.
+The `mdex` template is rather opinionated in its design, it's using tailwind and a strict daisyUI setup, which allows you to easily customize the look and feel of your documentation site, without touching any CSS. 
 
-## Theme Sandbox
+## Why a design system?
 
-Use this to change the root `data-theme` attribute from this page. It affects the navbar, docs layout, content styles, and other DaisyUI-driven surfaces until you disable the override or leave the page.
+Using a design system like daisyUI allows us to have a consistent look and feel across the entire documentation site. It also makes it easier to create new components and pages, as we can reuse existing styles and components.
 
+<Alert type='info'>
+That said, you can still add your own custom CSS if you want to. But it will lead to a more complex setup and you will have to maintain it yourself. 
+</Alert>
+
+## DaisyUI compatibility
+
+This template is built with DaisyUI, which means you can use any of the built-in themes or create your own custom themes.
 <DaisyThemeOverride />
+
+## Custom components
+
+<DaisyUiComponents />

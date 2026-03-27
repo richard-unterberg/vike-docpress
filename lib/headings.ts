@@ -15,8 +15,8 @@ export const headingDefinitions = {
   getStarted: {
     docPath: 'get-started',
     title: {
-      en: 'Welcome',
-      zh: '欢迎',
+      en: 'Welcome to mdex',
+      zh: '欢迎使用 mdex',
     },
     excerpt: {
       en: 'Get started with mdex and learn how to create your own documentation site.',
