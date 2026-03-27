@@ -26,11 +26,11 @@ const getDevModuleSource = () => {
   ].join('\n')
 }
 
-const getSsrModuleSource = () => {
+const getSsrModuleSource = (base: string) => {
   return [
     'export const searchIndexUrls = {',
     ...locales.map(
-      (locale) => `  ${JSON.stringify(locale)}: ${JSON.stringify(`/assets/search-index.${locale}.json`)},`,
+      (locale) => `  ${JSON.stringify(locale)}: ${JSON.stringify(`${base}assets/search-index.${locale}.json`)},`,
     ),
     '}',
   ].join('\n')
@@ -126,7 +126,7 @@ export const searchIndexPlugin = (): Plugin => {
       }
 
       if (isSsrBuild) {
-        return getSsrModuleSource()
+        return getSsrModuleSource(config.base)
       }
 
       const completeAssetRefs = Object.fromEntries(

@@ -5,6 +5,19 @@ type LocalePath = {
   pathname: string
 }
 
+const normalizeBasePath = (value: string | undefined) => {
+  const normalized = (value ?? '/').trim()
+
+  if (normalized === '' || normalized === '/') {
+    return ''
+  }
+
+  return `/${normalized.replace(/^\/+|\/+$/g, '')}`
+}
+
+const viteBaseUrl = typeof window !== 'undefined' ? import.meta.env.BASE_URL : undefined
+const basePath = normalizeBasePath(process.env.PAGES_BASE_PATH ?? viteBaseUrl)
+
 const getPathnameOnly = (pathnameOrHref: string) => {
   return pathnameOrHref.split('#')[0]?.split('?')[0] ?? pathnameOrHref
 }
@@ -15,17 +28,49 @@ const ensureLeadingSlash = (pathname: string) => {
 
 const normalizePathname = (pathname: string) => {
   const pathnameNormalized = ensureLeadingSlash(pathname)
-  return pathnameNormalized === '' ? '/' : pathnameNormalized
+  return pathnameNormalized === '' ? '/' : pathnameNormalized.replace(/\/{2,}/g, '/')
+}
+
+const stripBaseFromPathname = (pathname: string) => {
+  const pathnameNormalized = normalizePathname(pathname)
+
+  if (basePath === '') {
+    return pathnameNormalized
+  }
+
+  if (pathnameNormalized === basePath) {
+    return '/'
+  }
+
+  if (pathnameNormalized.startsWith(`${basePath}/`)) {
+    return pathnameNormalized.slice(basePath.length) || '/'
+  }
+
+  return pathnameNormalized
+}
+
+const withBasePath = (pathname: string) => {
+  const pathnameNormalized = normalizePathname(pathname)
+
+  if (basePath === '') {
+    return pathnameNormalized
+  }
+
+  if (pathnameNormalized === '/') {
+    return `${basePath}/`
+  }
+
+  return `${basePath}${pathnameNormalized}`
 }
 
 export const hasLocalePrefix = (pathname: string) => {
-  const pathnameNormalized = normalizePathname(pathname)
+  const pathnameNormalized = stripBaseFromPathname(pathname)
   const [maybeLocale] = pathnameNormalized.split('/').filter(Boolean)
   return Boolean(maybeLocale && isLocale(maybeLocale))
 }
 
 export const stripLocaleFromPathname = (pathname: string): LocalePath => {
-  const pathnameNormalized = normalizePathname(pathname)
+  const pathnameNormalized = stripBaseFromPathname(pathname)
   const segments = pathnameNormalized.split('/').filter(Boolean)
   const [maybeLocale, ...rest] = segments
 
@@ -51,7 +96,7 @@ const isExternalHref = (href: string) => {
   return /^(?:[a-z]+:)?\/\//i.test(href) || href.startsWith('mailto:') || href.startsWith('tel:')
 }
 
-export const localizeHref = (href: string, locale: Locale | string | undefined) => {
+export const localizePathname = (href: string, locale: Locale | string | undefined) => {
   const localeResolved = resolveLocale(locale)
 
   if (localeResolved === DEFAULT_LOCALE || href === '' || href.startsWith('#') || isExternalHref(href)) {
@@ -64,4 +109,17 @@ export const localizeHref = (href: string, locale: Locale | string | undefined) 
   const pathnameWithLocale = pathnameLocalized === '/' ? `/${localeResolved}` : `/${localeResolved}${pathnameLocalized}`
 
   return `${pathnameWithLocale}${search ? `?${search}` : ''}${hash ? `#${hash}` : ''}`
+}
+
+export const localizeHref = (href: string, locale: Locale | string | undefined) => {
+  if (href === '' || href.startsWith('#') || isExternalHref(href)) {
+    return href
+  }
+
+  const localizedHref = localizePathname(href, locale)
+  const [hrefWithoutHash, hash = ''] = localizedHref.split('#')
+  const [pathname, search = ''] = hrefWithoutHash.split('?')
+  const pathnameWithBase = withBasePath(pathname)
+
+  return `${pathnameWithBase}${search ? `?${search}` : ''}${hash ? `#${hash}` : ''}`
 }

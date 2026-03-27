@@ -9,7 +9,7 @@ import {
   resolveMdexSystemConfig,
 } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, isLocale, type Locale, locales } from '@/lib/i18n/config'
-import { localizeHref } from '@/lib/i18n/routing'
+import { localizePathname } from '@/lib/i18n/routing'
 
 type MdxModule = {
   default: ComponentType
@@ -229,11 +229,11 @@ export const getPrerenderDocUrls = (mdexConfig?: MdexSystemConfig) => {
 
   for (const locale of locales) {
     if (resolvedDocsConfig.basePath !== '') {
-      urls.add(localizeHref(getDocsIndexPath(resolvedDocsConfig), locale))
+      urls.add(localizePathname(getDocsIndexPath(resolvedDocsConfig), locale))
     }
 
     for (const slug of docSlugs) {
-      urls.add(localizeHref(getDocPath(slug, resolvedDocsConfig), locale))
+      urls.add(localizePathname(getDocPath(slug, resolvedDocsConfig), locale))
     }
   }
 

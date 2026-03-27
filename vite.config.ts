@@ -13,6 +13,18 @@ import tsConf from './lib/tsconf'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+const normalizeBaseUrl = (value: string | undefined) => {
+  const normalized = value?.trim()
+
+  if (!normalized || normalized === '/') {
+    return '/'
+  }
+
+  return `/${normalized.replace(/^\/+|\/+$/g, '')}/`
+}
+
+const base = normalizeBaseUrl(process.env.PAGES_BASE_PATH)
+
 export const pathAliases = Object.entries(tsConf.compilerOptions.paths).map(([key, [value]]) => {
   if (key.includes('*')) {
     const find = new RegExp(`^${key.replace('/*', '/(.*)$')}`)
@@ -37,6 +49,7 @@ const plugins: PluginOption[] = [
 ]
 
 export default defineConfig({
+  base,
   plugins,
   resolve: {
     alias: [...pathAliases],
