@@ -1,8 +1,8 @@
 import cm from '@classmatejs/react'
 import { BookText, Cpu, Map as MapIcon } from 'lucide-react'
 import { usePageContext } from 'vike-react/usePageContext'
+import { getHeadingData } from '@/lib/docs/headings'
 import { matchDocPath } from '@/lib/docs/systemConfig'
-import { getHeadingData } from '@/lib/headings'
 import { getLogicalPathname } from '@/lib/i18n/routing'
 
 type DocsMenuSection = 'docsHome' | 'components' | 'guides'

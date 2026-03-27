@@ -1,15 +1,4 @@
-import type { MdexSystemConfig } from '@/lib/docs/systemConfig'
-import { getDocPath } from '@/lib/docs/systemConfig'
-import type { Locale } from '@/lib/i18n/config'
-import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
-import { localizeHref } from '@/lib/i18n/routing'
-
-type HeadingDefinition = {
-  docPath: string
-  title: Record<Locale, string>
-  navTitle?: Record<Locale, string>
-  excerpt?: Record<Locale, string>
-}
+import type { HeadingConfig } from './docs/headings'
 
 export const headingDefinitions = {
   docsHome: {
@@ -32,6 +21,17 @@ export const headingDefinitions = {
     excerpt: {
       en: 'Get started with mdex and learn how to create your own documentation site.',
       zh: '开始使用 mdex, 学习如何创建你自己的文档站点。',
+    },
+  },
+  designSystem: {
+    docPath: 'design-theming',
+    title: {
+      en: 'Design System',
+      zh: '使用 Tailwind CSS 和 DaisyUI 进行样式设计',
+    },
+    excerpt: {
+      en: 'Learn how to style your mdex documentation site using Tailwind CSS and DaisyUI.',
+      zh: '学习如何使用 Tailwind CSS 和 DaisyUI 来设计你的 mdex 文档站点。',
     },
   },
   components: {
@@ -97,57 +97,4 @@ export const headingDefinitions = {
       zh: '学习如何使用 Tailwind CSS 和 DaisyUI 来设计你的 mdex 文档站点。',
     },
   },
-} as const satisfies Record<string, HeadingDefinition>
-
-export type HeadingKey = keyof typeof headingDefinitions
-
-const normalizeDocPath = (value: string) => value.replace(/^\/+|\/+$/g, '')
-
-const getHeadingDefinition = (headingKey: HeadingKey) => {
-  return headingDefinitions[headingKey] as HeadingDefinition
-}
-
-const getHeadingByDocPath = (docPath: string) => {
-  const normalizedDocPath = normalizeDocPath(docPath)
-
-  return Object.values(headingDefinitions).find((heading) => normalizeDocPath(heading.docPath) === normalizedDocPath) as
-    | HeadingDefinition
-    | undefined
-}
-
-const getHeadingNavTitle = (headingKey: HeadingKey, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
-  const resolvedLocale = resolveLocale(locale)
-  const heading = getHeadingDefinition(headingKey)
-
-  return heading.navTitle?.[resolvedLocale] ?? heading.title[resolvedLocale]
-}
-
-const getHeadingLink = (headingKey: HeadingKey, mdexConfig?: MdexSystemConfig) => {
-  return getDocPath(getHeadingDefinition(headingKey).docPath, mdexConfig)
-}
-
-export const getHeadingData = (
-  headingKey: HeadingKey,
-  locale: Locale | string | undefined = DEFAULT_LOCALE,
-  mdexConfig?: MdexSystemConfig,
-) => {
-  return {
-    title: getHeadingNavTitle(headingKey, locale),
-    href: localizeHref(getHeadingLink(headingKey, mdexConfig), locale),
-  }
-}
-
-export const getDocHeadingMetadata = (docPath: string, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
-  const heading = getHeadingByDocPath(docPath)
-
-  if (!heading) {
-    return null
-  }
-
-  const resolvedLocale = resolveLocale(locale)
-
-  return {
-    title: heading.title[resolvedLocale],
-    description: heading.excerpt?.[resolvedLocale] ?? null,
-  }
-}
+} satisfies HeadingConfig

@@ -1,3 +1,8 @@
+import { headingDefinitions } from '../headings'
+import { DEFAULT_LOCALE, type Locale, resolveLocale } from '../i18n/config'
+import { localizeHref } from '../i18n/routing'
+import { getDocPath, type MdexSystemConfig } from './systemConfig'
+
 export type DocHeading = {
   depth: number
   id: string
@@ -126,3 +131,65 @@ export const extractTextFromHast = (value: unknown): string => {
 }
 
 export const normalizeHeadingTitle = (value: string) => normalizeWhitespace(value)
+
+export type HeadingDefinition = {
+  docPath: string
+  title: Record<Locale, string>
+  navTitle?: Record<Locale, string>
+  excerpt?: Record<Locale, string>
+}
+
+export type HeadingConfig = Record<string, HeadingDefinition>
+
+export type HeadingKey = keyof typeof headingDefinitions
+
+const normalizeDocPath = (value: string) => value.replace(/^\/+|\/+$/g, '')
+
+const getHeadingDefinition = (headingKey: HeadingKey) => {
+  return headingDefinitions[headingKey] as HeadingDefinition
+}
+
+const getHeadingByDocPath = (docPath: string) => {
+  const normalizedDocPath = normalizeDocPath(docPath)
+
+  return Object.values(headingDefinitions).find((heading) => normalizeDocPath(heading.docPath) === normalizedDocPath) as
+    | HeadingDefinition
+    | undefined
+}
+
+export const getHeadingNavTitle = (headingKey: HeadingKey, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
+  const resolvedLocale = resolveLocale(locale)
+  const heading = getHeadingDefinition(headingKey)
+
+  return heading.navTitle?.[resolvedLocale] ?? heading.title[resolvedLocale]
+}
+
+const getHeadingLink = (headingKey: HeadingKey, mdexConfig?: MdexSystemConfig) => {
+  return getDocPath(getHeadingDefinition(headingKey).docPath, mdexConfig)
+}
+
+export const getHeadingData = (
+  headingKey: HeadingKey,
+  locale: Locale | string | undefined = DEFAULT_LOCALE,
+  mdexConfig?: MdexSystemConfig,
+) => {
+  return {
+    title: getHeadingNavTitle(headingKey, locale),
+    href: localizeHref(getHeadingLink(headingKey, mdexConfig), locale),
+  }
+}
+
+export const getDocHeadingMetadata = (docPath: string, locale: Locale | string | undefined = DEFAULT_LOCALE) => {
+  const heading = getHeadingByDocPath(docPath)
+
+  if (!heading) {
+    return null
+  }
+
+  const resolvedLocale = resolveLocale(locale)
+
+  return {
+    title: heading.title[resolvedLocale],
+    description: heading.excerpt?.[resolvedLocale] ?? null,
+  }
+}

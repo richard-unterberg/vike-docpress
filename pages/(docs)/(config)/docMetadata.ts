@@ -1,6 +1,6 @@
 import type { PageContext } from 'vike/types'
+import { getDocHeadingMetadata } from '@/lib/docs/headings'
 import { getMdexSystemConfig } from '@/lib/docs/systemConfig'
-import { getDocHeadingMetadata } from '@/lib/headings'
 import pageConfig from '@/pages/+config'
 
 type DocsPageContext = PageContext & {

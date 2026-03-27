@@ -10,7 +10,7 @@ type DaisyThemeMeta = {
 let overrideStylesPromise: Promise<unknown> | null = null
 
 const ensureOverrideStyles = () => {
-  overrideStylesPromise ??= import('./override.css')
+  overrideStylesPromise ??= import('@/components/docs/DaisyThemeOverride/override.css')
   return overrideStylesPromise
 }
 

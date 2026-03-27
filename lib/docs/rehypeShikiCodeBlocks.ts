@@ -1,4 +1,4 @@
-import { type BundledLanguage, bundledLanguages, bundledLanguagesAlias, codeToHast } from 'shiki'
+import { type BundledLanguage, bundledLanguages, bundledLanguagesAlias, getSingletonHighlighter } from 'shiki'
 import { extractTextFromHast } from './headings'
 
 type HastNode = {
@@ -6,6 +6,15 @@ type HastNode = {
   properties?: Record<string, unknown>
   tagName?: string
   type?: string
+}
+
+const shikiThemes = {
+  light: 'min-light',
+  dark: 'one-dark-pro',
+} as const
+
+const embeddedLanguageWarmups: Partial<Record<BundledLanguage, BundledLanguage[]>> = {
+  mdx: ['mdx', 'tsx', 'jsx', 'typescript', 'javascript'],
 }
 
 const isElement = (node: HastNode | undefined, tagName?: string): node is HastNode => {
@@ -46,6 +55,15 @@ const resolveShikiLanguage = (language: string) => {
   return typeof alias === 'string' ? alias : null
 }
 
+const getHighlighter = async (language: BundledLanguage) => {
+  const langs = [...new Set(embeddedLanguageWarmups[language] ?? [language])]
+
+  return getSingletonHighlighter({
+    themes: [shikiThemes.light, shikiThemes.dark],
+    langs,
+  })
+}
+
 const highlightCodeBlock = async (node: HastNode) => {
   const codeNode = node.children?.find((child) => isElement(child, 'code'))
   if (!codeNode) return null
@@ -56,12 +74,10 @@ const highlightCodeBlock = async (node: HastNode) => {
   const shikiLanguage = resolveShikiLanguage(language)
   if (!shikiLanguage) return null
 
-  const highlighted = await codeToHast(extractTextFromHast(codeNode.children ?? []), {
+  const highlighter = await getHighlighter(shikiLanguage)
+  const highlighted = await highlighter.codeToHast(extractTextFromHast(codeNode.children ?? []), {
     lang: shikiLanguage,
-    themes: {
-      light: 'min-light',
-      dark: 'one-dark-pro',
-    },
+    themes: shikiThemes,
   })
 
   const highlightedPreCandidate = highlighted.children.find(

@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { Compass, Map as MapIcon, Sprout } from 'lucide-react'
 import type { SidebarGroup } from '@/components/Sidebar/SidebarNavigation'
-import { getHeadingData, type HeadingKey } from '@/lib/headings'
+import { getHeadingData, type HeadingKey } from '@/lib/docs/headings'
 import type { Locale } from '@/lib/i18n/config'
 import { t } from '@/lib/messages'
 
@@ -17,7 +17,7 @@ const menuGroups: MenuGroupDefinition[] = [
     id: 'get-started',
     icon: Sprout,
     titleKey: 'getStarted',
-    links: ['getStarted'],
+    links: ['getStarted', 'designSystem'],
   },
   {
     id: 'components',
