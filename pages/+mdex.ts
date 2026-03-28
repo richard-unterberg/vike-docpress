@@ -6,6 +6,6 @@ export default {
     tableOfContents: true,
   },
   search: {
-    indexedWordsPerDoc: 240,
+    indexedWordsPerDoc: 2400,
   },
 } satisfies MdexSystemConfig

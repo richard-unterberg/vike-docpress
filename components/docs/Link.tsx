@@ -8,11 +8,12 @@ const getLocalizedMdxHref = (href: AnchorProps['href'], locale: string | undefin
   if (typeof href !== 'string' || !href.startsWith('/')) {
     return href
   }
-
   return localizeHref(href, locale)
 }
 
-export const MdxLink = ({ href, ...props }: AnchorProps) => {
+const Link = ({ href, ...props }: AnchorProps) => {
   const { locale } = usePageContext()
   return <a href={getLocalizedMdxHref(href, locale)} {...props} />
 }
+
+export default Link

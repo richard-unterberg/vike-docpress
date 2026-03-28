@@ -9,6 +9,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
+    "allowArbitraryExtensions": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {

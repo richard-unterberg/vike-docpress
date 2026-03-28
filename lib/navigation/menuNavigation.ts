@@ -1,4 +1,4 @@
-import { Compass, Map as MapIcon, Sprout } from 'lucide-react'
+import { Map as MapIcon, Sprout } from 'lucide-react'
 import { getHeadingData, type HeadingKey } from '@/lib/docs/headings'
 import type { Locale } from '@/lib/i18n/config'
 import { t } from '@/lib/messages'
@@ -13,24 +13,17 @@ type GroupKeys = (typeof GroupKeys)[keyof typeof GroupKeys]
 
 type MenuGroupDefinition = MenuGroupShared & {
   groupKey: GroupKeys
-  links: HeadingKey[]
+  links: (HeadingKey | { dividerText: string })[]
 }
 const menuGroups: MenuGroupDefinition[] = [
   {
     id: 'get-started',
     icon: Sprout,
     groupKey: 'getStarted',
-    links: ['getStarted', 'designSystem'],
+    links: ['getStarted', { dividerText: 'Guides' }, 'designSystem'],
     collapsible: {
       isDefaultOpen: true,
     },
-  },
-  {
-    id: 'components',
-    icon: Compass,
-    groupKey: 'components',
-    links: ['components', 'alert'],
-    collapsible: true,
   },
   {
     id: 'guides',
@@ -46,6 +39,15 @@ export const getMenuNavigation = (locale: Locale): MenuRendererGroup[] => {
     icon: group.icon,
     title: t(locale, 'sidebar', group.groupKey),
     collapsible: group.collapsible,
-    links: group.links.map((item) => getHeadingData(item, locale)),
+    links: group.links.map((item) => {
+      if (typeof item === 'object' && 'dividerText' in item) {
+        return {
+          id: `divider-${item.dividerText}`,
+          title: item.dividerText,
+          isDivider: true,
+        }
+      }
+      return getHeadingData(item)
+    }),
   }))
 }

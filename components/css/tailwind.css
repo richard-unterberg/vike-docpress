@@ -38,46 +38,20 @@
     @apply bg-base-200! dark:bg-base-muted-superlight!;
   }
 
-  :is(
-      [data-theme='mdex-dark'],
-      [data-theme='dark'],
-      [data-theme='synthwave'],
-      [data-theme='halloween'],
-      [data-theme='forest'],
-      [data-theme='aqua'],
-      [data-theme='black'],
-      [data-theme='luxury'],
-      [data-theme='dracula'],
-      [data-theme='business'],
-      [data-theme='night'],
-      [data-theme='coffee'],
-      [data-theme='dim'],
-      [data-theme='sunset'],
-      [data-theme='abyss']
-    )
-    .shiki {
+  .landing-code-samples [data-code-block-header] {
+    @apply hidden!;
+  }
+
+  .landing-code-samples [data-code-block-content] {
+    @apply pt-4! mb-0;
+    font-size: 12.5px !important;
+  }
+
+  :is([data-theme='mdex-dark']) .shiki {
     color: var(--shiki-dark) !important;
   }
 
-  :is(
-      [data-theme='mdex-dark'],
-      [data-theme='dark'],
-      [data-theme='synthwave'],
-      [data-theme='halloween'],
-      [data-theme='forest'],
-      [data-theme='aqua'],
-      [data-theme='black'],
-      [data-theme='luxury'],
-      [data-theme='dracula'],
-      [data-theme='business'],
-      [data-theme='night'],
-      [data-theme='coffee'],
-      [data-theme='dim'],
-      [data-theme='sunset'],
-      [data-theme='abyss']
-    )
-    .shiki
-    span {
+  :is([data-theme='mdex-dark']) .shiki span {
     color: var(--shiki-dark) !important;
   }
 }

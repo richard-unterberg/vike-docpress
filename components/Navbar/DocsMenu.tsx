@@ -1,18 +1,19 @@
 import cm from '@classmatejs/react'
-import { BookText, Cpu, Map as MapIcon } from 'lucide-react'
+import { BookText, Map as MapIcon } from 'lucide-react'
+import { useMemo } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { getHeadingData } from '@/lib/docs/headings'
 import { matchDocPath } from '@/lib/docs/systemConfig'
 import { getLogicalPathname } from '@/lib/i18n/routing'
+import { t } from '@/lib/messages'
 
 type DocsMenuSection = 'docsHome' | 'components' | 'guides'
 
-const MenuItem = cm.a.variants<{ $active?: boolean }>({
-  base: 'btn btn px-2 btn-ghost bg-transparent whitespace-nowrap',
+const MenuItem = cm.div.variants<{ $active?: boolean }>({
+  base: 'btn btn px-2 whitespace-nowrap',
   variants: {
     $active: {
-      true: '',
-      false: '',
+      true: 'btn-primary btn-soft',
+      false: 'btn-ghost ',
     },
   },
   defaultVariants: {
@@ -42,25 +43,24 @@ const getActiveSection = (pathname: string): DocsMenuSection | null => {
 
 const DocsMenu = () => {
   const pageContext = usePageContext()
-  const { locale, config, urlPathnameLocalized, urlPathname } = pageContext
+  const { locale, urlPathnameLocalized, urlPathname } = pageContext
   const activeSection = getActiveSection(urlPathnameLocalized ?? urlPathname)
-  const items: Array<{ key: DocsMenuSection; href: string; title: string; icon: typeof BookText }> = [
-    {
-      key: 'docsHome',
-      ...getHeadingData('docsHome', locale, config.mdex),
-      icon: BookText,
-    },
-    {
-      key: 'components',
-      ...getHeadingData('componentsOverview', locale, config.mdex),
-      icon: Cpu,
-    },
-    {
-      key: 'guides',
-      ...getHeadingData('guides', locale, config.mdex),
-      icon: MapIcon,
-    },
-  ]
+
+  const items = useMemo(
+    () => [
+      {
+        key: 'docsHome',
+        title: t(locale, 'header', 'menuDocumentation'),
+        icon: BookText,
+      },
+      {
+        key: 'api',
+        title: t(locale, 'header', 'menuAPI'),
+        icon: MapIcon,
+      },
+    ],
+    [locale],
+  )
 
   return (
     <ul className="flex items-center font-semibold gap-2">
@@ -69,7 +69,7 @@ const DocsMenu = () => {
 
         return (
           <li key={item.key}>
-            <MenuItem $active={item.key === activeSection} tabIndex={0} href={item.href}>
+            <MenuItem $active={item.key === activeSection} tabIndex={0}>
               <Icon className="w-4 h-4" />
               {item.title}
             </MenuItem>

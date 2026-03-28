@@ -50,7 +50,7 @@
   --color-base-content: oklch(85% 0 0);
   --color-primary: #e2a431;
   --color-primary-content: oklch(15% 0 0);
-  --color-secondary: #b0a1ff;
+  --color-secondary: #f7e018;
   --color-secondary-content: oklch(15% 0 0);
   --color-accent: green;
   --color-accent-content: oklch(85% 0 0);
@@ -87,7 +87,7 @@
   );
   --color-base-muted-light: color-mix(
     in oklab,
-    var(--color-base-content) 15%,
+    var(--color-base-content) 12%,
     transparent
   );
   --color-base-muted-superlight: color-mix(

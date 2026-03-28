@@ -1,129 +1,52 @@
-import { ArrowBigDownDash, Sticker } from 'lucide-react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { MdxCodeBlock } from '@/components/docs/CodeBlock'
-import GradientText from '@/components/GradientText'
+import Link from '@/components/docs/Link'
 import LayoutComponent from '@/components/LayoutComponent'
-import baseAssets from '@/lib/baseAssets'
 import { t } from '@/lib/messages'
-
-/*
-frontend:
-
-// CreateTodo.tsx
-// Environment: client
- 
-// CreateTodo.telefunc.ts isn't actually loaded;
-// Telefunc transforms it into a thin HTTP client.
-import { onNewTodo } from './CreateTodo.telefunc.ts'
- 
-async function onClick(form) {
-  const text = form.input.value
-  // Behind the scenes, Telefunc makes an HTTP request
-  // to the server.
-  await onNewTodo(text)
-}
- 
-function CreateTodo() {
-  return (
-    <form>
-      <input input="text"></input>
-      <button onClick={onClick}>Add To-Do</button>
-    </form>
-  )
-}
-
-*/
-
-const frontendCode = `// CreateTodo.telefunc.ts isn't actually loaded;
-// Telefunc transforms it into a thin HTTP client.
-import { onNewTodo } from './CreateTodo.telefunc.ts'
- 
-async function onClick(form) {
-  const text = form.input.value
-  // Behind the scenes, Telefunc makes an HTTP request
-  // to the server.
-  await onNewTodo(text)
-}
- 
-function CreateTodo() {
-  return (
-    <form>
-      <input input="text"></input>
-      <button onClick={onClick}>Add To-Do</button>
-    </form>
-  )
-}
-`
-
-/*
-server:
-
-
-*/
-
-const backendCode = `// CreateTodo.telefunc.ts
-// Environment: server
- 
-// Telefunc makes onNewTodo() remotely callable
-// from the browser.
-export { onNewTodo }
- 
-import { getContext } from 'telefunc'
- 
-// Telefunction arguments are automatically validated
-// at runtime, so \`text\` is guaranteed to be a string.
-async function onNewTodo(text: string) {
-  const { user } = getContext()
- 
-  // With an ORM
-  await Todo.create({ text, authorId: user.id })
- 
-  // With SQL
-  await sql(
-    'INSERT INTO todo_items VALUES (:text, :authorId)',
-    { text, authorId: user.id }
-  )
-}
-`
+import BackendCode from '@/pages/index/backendCode.mdx'
+import FrontendCode from '@/pages/index/frontendCode.mdx'
 
 const Page = () => {
   const { locale } = usePageContext()
 
   return (
-    <>
-      <div className="overflow-x-clip min-h-[calc(100svh-40*var(--spacing))] flex flex-col justify-center gap-16 py-16">
-        <LayoutComponent className="relative">
-          <div className="z-1 object-center absolute w-300 h-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-            <img
-              src={`${baseAssets}decorators/mascot-bg.avif`}
-              alt=""
-              width={300}
-              height={300}
-              className="w-full h-full select-none pointer-events-none opacity-40 dark:opacity-45"
-            />
+    <div className="overflow-x-clip min-h-[calc(100svh-40*var(--spacing))] flex flex-col justify-center py-16 w-full">
+      <LayoutComponent className="relative">
+        <div className="text-center mx-auto z-2 relative">
+          <div className="flex rounded-field justify-center w-fit mx-auto shadow border border-base-muted-medium/50 overflow-hidden">
+            <span className="block py-1.5 px-2 font-semibold text-xs text-base-muted tracking-wide">REPLACES</span>
+            <span className="block py-1.5 px-2 bg-base-muted-superlight text-base-muted font-semibold text-xs">
+              REST / GraphQL / tRPC / Server Actions
+            </span>
           </div>
-          <div className="text-center mx-auto z-2 relative">
-            <h1 className="text-4xl lg:text-5xl xl:text-7xl font-bold">
-              {t(locale, 'home', 'titlePrefix')}{' '}
-              <GradientText className="">{t(locale, 'home', 'titleAccent')}</GradientText>
+          <div className="my-8">
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold">
+              {t(locale, 'home', 'titlePrefix')} {t(locale, 'home', 'titleAccent')}
             </h1>
-            <p className="font-normal text-base-muted text-lg lg:text-3xl mt-6">{t(locale, 'home', 'subtitle')}</p>
+            <p className="font-normal text-base-muted text-lg lg:text-3xl mt-4">{t(locale, 'home', 'subtitle')}</p>
           </div>
-        </LayoutComponent>
-        <LayoutComponent $size="sm" className="relative grid grid-cols-2 gap-4 items-stretch ">
-          <MdxCodeBlock data-language="typescript" data-language-label="Called on the frontend">
-            {frontendCode}
-          </MdxCodeBlock>
-          <MdxCodeBlock data-language="typescript" data-language-label="Defined on the server">
-            {backendCode}
-          </MdxCodeBlock>
-        </LayoutComponent>
-      </div>
-      <div className=" animate-bounce">
-        <Sticker className="w-8 h-8 mx-auto mb-2 text-base-muted" />
-        <ArrowBigDownDash className="w-6 h-6 mx-auto text-base-muted animate-bounce" />
-      </div>
-    </>
+        </div>
+      </LayoutComponent>
+
+      <LayoutComponent $size="sm" className="flex gap-2 justify-center">
+        <Link href="get-started" className="btn btn-secondary btn-lg">
+          {t(locale, 'landing', 'getStartedButton')}
+        </Link>
+        <Link className="btn btn-ghost border-base-content bg-transparent btn-lg">
+          {t(locale, 'landing', 'learnMoreButton')}
+        </Link>
+      </LayoutComponent>
+
+      <LayoutComponent $size="sm" className="mt-10">
+        <div className="grid grid-cols-2 gap-4">
+          <h2 className="text-lg font mb-2 text-center">{t(locale, 'landing', 'frontendCodeTitle')}</h2>
+          <h2 className="text-lg font mb-2 text-center">{t(locale, 'landing', 'backendCodeTitle')}</h2>
+        </div>
+        <div className="landing-code-samples grid grid-cols-2 gap-4 items-stretch">
+          <FrontendCode />
+          <BackendCode />
+        </div>
+      </LayoutComponent>
+    </div>
   )
 }
 

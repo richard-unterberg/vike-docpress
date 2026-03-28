@@ -4,7 +4,7 @@ export const headingDefinitions = {
   docsHome: {
     docPath: '',
     title: {
-      en: 'Docs',
+      en: 'Documentation',
       zh: '文档',
     },
     excerpt: {
@@ -75,10 +75,10 @@ export const headingDefinitions = {
       zh: '学习如何使用 Alert 组件来显示重要消息和通知。',
     },
   },
-  guides: {
-    docPath: 'guides',
+  api: {
+    docPath: 'api',
     title: {
-      en: 'Guides',
+      en: 'API',
       zh: '指南',
     },
     excerpt: {

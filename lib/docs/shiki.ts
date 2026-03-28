@@ -1,7 +1,7 @@
 import { type BundledLanguage, bundledLanguages, bundledLanguagesAlias, getSingletonHighlighter } from 'shiki'
 
 const shikiThemes = {
-  light: 'min-light',
+  light: 'github-light',
   dark: 'one-dark-pro',
 } as const
 

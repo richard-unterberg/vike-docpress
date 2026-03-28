@@ -31,7 +31,7 @@ const Navbar = () => {
   return (
     <header
       className={cmMerge(
-        isLandingPage ? '' : 'bg-base-100  border-base-muted-light border-b dark:shadow',
+        isLandingPage ? '' : 'bg-base-100 border-base-muted-light border-b dark:shadow',
         'z-10 w-full h-16 fixed top-0 left-0',
       )}
     >
@@ -42,10 +42,11 @@ const Navbar = () => {
               <BrandLogo locale={locale} isLanding />
             </div>
             <div className="flex flex-1 items-center justify-center gap-4 top-0 left-0 w-full">
-              <Search inputSize={isLandingPage ? 'md' : 'sm'} />
+              <DocsMenu />
             </div>
             <div className="flex-1 flex items-center justify-end gap-2">
-              <div className="hidden xl:block">
+              <Search />
+              <div className="hidden xl:block border-e border-e-base-muted-light pr-2 ">
                 <SocialIcons />
               </div>
               <ThemeSwitch />

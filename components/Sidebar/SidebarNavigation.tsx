@@ -1,12 +1,9 @@
 import { cmMerge } from '@classmatejs/react'
 import { Fragment, type ReactNode, useEffect, useRef } from 'react'
 import { getLogicalPathname } from '@/lib/i18n/routing'
-import type { MenuRendererGroup } from '@/lib/types'
+import type { MenuRendererGroup, SidebarItem, SidebarLinkItem } from '@/lib/types'
 
-type SidebarHeading = {
-  title: ReactNode
-  href: string
-}
+const isSidebarLink = (item: SidebarItem): item is SidebarLinkItem => 'href' in item
 
 const isActiveHref = (currentPathname: string, href: string) => {
   const normalizeLogicalPathname = (pathname: string) => {
@@ -29,6 +26,10 @@ const getActiveHref = (groups: MenuRendererGroup[], currentPathname: string) => 
 
   for (const group of groups) {
     for (const link of group.links ?? []) {
+      if (!isSidebarLink(link)) {
+        continue
+      }
+
       if (!isActiveHref(currentPathname, link.href)) {
         continue
       }
@@ -63,9 +64,10 @@ const renderInlineMarkdown = (title: ReactNode): ReactNode => {
   })
 }
 
-const getSidebarItemKey = (item: SidebarHeading, index: number) => `${item.href}::${index}`
+const getSidebarItemKey = (item: SidebarItem, index: number) =>
+  ('href' in item ? item.href : item.id) ?? `sidebar-item-${index}`
 
-const SidebarLink = (props: SidebarHeading & { activeHref: string | null }) => {
+const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => {
   return (
     <li>
       <a
@@ -77,6 +79,14 @@ const SidebarLink = (props: SidebarHeading & { activeHref: string | null }) => {
       >
         {renderInlineMarkdown(props.title)}
       </a>
+    </li>
+  )
+}
+
+const SidebarDivider = (props: { title: ReactNode }) => {
+  return (
+    <li className="-mb-2 mt-1 text-base-muted-medium pointer-events-none font-semibold">
+      <span>{renderInlineMarkdown(props.title)}</span>
     </li>
   )
 }
@@ -95,7 +105,7 @@ const SidebarGroupLabel = (props: Pick<MenuRendererGroup, 'icon' | 'title'>) => 
 const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string | null; showSeparator: boolean }) => {
   const isCollapsible = props.collapsible !== false && props.collapsible !== undefined
   const isOpenByDefault = typeof props.collapsible === 'object' ? (props.collapsible.isDefaultOpen ?? true) : false
-  const hasActiveLink = (props.links ?? []).some((link) => link.href === props.activeHref)
+  const hasActiveLink = (props.links ?? []).some((link) => isSidebarLink(link) && link.href === props.activeHref)
   const detailsRef = useRef<HTMLDetailsElement>(null)
   const hasMountedRef = useRef(false)
   const wasActiveRef = useRef(hasActiveLink)
@@ -131,9 +141,13 @@ const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string |
             <SidebarGroupLabel icon={props.icon} title={props.title} />
           </summary>
           <ul>
-            {props.links?.map((item, index) => (
-              <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
-            ))}
+            {props.links?.map((item, index) =>
+              isSidebarLink(item) ? (
+                <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
+              ) : (
+                <SidebarDivider key={getSidebarItemKey(item, index)} title={item.title} />
+              ),
+            )}
           </ul>
         </details>
       ) : (
@@ -142,9 +156,13 @@ const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string |
             <SidebarGroupLabel icon={props.icon} title={props.title} />
           </span>
           <ul>
-            {props.links?.map((item, index) => (
-              <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
-            ))}
+            {props.links?.map((item, index) =>
+              isSidebarLink(item) ? (
+                <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
+              ) : (
+                <SidebarDivider key={getSidebarItemKey(item, index)} title={item.title} />
+              ),
+            )}
           </ul>
         </>
       )}

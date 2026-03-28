@@ -48,8 +48,8 @@ const isMdxCodeBlock = (node: ReactNode): node is ReactElement<MdxCodeBlockProps
 
 const CodeBlockFrame = ({ label, children }: { label: string; children: ReactNode }) => {
   return (
-    <CodeBlockOuter>
-      <CodeblockHeader>
+    <CodeBlockOuter data-code-block-frame="">
+      <CodeblockHeader data-code-block-header="">
         <CodeBlockTitle>{label}</CodeBlockTitle>
       </CodeblockHeader>
       {children}
@@ -60,7 +60,7 @@ const CodeBlockFrame = ({ label, children }: { label: string; children: ReactNod
 export const MdxCodeBlock = ({ children, className, grouped = false, ...props }: MdxCodeBlockProps) => {
   const label = getCodeBlockLabel(props)
   const codeBlock = (
-    <CodeSegment {...props} className={['', className].filter(Boolean).join(' ')}>
+    <CodeSegment data-code-block-content="" {...props} className={['', className].filter(Boolean).join(' ')}>
       {children}
     </CodeSegment>
   )
@@ -96,9 +96,9 @@ export const CodeGroup = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <CodeBlockOuter>
+    <CodeBlockOuter data-code-block-frame="">
       {blocks.length > 1 && (
-        <CodeblockHeader>
+        <CodeblockHeader data-code-block-header="">
           <CodeBlockTitle>{activeBlock.label}</CodeBlockTitle>
           <label className="select select-xs w-fit min-w-28">
             <select
