@@ -3,7 +3,7 @@ import path, { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import mdex from '../../pages/+mdex'
 import { extractDocHeadings } from '../docs/headings'
-import { resolveMdexSystemConfig } from '../docs/systemConfig'
+import { getDocPath, resolveMdexSystemConfig } from '../docs/systemConfig'
 import { DEFAULT_LOCALE, isLocale, type Locale, locales } from '../i18n/config'
 import { localizeHref } from '../i18n/routing'
 import type { SearchIndexEntry } from './shared'
@@ -61,14 +61,6 @@ const getDocsSourceMap = (): DocsSourceMap => {
   return docs
 }
 
-const getDocPath = (slug: string, basePath: string) => {
-  if (slug === '') {
-    return basePath || `/${resolveMdexSystemConfig(mdex).defaultSlug}`
-  }
-
-  return basePath ? `${basePath}/${slug}` : `/${slug}`
-}
-
 export const buildSearchIndexes = (): Record<Locale, SearchIndexEntry[]> => {
   const docs = getDocsSourceMap()
   const resolvedConfig = resolveMdexSystemConfig(mdex)
@@ -87,7 +79,7 @@ export const buildSearchIndexes = (): Record<Locale, SearchIndexEntry[]> => {
         return [
           {
             headings: extractDocHeadings(source),
-            href: localizeHref(getDocPath(slug, resolvedConfig.basePath), locale),
+            href: localizeHref(getDocPath(slug, resolvedConfig), locale),
             locale,
             resolvedLocale,
             slug,

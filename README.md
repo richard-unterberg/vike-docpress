@@ -66,7 +66,7 @@ Use `pages/+mdex.ts` for app-wide docs behavior:
 import type { MdexSystemConfig } from '../lib/docs/systemConfig'
 
 export default {
-  basePath: '',
+  docsBasePath: '',
   defaultSlug: 'get-started',
   defaultDocConfig: {
     tableOfContents: true,
@@ -77,7 +77,7 @@ export default {
 } satisfies MdexSystemConfig
 ```
 
-With `basePath: ''`, docs currently resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
+With `docsBasePath: ''`, docs resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
 
 `search.indexedWordsPerDoc` controls how many parsed words from each doc are included in the generated search index.
 
@@ -103,4 +103,3 @@ Search indexes are generated from raw MDX content, not from rendered HTML.
 - In production builds, the same plugin emits `dist/client/assets/search-index.en.json` and `dist/client/assets/search-index.zh.json`.
 - The plugin also patches `dist/assets.json` so deployments that rely on the asset manifest can discover those files.
 - The navbar search loads the active locale index on demand and ranks matches on the client using title, slug, headings, and truncated body text.
-

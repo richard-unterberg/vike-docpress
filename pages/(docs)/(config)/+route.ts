@@ -8,7 +8,7 @@ const route = (pageContext: PageContext) => {
   const logicalPathname = stripLocaleFromPathname(pageContext.urlPathname).pathname
   const slug = matchDocPath(logicalPathname, docsConfig)
   if (slug === null) return false
-  if (docsConfig.basePath === '' && !hasDocSlug(slug)) return false
+  if (docsConfig.docsBasePath === '' && !hasDocSlug(slug)) return false
 
   return {
     routeParams: {

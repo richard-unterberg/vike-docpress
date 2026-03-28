@@ -10,7 +10,7 @@ const guard = async (pageContext: PageContext) => {
   const requestedSlug = routeParams.slug?.replace(/^\/+|\/+$/g, '') ?? ''
   const docSlug = requestedSlug || docsConfig.defaultSlug
 
-  if (requestedSlug === '' && docsConfig.basePath !== '') {
+  if (requestedSlug === '' && docsConfig.docsBasePath !== '') {
     throw redirect(localizeHref(getDocPath(docSlug, docsConfig), pageContext.locale))
   }
 

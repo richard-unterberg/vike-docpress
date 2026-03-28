@@ -102,7 +102,7 @@ export const messages = {
       zh: '开发者',
     },
     subtitle: {
-      en: 'is a developer-focused documentation starter kit built on top of Vike, optimized for performance and developer experience.',
+      en: 'is a documentation starter kit built on top of the vike SSR-framework.',
       zh: '是一个以开发者为中心的文档入门套件，构建在 Vike 之上，并针对性能与开发体验进行了优化。',
     },
     cta: {

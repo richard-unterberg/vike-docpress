@@ -228,7 +228,7 @@ export const getPrerenderDocUrls = (mdexConfig?: MdexSystemConfig) => {
   const docSlugs = getAllDocSlugs()
 
   for (const locale of locales) {
-    if (resolvedDocsConfig.basePath !== '') {
+    if (resolvedDocsConfig.docsBasePath !== '') {
       urls.add(localizePathname(getDocsIndexPath(resolvedDocsConfig), locale))
     }
 

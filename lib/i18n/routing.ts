@@ -16,7 +16,8 @@ const normalizeBasePath = (value: string | undefined) => {
 }
 
 const viteBaseUrl = typeof window !== 'undefined' ? import.meta.env.BASE_URL : undefined
-const basePath = normalizeBasePath(process.env.PAGES_BASE_PATH ?? viteBaseUrl)
+const processBasePath = typeof process !== 'undefined' ? process.env.PAGES_BASE_PATH : undefined
+const basePath = normalizeBasePath(processBasePath ?? viteBaseUrl)
 
 const getPathnameOnly = (pathnameOrHref: string) => {
   return pathnameOrHref.split('#')[0]?.split('?')[0] ?? pathnameOrHref

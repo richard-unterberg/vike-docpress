@@ -1,7 +1,7 @@
 import type { MdexSystemConfig } from '../lib/docs/systemConfig'
 
 export default {
-  basePath: '',
+  docsBasePath: '',
   defaultSlug: 'get-started',
   defaultDocConfig: {
     tableOfContents: true,

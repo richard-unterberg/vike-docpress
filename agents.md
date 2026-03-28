@@ -11,8 +11,8 @@
 
 - Stack: Vike + `vike-react`, React 19, Vite 7, MDX via `@mdx-js/rollup`, Tailwind CSS 4, DaisyUI 5, Zustand, and `@classmatejs/react`.
 - Global app config lives in `pages/+config.ts`. It enables global `mdex` config, prerendering, `vike-react`, `htmlAttributes.data-theme = 'mdex-dark'`, and passes `locale` plus `urlPathnameLocalized` to the client.
-- App-wide docs system config lives in `pages/+mdex.ts`. Current values are `basePath: ''`, `defaultSlug: 'get-started'`, `defaultDocConfig.tableOfContents: true`, and `search.indexedWordsPerDoc: 120`.
-- Current URL model: `/` is the landing page from `pages/index/+Page.tsx`. Docs pages are served from the single dynamic Vike subtree at `pages/(docs)/(config)`. Because `basePath` is currently `''`, docs resolve at root-level slugs like `/get-started` and `/intro` instead of under `/docs`.
+- App-wide docs system config lives in `pages/+mdex.ts`. Current values are `docsBasePath: ''`, `defaultSlug: 'get-started'`, `defaultDocConfig.tableOfContents: true`, and `search.indexedWordsPerDoc: 120`.
+- Current URL model: `/` is the landing page from `pages/index/+Page.tsx`. Docs pages are served from the single dynamic Vike subtree at `pages/(docs)/(config)`. Because `docsBasePath` is currently `''`, docs resolve at root-level slugs like `/get-started` and `/intro` instead of under `/docs`.
 - Locales are defined in `lib/i18n/config.ts` as `en` and `zh`, with `en` as the default locale. Non-default locale URLs use a pathname prefix like `/zh/...`; default locale URLs stay unprefixed.
 - Routing locale behavior is handled in `pages/+onBeforeRoute.ts`. For non-prefixed URLs, the app may redirect on the client to a stored non-default locale preference. The URL remains the source of truth for the render-time locale.
 - Theme and locale preferences are persisted in local storage under `vike-user-settings` using Zustand persistence. `UserSettingsSync` reapplies theme and keeps the stored locale in sync with explicit locale-prefixed URLs.
