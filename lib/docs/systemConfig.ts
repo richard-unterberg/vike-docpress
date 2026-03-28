@@ -6,31 +6,17 @@ export type MdexSearchConfig = {
 }
 
 export type MdexSystemConfig = {
-  docsBasePath?: string
-  /** @deprecated Use docsBasePath instead. */
-  basePath?: string
   defaultSlug?: string
   defaultDocConfig?: DocConfig
   search?: MdexSearchConfig
 }
 
 export type ResolvedMdexSystemConfig = {
-  docsBasePath: string
   defaultSlug: string
   defaultDocConfig: DocConfig
   search: {
     indexedWordsPerDoc: number
   }
-}
-
-const normalizeDocsBasePath = (value: string | undefined) => {
-  const normalized = (value ?? '/docs').trim()
-
-  if (normalized === '' || normalized === '/') {
-    return ''
-  }
-
-  return `/${normalized.replace(/^\/+|\/+$/g, '')}`
 }
 
 const normalizeDocSlug = (value: string | undefined) => {
@@ -39,7 +25,6 @@ const normalizeDocSlug = (value: string | undefined) => {
 
 export const resolveMdexSystemConfig = (config?: MdexSystemConfig): ResolvedMdexSystemConfig => {
   return {
-    docsBasePath: normalizeDocsBasePath(config?.docsBasePath ?? config?.basePath),
     defaultSlug: normalizeDocSlug(config?.defaultSlug) || 'get-started',
     defaultDocConfig: config?.defaultDocConfig ?? { tableOfContents: true },
     search: {
@@ -56,7 +41,7 @@ export const getMdexSystemConfig = (value?: { config?: { mdex?: MdexSystemConfig
 
 export const getDocsIndexPath = (config: MdexSystemConfig | ResolvedMdexSystemConfig = mdexSystemConfig) => {
   const resolved = resolveMdexSystemConfig(config)
-  return resolved.docsBasePath || `/${resolved.defaultSlug}`
+  return `/${resolved.defaultSlug}`
 }
 
 export const getDocPath = (slug: string, config: MdexSystemConfig | ResolvedMdexSystemConfig = mdexSystemConfig) => {
@@ -67,29 +52,11 @@ export const getDocPath = (slug: string, config: MdexSystemConfig | ResolvedMdex
     return getDocsIndexPath(resolved)
   }
 
-  return resolved.docsBasePath ? `${resolved.docsBasePath}/${normalizedSlug}` : `/${normalizedSlug}`
+  return `/${normalizedSlug}`
 }
 
-export const matchDocPath = (
-  pathname: string,
-  config: MdexSystemConfig | ResolvedMdexSystemConfig = mdexSystemConfig,
-) => {
-  const resolved = resolveMdexSystemConfig(config)
+export const matchDocPath = (pathname: string) => {
   const normalizedPathname = pathname === '/' ? '/' : `/${pathname.replace(/^\/+|\/+$/g, '')}`
-
-  if (resolved.docsBasePath === '') {
-    const slug = normalizeDocSlug(normalizedPathname)
-    return slug || null
-  }
-
-  if (normalizedPathname === resolved.docsBasePath) {
-    return ''
-  }
-
-  const prefix = `${resolved.docsBasePath}/`
-  if (!normalizedPathname.startsWith(prefix)) {
-    return null
-  }
-
-  return normalizeDocSlug(normalizedPathname.slice(prefix.length))
+  const slug = normalizeDocSlug(normalizedPathname)
+  return slug || null
 }

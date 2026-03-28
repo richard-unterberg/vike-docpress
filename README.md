@@ -66,7 +66,6 @@ Use `pages/+mdex.ts` for app-wide docs behavior:
 import type { MdexSystemConfig } from '../lib/docs/systemConfig'
 
 export default {
-  docsBasePath: '',
   defaultSlug: 'get-started',
   defaultDocConfig: {
     tableOfContents: true,
@@ -77,7 +76,7 @@ export default {
 } satisfies MdexSystemConfig
 ```
 
-With `docsBasePath: ''`, docs resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
+Docs URLs are derived from the Vike route structure. In the current template, docs resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
 
 `search.indexedWordsPerDoc` controls how many parsed words from each doc are included in the generated search index.
 

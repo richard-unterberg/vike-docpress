@@ -20,8 +20,8 @@ const MenuItem = cm.a.variants<{ $active?: boolean }>({
   },
 })
 
-const getActiveSection = (pathname: string, mdexConfig: Parameters<typeof matchDocPath>[1]): DocsMenuSection | null => {
-  const docSlug = matchDocPath(getLogicalPathname(pathname), mdexConfig)
+const getActiveSection = (pathname: string): DocsMenuSection | null => {
+  const docSlug = matchDocPath(getLogicalPathname(pathname))
 
   if (docSlug === null) {
     return null
@@ -43,7 +43,7 @@ const getActiveSection = (pathname: string, mdexConfig: Parameters<typeof matchD
 const DocsMenu = () => {
   const pageContext = usePageContext()
   const { locale, config, urlPathnameLocalized, urlPathname } = pageContext
-  const activeSection = getActiveSection(urlPathnameLocalized ?? urlPathname, config.mdex)
+  const activeSection = getActiveSection(urlPathnameLocalized ?? urlPathname)
   const items: Array<{ key: DocsMenuSection; href: string; title: string; icon: typeof BookText }> = [
     {
       key: 'docsHome',
