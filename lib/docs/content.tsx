@@ -233,9 +233,15 @@ export const getPrerenderDocUrls = (telefuncConfig?: TelefuncSystemConfig) => {
   const docSlugs = getAllDocSlugs()
 
   for (const locale of locales) {
-    urls.add(localizePathname(getDocsIndexPath(resolvedDocsConfig), locale))
+    if (hasDocPageForLocale(resolvedDocsConfig.defaultSlug, locale)) {
+      urls.add(localizePathname(getDocsIndexPath(resolvedDocsConfig), locale))
+    }
 
     for (const slug of docSlugs) {
+      if (!hasDocPageForLocale(slug, locale)) {
+        continue
+      }
+
       urls.add(localizePathname(getDocPath(slug, resolvedDocsConfig), locale))
     }
   }

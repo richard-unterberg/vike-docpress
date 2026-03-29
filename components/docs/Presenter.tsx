@@ -4,7 +4,7 @@ interface PresenterProps extends React.HTMLAttributes<HTMLDivElement> {
   elevated?: boolean
   children?: React.ReactNode
 }
-
+/** @deprecated - do not use atm - not clarified */
 export const Presenter = ({ elevated = false, children, ...props }: PresenterProps) => {
   return (
     <StyledPresenter $elevated={elevated} {...props}>

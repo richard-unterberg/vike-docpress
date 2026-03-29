@@ -1,4 +1,4 @@
-import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
+import { Alert, CodeGroup, Link, Table } from '@/components/docs'
 
 # Telefunc docs maintainer guide
 
@@ -22,9 +22,9 @@ import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
   ]
 }} />
 
-<Presenter elevated>
-   **Rule of thumb:** if the change is prose, examples, headings, links, screenshots, callouts, or tables, it belongs in MDX. If it changes routing, layout, styling, navigation wiring, or React code, hand it back to a developer.
-</Presenter>
+<Alert type="info" heading="Rule of thumb">
+  If the change is prose, examples, headings, links, screenshots, callouts, or tables, it belongs in MDX. If it changes routing, layout, styling, navigation wiring, or React code, hand it back to a developer.
+</Alert>
 
 ## Working rules
 
@@ -52,7 +52,6 @@ Use `lib/headings.ts` when a doc needs metadata or label changes, and use `lib/n
   If `navTitle` is omitted, the navigation uses `title`. Only add `navTitle` when the sidebar label should differ from the page heading.
 </Alert>
 
-<CodeGroup>
 ```ts
 quickStart: {
   docPath: 'get-started',
@@ -67,15 +66,6 @@ quickStart: {
   },
 }
 ```
-
-```ts
-links: [
-  'quickStart',
-  'concepts',
-  'bestPractices',
-]
-```
-</CodeGroup>
 
 - Edit `lib/headings.ts` when the document name, short nav label, or description needs to change.
 - Edit `lib/navigation/menuNavigation.ts` when a link should move to another section, appear in a different order, or be removed from the sidebar.
@@ -128,11 +118,9 @@ quickStart: {
   A string in `links` is not the URL itself. It is a heading key. The builder passes that key to `getHeadingData()`, which reads `lib/headings.ts` and turns it into the localized sidebar label and href.
 </Alert>
 
-<Presenter elevated>
-  <p>
-    <strong>Safe editing pattern:</strong> first create or update the metadata entry in <code>lib/headings.ts</code>, then add that key to the right <code>links</code> array in <code>lib/navigation/menuNavigation.ts</code>.
-  </p>
-</Presenter>
+<Alert type="info" heading="Safe editing pattern">
+  First create or update the metadata entry in <code>lib/headings.ts</code>, then add that key to the right <code>links</code> array in <code>lib/navigation/menuNavigation.ts</code>.
+</Alert>
 
 - To reorder the sidebar, move items up or down within a `links` array.
 - To remove a doc from the sidebar, remove its heading key from `links`.
@@ -145,7 +133,7 @@ quickStart: {
 Use this import at the top of a doc:
 
 ```mdx
-import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
+import { Alert, CodeGroup, Link, Table } from '@/components/docs'
 ```
 
 <Table data={{
@@ -154,7 +142,6 @@ import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
     ['Alert', 'Notes, warnings, and important guidance', '<Alert type="warning" heading="Heads up">...</Alert>'],
     ['CodeGroup', 'Showing alternative snippets in one framed block', '<CodeGroup>{multiple fenced code blocks}</CodeGroup>'],
     ['Link', 'Internal or external links; internal links keep locale prefixes correct', '<Link href="/intro">Intro</Link>'],
-    ['Presenter', 'Framed screenshots, diagrams, or embedded visual examples', '<Presenter elevated>...</Presenter>'],
     ['Table', 'Structured reference tables with headers and rows', '<Table data={{ headers: [...], rows: [...] }} />'],
   ]
 }} />
@@ -163,7 +150,7 @@ import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
 
 <CodeGroup>
 ```mdx
-import { Alert, CodeGroup, Link, Presenter, Table } from '@/components/docs'
+import { Alert, CodeGroup, Link, Table } from '@/components/docs'
 ```
 
 ```mdx
