@@ -44,7 +44,7 @@ const Navbar = () => {
         {isLandingPage ? (
           <div className="py-4 flex justify-between items-center h-full relative z-3">
             <div className="flex-1 flex items-center gap-4">
-              <BrandLogo locale={locale} isLanding />
+              <BrandLogo locale={locale} />
             </div>
             <div className="flex flex-1 items-center justify-center gap-4 top-0 left-0 w-full">
               <DocsMenu />

@@ -20,8 +20,8 @@ const Page = () => {
               REST / GraphQL / tRPC / Server Actions
             </span>
           </div> */}
-            <div className="my-8">
-              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold">
+            <div>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl font-bold">
                 {t(locale, 'home', 'titlePrefix')} {t(locale, 'home', 'titleAccent')}
               </h1>
               <p className="font-normal text-base-muted text-lg lg:text-3xl mt-4">{t(locale, 'home', 'subtitle')}</p>
@@ -29,7 +29,7 @@ const Page = () => {
           </div>
         </LayoutComponent>
 
-        <LayoutComponent $size="sm" className="flex gap-2 justify-center">
+        <LayoutComponent $size="sm" className="flex gap-2 justify-center my-10">
           <Link href={headingDefinitions.getStarted.docPath} className="btn btn-secondary btn-lg">
             {t(locale, 'landing', 'getStartedButton')}
           </Link>
@@ -41,7 +41,7 @@ const Page = () => {
           </Link>
         </LayoutComponent>
 
-        <LayoutComponent $size="sm" className="mt-10">
+        <LayoutComponent $size="sm">
           <div className="grid grid-cols-2 gap-4">
             <h2 className="text-lg font mb-2 text-center">{t(locale, 'landing', 'frontendCodeTitle')}</h2>
             <h2 className="text-lg font mb-2 text-center">{t(locale, 'landing', 'backendCodeTitle')}</h2>

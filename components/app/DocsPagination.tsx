@@ -38,16 +38,13 @@ const PaginationCard = (props: {
     <a
       href={props.item.href}
       className={cmMerge(
-        'group rounded-box border border-base-muted-light bg-base-100 p-5 no-underline transition-colors hover:border-base-300 hover:bg-base-200/50',
+        'group rounded-box border border-base-muted-light bg-base-100 p-5 no-underline transition-colors hover:bg-base-200 hover:border-primary-muted-medium',
         isPrevious ? 'text-left' : 'text-right',
         props.className,
       )}
     >
-      <div className="flex min-h-32 flex-col justify-between gap-5">
-        <div className="space-y-2">
-          <p className="text-xl font-semibold text-base-content">{renderInlineMarkdown(props.item.title)}</p>
-          {props.item.description && <p className="text-sm leading-6 text-base-muted">{props.item.description}</p>}
-        </div>
+      <div className="flex flex-col justify-between">
+        <p className="text-xl mb-2 font-semibold text-base-content">{renderInlineMarkdown(props.item.title)}</p>
         <div
           className={cmMerge(
             'flex items-center gap-1 text-base-muted transition-colors group-hover:text-base-content',

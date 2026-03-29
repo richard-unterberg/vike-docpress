@@ -22,11 +22,7 @@ const DocsFooter = () => {
         <SocialIcons />
         <div className="flex gap-2 items-center">
           <LanguageSwitch />
-          <p>
-            <a href="unterberg.dev" className="text-base-content">
-              <BrandLogo locale={locale} showText={false} />
-            </a>
-          </p>
+          <BrandLogo locale={locale} showText={false} />
         </div>
       </div>
     </footer>
