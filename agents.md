@@ -44,3 +44,6 @@
 - Implication: a file next to `content.en.mdx` or `content.zh.mdx` is not in the rendered page's Vike config ancestry, so Vike will not expose it through `pageContext.config`.
 - Current rule: per-document content options must use the custom content-level config convention, not Vike `+config.ts`.
 - Real Vike per-document config becomes possible only after an architecture refactor where each document directory is itself a real Vike page subtree, for example `pages/(docs)/intro/+Page.tsx` with `pages/(docs)/intro/+config.ts`.
+
+- always run typescript checks on the entire codebase, not just changed files, to prevent type errors from creeping in unnoticed
+- always run `pnpm knip` and check for unused dependencies you just introduced with your recent changes

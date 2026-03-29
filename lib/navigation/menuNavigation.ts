@@ -1,5 +1,6 @@
 import { Map as MapIcon, Sprout } from 'lucide-react'
-import { getHeadingData, type HeadingKey } from '@/lib/docs/headings'
+import { getHeadingData, getHeadingLinkData, type HeadingKey } from '@/lib/docs/headings'
+import type { TelefuncSystemConfig } from '@/lib/docs/systemConfig'
 import type { Locale } from '@/lib/i18n/config'
 import { t } from '@/lib/messages'
 import type { MenuGroupShared, MenuRendererGroup } from '@/lib/navigation/navigation'
@@ -65,7 +66,21 @@ const menuGroups: MenuGroupDefinition[] = [
   },
 ]
 
-export const getMenuNavigation = (locale: Locale): MenuRendererGroup[] => {
+export type MenuDocLink = ReturnType<typeof getHeadingLinkData>
+
+export const getMenuDocLinks = (locale: Locale, telefuncConfig?: TelefuncSystemConfig): MenuDocLink[] => {
+  return menuGroups.flatMap((group) =>
+    group.links.flatMap((item) => {
+      if (typeof item === 'object' && 'dividerText' in item) {
+        return []
+      }
+
+      return [getHeadingLinkData(item, locale, telefuncConfig)]
+    }),
+  )
+}
+
+export const getMenuNavigation = (locale: Locale, telefuncConfig?: TelefuncSystemConfig): MenuRendererGroup[] => {
   return menuGroups.map((group) => ({
     id: group.id,
     icon: group.icon,
@@ -79,7 +94,7 @@ export const getMenuNavigation = (locale: Locale): MenuRendererGroup[] => {
           isDivider: true,
         }
       }
-      return getHeadingData(item)
+      return getHeadingData(item, locale, telefuncConfig)
     }),
   }))
 }

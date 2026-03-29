@@ -168,14 +168,32 @@ const getHeadingLink = (headingKey: HeadingKey, telefuncConfig?: TelefuncSystemC
   return getDocPath(getHeadingDefinition(headingKey).docPath, telefuncConfig)
 }
 
+export const getHeadingLinkData = (
+  headingKey: HeadingKey,
+  locale: Locale | string | undefined = DEFAULT_LOCALE,
+  telefuncConfig?: TelefuncSystemConfig,
+) => {
+  const resolvedLocale = resolveLocale(locale)
+  const heading = getHeadingDefinition(headingKey)
+
+  return {
+    docPath: normalizeDocPath(heading.docPath),
+    title: heading.navTitle?.[resolvedLocale] ?? heading.title[resolvedLocale],
+    href: localizeHref(getHeadingLink(headingKey, telefuncConfig), resolvedLocale),
+    description: heading.excerpt?.[resolvedLocale] ?? null,
+  }
+}
+
 export const getHeadingData = (
   headingKey: HeadingKey,
   locale: Locale | string | undefined = DEFAULT_LOCALE,
   telefuncConfig?: TelefuncSystemConfig,
 ) => {
+  const { title, href } = getHeadingLinkData(headingKey, locale, telefuncConfig)
+
   return {
-    title: getHeadingNavTitle(headingKey, locale),
-    href: localizeHref(getHeadingLink(headingKey, telefuncConfig), locale),
+    title,
+    href,
   }
 }
 

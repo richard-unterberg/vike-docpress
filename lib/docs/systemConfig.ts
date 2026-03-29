@@ -5,10 +5,15 @@ export type TelefuncSearchConfig = {
   indexedWordsPerDoc?: number
 }
 
+export type TelefuncFooterConfig = {
+  pagination?: boolean
+}
+
 export type TelefuncSystemConfig = {
   defaultSlug?: string
   defaultDocConfig?: DocConfig
   search?: TelefuncSearchConfig
+  footer?: TelefuncFooterConfig
 }
 
 export type ResolvedTelefuncSystemConfig = {
@@ -16,6 +21,9 @@ export type ResolvedTelefuncSystemConfig = {
   defaultDocConfig: DocConfig
   search: {
     indexedWordsPerDoc: number
+  }
+  footer: {
+    pagination: boolean
   }
 }
 
@@ -29,6 +37,9 @@ export const resolveTelefuncSystemConfig = (config?: TelefuncSystemConfig): Reso
     defaultDocConfig: config?.defaultDocConfig ?? { tableOfContents: true },
     search: {
       indexedWordsPerDoc: Math.max(1, Math.floor(config?.search?.indexedWordsPerDoc ?? 120)),
+    },
+    footer: {
+      pagination: config?.footer?.pagination ?? false,
     },
   }
 }

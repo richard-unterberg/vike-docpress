@@ -5,6 +5,9 @@ export default {
   defaultDocConfig: {
     tableOfContents: true,
   },
+  footer: {
+    pagination: true,
+  },
   search: {
     indexedWordsPerDoc: 2400,
   },

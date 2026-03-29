@@ -89,6 +89,14 @@ const messages = {
       en: 'On this page',
       zh: '本页导航',
     },
+    previous: {
+      en: 'Previous',
+      zh: '上一页',
+    },
+    next: {
+      en: 'Next',
+      zh: '下一页',
+    },
     edit: {
       en: 'Edit this page',
       zh: '编辑此页',

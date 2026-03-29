@@ -1,6 +1,7 @@
 import cm from '@classmatejs/react'
 import type { ReactNode } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
+import DocsPagination from '@/app-components/DocsPagination'
 import DocsFooter from '@/app-components/Footer'
 import LayoutComponent from '@/app-components/LayoutComponent'
 import Sidebar from '@/app-components/Sidebar'
@@ -77,6 +78,7 @@ const DocsLayout = ({ children }: { children: ReactNode }) => {
             <ProseContainer className="flex-1 z-1 relative" data-doc-content>
               {children}
             </ProseContainer>
+            <DocsPagination />
             <DocsFooter />
           </div>
           {showTableOfContents && <TableOfContents key={tocKey} headings={doc?.headings ?? []} />}
