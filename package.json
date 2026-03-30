@@ -1,8 +1,13 @@
 {
   "scripts": {
+    "generate:docs": "node scripts/generateDocsPages.mjs",
     "dev": "vike dev",
     "build": "vike build",
     "preview": "vike build && vike preview",
+    "predev": "pnpm generate:docs",
+    "prebuild": "pnpm generate:docs",
+    "pretypecheck": "pnpm generate:docs",
+    "preknip": "pnpm generate:docs",
     "prepare": "lefthook install",
     "typecheck": "tsc --noEmit",
     "lint": "biome lint --write .",

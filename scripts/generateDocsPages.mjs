@@ -1,27 +1,11 @@
 import fs from 'node:fs'
-import path, { dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
-import type { Plugin, ViteDevServer } from 'vite'
-import { extractDocHeadings } from './headings'
+import path from 'node:path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const virtualModuleId = 'virtual:docs-content-manifest'
-const resolvedVirtualModuleId = '\0virtual:docs-content-manifest'
-const pagesRoot = path.resolve(__dirname, '../../pages')
-const docsPagesRoot = path.resolve(pagesRoot, '(docs)')
-const docsContentRoot = path.resolve(pagesRoot, '(docs)/(content)')
+const rootDir = process.cwd()
+const pagesRoot = path.resolve(rootDir, 'pages')
 const generatedPagesRoot = path.resolve(pagesRoot, '(docs)/(generated)')
 
-type DocsContentEntry = {
-  headings: ReturnType<typeof extractDocHeadings>
-  locale: string
-  path: string
-  routeId: string
-}
-
-const walkDir = (dirPath: string): string[] => {
+const walkDir = (dirPath) => {
   return fs.readdirSync(dirPath, { withFileTypes: true }).flatMap((entry) => {
     const nextPath = path.join(dirPath, entry.name)
     if (entry.isDirectory()) {
@@ -32,13 +16,11 @@ const walkDir = (dirPath: string): string[] => {
   })
 }
 
-const getLogicalSegments = (segments: string[]) => {
+const getLogicalSegments = (segments) => {
   return segments.filter((segment) => segment !== '' && !(segment.startsWith('(') && segment.endsWith(')')))
 }
 
-const toPosixPath = (value: string) => value.split(path.sep).join('/')
-
-const writeFileIfChanged = (filePath: string, source: string) => {
+const writeFileIfChanged = (filePath, source) => {
   const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null
   if (current === source) {
     return
@@ -48,12 +30,12 @@ const writeFileIfChanged = (filePath: string, source: string) => {
   fs.writeFileSync(filePath, source)
 }
 
-const getDocsContentEntries = (): DocsContentEntry[] => {
+const getDocsContentEntries = () => {
   if (!fs.existsSync(pagesRoot)) {
     return []
   }
 
-  return walkDir(pagesRoot).flatMap<DocsContentEntry>((filePath) => {
+  return walkDir(pagesRoot).flatMap((filePath) => {
     const localeMatch = path.basename(filePath).match(/^content\.([^.]+)\.mdx$/)
     if (!localeMatch) {
       return []
@@ -77,16 +59,14 @@ const getDocsContentEntries = (): DocsContentEntry[] => {
 
     return [
       {
-        headings: extractDocHeadings(fs.readFileSync(filePath, 'utf8')),
         locale: localeMatch[1],
-        path: filePath,
         routeId,
       },
     ]
   })
 }
 
-const getGeneratedImports = (routeId: string, entries: DocsContentEntry[]) => {
+const getGeneratedImports = (routeId, entries) => {
   const imports = entries
     .map((entry) => {
       const importName = `doc${entry.locale.replace(/[^a-zA-Z0-9_$]/g, '_')}`
@@ -105,7 +85,7 @@ const getGeneratedImports = (routeId: string, entries: DocsContentEntry[]) => {
   }
 }
 
-const getGeneratedPageSource = (routeId: string, entries: DocsContentEntry[]) => {
+const getGeneratedPageSource = (routeId, entries) => {
   const { importBlock, modulesBlock } = getGeneratedImports(routeId, entries)
 
   return [
@@ -135,7 +115,7 @@ const getGeneratedPageSource = (routeId: string, entries: DocsContentEntry[]) =>
   ].join('\n')
 }
 
-const getGeneratedDataSource = (routeId: string, entries: DocsContentEntry[]) => {
+const getGeneratedDataSource = (routeId, entries) => {
   const { importBlock, modulesBlock } = getGeneratedImports(routeId, entries)
 
   return [
@@ -159,8 +139,12 @@ const getGeneratedDataSource = (routeId: string, entries: DocsContentEntry[]) =>
 }
 
 const syncGeneratedDocPages = () => {
-  const docsContentEntries = getDocsContentEntries().sort((left, right) => left.path.localeCompare(right.path))
-  const entriesByRoute = new Map<string, DocsContentEntry[]>()
+  const docsContentEntries = getDocsContentEntries().sort((left, right) => {
+    return left.routeId === right.routeId
+      ? left.locale.localeCompare(right.locale)
+      : left.routeId.localeCompare(right.routeId)
+  })
+  const entriesByRoute = new Map()
 
   for (const entry of docsContentEntries) {
     const routeEntries = entriesByRoute.get(entry.routeId) ?? []
@@ -178,68 +162,4 @@ const syncGeneratedDocPages = () => {
   }
 }
 
-const isDocsSourcePath = (filePath: string) => {
-  const normalized = toPosixPath(filePath)
-  const docsRoot = toPosixPath(docsPagesRoot)
-  const generatedRoot = toPosixPath(generatedPagesRoot)
-
-  return (
-    normalized.startsWith(docsRoot) &&
-    !normalized.startsWith(generatedRoot) &&
-    (/\/content\.[^.]+\.mdx$/.test(normalized) || /\/content\.config\.(ts|js)$/.test(normalized))
-  )
-}
-
-const restartDevServer = async (server: ViteDevServer) => {
-  syncGeneratedDocPages()
-  await server.restart()
-}
-
-export const docsPagesPlugin = (): Plugin => {
-  return {
-    name: 'docs-pages-plugin',
-    enforce: 'pre',
-    configureServer(server) {
-      server.watcher.on('add', async (filePath) => {
-        if (!isDocsSourcePath(filePath)) {
-          return
-        }
-
-        await restartDevServer(server)
-      })
-
-      server.watcher.on('unlink', async (filePath) => {
-        if (!isDocsSourcePath(filePath)) {
-          return
-        }
-
-        await restartDevServer(server)
-      })
-    },
-    handleHotUpdate(ctx) {
-      if (!isDocsSourcePath(ctx.file)) {
-        return
-      }
-
-      ctx.server.ws.send({ type: 'full-reload' })
-      return []
-    },
-    resolveId(id) {
-      if (id === virtualModuleId) {
-        return resolvedVirtualModuleId
-      }
-    },
-    load(id) {
-      if (id !== resolvedVirtualModuleId) {
-        return
-      }
-
-      const docsContentEntries = getDocsContentEntries().sort((left, right) => left.path.localeCompare(right.path))
-
-      return [
-        `export const docsContentEntries = ${JSON.stringify(docsContentEntries)};`,
-        'export default docsContentEntries;',
-      ].join('\n')
-    },
-  }
-}
+syncGeneratedDocPages()

@@ -14,6 +14,11 @@ import tsConf from './tsconfig.json'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
+// Generated docs pages live in an untracked directory. Vike's default git-based
+// crawler misses nested plus files in untracked directories, so force glob
+// crawling to make generated routes visible in dev and build.
+process.env.VIKE_CRAWL ??= JSON.stringify({ git: false })
+
 const normalizeBaseUrl = (value: string | undefined) => {
   const normalized = value?.trim()
 
