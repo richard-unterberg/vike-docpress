@@ -1,5 +1,6 @@
 import { redirect } from 'vike/abort'
 import { modifyUrl } from 'vike/modifyUrl'
+import { getDocPath } from '@/lib/docs/systemConfig'
 import type { PageContext } from 'vike/types'
 import { resolveHeadingByHrefPathname } from '@/lib/docs/headings'
 import { hasDocPageForLocale, hasDocSlug } from '@/lib/docs/contentManifest'
@@ -10,7 +11,7 @@ import { getStoredLocalePreference } from '@/lib/settings-store'
 
 const getCanonicalDocPathname = (pathname: string) => {
   const resolved = resolveHeadingByHrefPathname(pathname)
-  return resolved ? `/${resolved.docPath}` : pathname
+  return resolved ? getDocPath(resolved.docPath) : pathname
 }
 
 const getDocSlugFromPathname = (pathname: string) => {

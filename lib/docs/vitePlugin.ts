@@ -158,6 +158,10 @@ const getGeneratedDataSource = (routeId: string, entries: DocsContentEntry[]) =>
   ].join('\n')
 }
 
+const getGeneratedRouteSource = (routeId: string) => {
+  return [`export default ${JSON.stringify(`/${routeId}/`)}`, ''].join('\n')
+}
+
 const syncGeneratedDocPages = () => {
   const docsContentEntries = getDocsContentEntries().sort((left, right) => left.path.localeCompare(right.path))
   const entriesByRoute = new Map<string, DocsContentEntry[]>()
@@ -175,6 +179,7 @@ const syncGeneratedDocPages = () => {
     const pageDir = path.join(generatedPagesRoot, ...routeId.split('/'))
     writeFileIfChanged(path.join(pageDir, '+Page.tsx'), getGeneratedPageSource(routeId, entries))
     writeFileIfChanged(path.join(pageDir, '+data.ts'), getGeneratedDataSource(routeId, entries))
+    writeFileIfChanged(path.join(pageDir, '+route.ts'), getGeneratedRouteSource(routeId))
   }
 }
 

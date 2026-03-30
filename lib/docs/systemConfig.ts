@@ -54,7 +54,7 @@ export const getDocsIndexPath = (
   config: TelefuncSystemConfig | ResolvedTelefuncSystemConfig = telefuncSystemConfig,
 ) => {
   const resolved = resolveTelefuncSystemConfig(config)
-  return `/${resolved.defaultSlug}`
+  return `/${resolved.defaultSlug}/`
 }
 
 export const getDocPath = (
@@ -68,7 +68,7 @@ export const getDocPath = (
     return getDocsIndexPath(resolved)
   }
 
-  return `/${normalizedSlug}`
+  return `/${normalizedSlug}/`
 }
 
 export const matchDocPath = (pathname: string) => {

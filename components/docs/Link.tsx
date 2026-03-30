@@ -4,6 +4,7 @@ import { usePageContext } from 'vike-react/usePageContext'
 import { getDocHeadings } from '@/lib/docs/contentManifest'
 import { getDocHeadingMetadata, resolveHeadingByHrefPathname } from '@/lib/docs/headings'
 import { getDocPageDataFromPageContext } from '@/lib/docs/pageContext'
+import { getDocPath } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
 import { localizeHref } from '@/lib/i18n/routing'
 import { getHeadingGroupTitle } from '@/lib/navigation/menuNavigation'
@@ -114,7 +115,7 @@ const getLocalizedMdxHref = (href: string, locale: string | undefined) => {
 
   const { hrefHash, hrefPathname } = parseHref(href)
   const resolved = hrefPathname ? resolveHeadingByHrefPathname(hrefPathname) : null
-  const pathnameCanonical = resolved ? `/${resolved.docPath}` : (hrefPathname ?? href)
+  const pathnameCanonical = resolved ? getDocPath(resolved.docPath) : (hrefPathname ?? href)
   const normalizedHref = hrefHash ? `${pathnameCanonical}#${hrefHash}` : pathnameCanonical
 
   return localizeHref(normalizedHref, locale)
