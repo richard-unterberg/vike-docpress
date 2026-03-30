@@ -25,7 +25,7 @@ const Page = () => {
             </span>
           </div> */}
             <div>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-6xl font-bold">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl! font-bold">
                 {t(locale, 'home', 'titlePrefix')} {t(locale, 'home', 'titleAccent')}
               </h1>
               <p className="font-normal text-base-muted text-lg lg:text-3xl mt-4">{t(locale, 'home', 'subtitle')}</p>
@@ -34,12 +34,12 @@ const Page = () => {
         </LayoutComponent>
 
         <LayoutComponent $size="sm" className="flex gap-2 justify-center my-10">
-          <Link href={`/${headingDefinitions.quickStart.docPath}`} className="btn btn-secondary btn-lg">
+          <Link href={`/${headingDefinitions.quickStart.docPath}`} className="btn btn-secondary lg:btn-lg">
             {t(locale, 'landing', 'getStartedButton')}
           </Link>
           <Link
             href={`/${headingDefinitions.concepts.docPath}`}
-            className="btn btn-ghost border-base-content bg-transparent btn-lg"
+            className="btn btn-ghost border-base-content bg-transparent lg:btn-lg"
           >
             {t(locale, 'landing', 'learnMoreButton')}
           </Link>
