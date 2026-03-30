@@ -2,7 +2,7 @@ import type { Config } from 'vike/types'
 import vikeReact from 'vike-react/config'
 import telefunc from '@/pages/+telefunc'
 
-export default {
+const config: Config = {
   meta: {
     telefunc: {
       env: {
@@ -26,4 +26,6 @@ export default {
   // docs entry, so treat this as an app invariant unless the whole docs URL
   // pipeline is revisited together.
   trailingSlash: true,
-} satisfies Config
+}
+
+export default config

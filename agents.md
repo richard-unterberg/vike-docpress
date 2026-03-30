@@ -1,11 +1,24 @@
 # Docs Architecture Note
 
+- Monorepo baseline: this repo now uses pnpm workspaces. The app lives in `packages/telefunc`, and reusable published MDX components live in `packages/universal-mdx-mods`.
+- Path convention: unless a path is explicitly prefixed otherwise, the implementation details below refer to files inside `packages/telefunc`.
+- Monorepo plan: keep `MONOREPO_RESTRUCTURE_PLAN.md` and this file aligned as the restructure evolves. Record new extraction decisions in both places.
 - General rule: when prompted in general, read this local repo `agents.md` file first before taking other action.
 - UI rule: when a UI task is required, inspect the styling system in `components/css` first.
 - UI rule: this repo uses Tailwind CSS with DaisyUI-driven configuration, so UI changes should align with those constraints.
 - UI rule: prefer DaisyUI and existing Tailwind utilities/tokens over arbitrary values; the less arbitrary styling, the better.
 - Component rule: before inventing a new component, inspect the existing components under `/components` and prefer reuse or extension.
 - Component rule: MDX-usable shared components are re-exported from `components/index.tsx`.
+
+## Monorepo Plan Snapshot
+
+- Workspace root owns repo-wide scripts, TypeScript project references, Biome, Knip, and Lefthook.
+- `packages/telefunc` remains private and owns Vike routing, docs runtime, search generation, page context, app-local translations, and GitHub Pages build concerns.
+- `packages/universal-mdx-mods` is published as `@unterberg/universal-mdx-mods` and should stay host-agnostic.
+- Current shared extraction scope: `Alert`, `Table`, and `RepoLink`.
+- Current non-goals: `Link`, docs pagination, table of contents, footer, navbar, and code-block orchestration remain in `packages/telefunc`.
+- Runtime boundary: future shared runtime-aware components should use an adapter/provider contract instead of importing `vike-react` or app-local doc metadata directly.
+- Future extraction note: code-block components and MDX helper orchestration are planned for a later wave, after the adapter contract is in real use.
 
 ## Current Implementation Spec
 

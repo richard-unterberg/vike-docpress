@@ -1,0 +1,38 @@
+{
+  "name": "@unterberg/universal-mdx-mods",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "pack:check": "pnpm pack --dry-run"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "dependencies": {
+    "@classmatejs/react": "^0.2.1",
+    "lucide-react": "0.443.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "tsup": "^8.5.0"
+  }
+}

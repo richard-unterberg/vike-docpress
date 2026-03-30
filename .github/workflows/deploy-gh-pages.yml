@@ -3,7 +3,7 @@ name: Deploy Page
 on:
   push:
     branches:
-      - telefunc
+      - create-monorepo
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -54,4 +54,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/client
+          publish_dir: ./packages/telefunc/dist/client

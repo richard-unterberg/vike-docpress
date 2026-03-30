@@ -1,5 +1,5 @@
 .doc-code-pre > code {
-  @apply grid min-w-full bg-base-200!;
+  @apply grid bg-base-200!;
   color: var(--color-base-content);
   padding: 0 !important;
 }

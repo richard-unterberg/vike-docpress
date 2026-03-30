@@ -1,11 +1,11 @@
 import cm from '@classmatejs/react'
 
-interface TableData {
+export interface TableData {
   headers: string[]
   rows: string[][]
 }
 
-interface TableProps {
+export interface TableProps {
   size?: 'sm' | 'md' | 'lg'
   data: TableData
 }
@@ -13,7 +13,7 @@ interface TableProps {
 export const Table = ({ size = 'md', data }: TableProps) => {
   return (
     <StyledTable $size={size}>
-      <thead className="bg-base-200 rounded-t-box overflow-hidden">
+      <thead className="overflow-hidden rounded-t-box bg-base-200">
         <tr>
           {data.headers.map((header, index) => (
             <th key={index}>{header}</th>

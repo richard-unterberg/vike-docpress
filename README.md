@@ -1,104 +1,56 @@
-# telefunc
+# solid-docpress workspace
 
-`telefunc` is a docs starter built as a real Vike application, not as a standalone docs theme.
+This repo is a pnpm workspace with two packages:
 
-The goal of this template is to give you a fully fledged SSR React app with a documentation runtime already integrated. You can ship docs, landing pages, custom product pages, and app-specific UI in the same codebase without fighting a docs-first framework that expects the whole project to behave like a docs site.
+- `packages/telefunc`: the Vike docs application
+- `packages/universal-mdx-mods`: the publishable shared MDX component package
 
-![screenshot 1](https://github.com/richard-unterberg/vike-docpress/blob/master/public/preview/preview-1.jpg?raw=true)
+Package-specific details live in their local READMEs:
 
-## Current Features
+- `packages/telefunc/README.md`
+- `packages/universal-mdx-mods/README.md`
 
-- SSR and prerendering through Vike
-- MDX docs pages discovered from `pages/**/content.*.mdx`
-- Global docs system config in `pages/+telefunc.ts`
-- Per-document inherited config through `content.config.ts` / `content.config.js`
-- Locale-aware routing with `en` and `zh`
-- Light/dark theme support with pre-hydration theme bootstrapping
-- Built-in localized search with build-time index generation and lazy client loading
-- Landing page plus docs layout in one app
-- Sidebar navigation, docs footer, and right-side table of contents
+## Getting Started
 
-## What This Template Is
-
-- A Vike + React SSR app with an MDX-powered docs runtime.
-- A starter for teams that want docs inside a real application shell.
-- A base for custom docs experiences, product sites, or hybrid marketing/docs apps.
-- A repo with built-in theming, localization, sidebar navigation, and table of contents support.
-
-## What This Template Is Not
-
-- Not a generic static docs theme trying to replace Docusaurus, Starlight, or VitePress feature-for-feature.
-- Not a batteries-included docs platform with versioning, search, analytics, and GitHub integrations already wired.
-- Not a file-tree-driven docs generator where every docs folder is also a native Vike page subtree.
-
-## Stack
-
-- [Vike](https://vike.dev/) + [`vike-react`](https://vike.dev/react) for routing, SSR, prerendering, and app architecture
-- [React 19](https://react.dev/)
-  - can be replaced with SolidJS
-- [Vite 7](https://vite.dev/)
-- [MDX](https://mdxjs.com/) via `@mdx-js/rollup`
-- [Tailwind CSS 4](https://tailwindcss.com/)
-- [DaisyUI 5](https://daisyui.com/)
-- [Zustand](https://zustand.docs.pmnd.rs/) for persisted user settings
-- [`@classmatejs/react`](https://www.npmjs.com/package/@classmatejs/react) for component class composition
-
-## Docs Runtime Model
-
-This repo keeps docs authoring content-only while still rendering docs as real Vike pages.
-
-Instead:
-
-- MDX files under `pages/(docs)/(content)/**` are the authoring source of truth.
-- `lib/docs/vitePlugin.ts` generates routable Vike pages under `pages/(docs)/(generated)/**`.
-- Shared per-document options live in `content.config.ts` / `content.config.js`.
-- Global docs behavior lives in `pages/+telefunc.ts`.
-
-This keeps SPA page-level routing/prefetch behavior without requiring maintainers to hand-author `+Page.tsx` / `+config.ts` files for each doc.
-
-## Configuration
-
-### Global docs settings
-
-Use `pages/+telefunc.ts` for app-wide docs behavior:
-
-```ts
-import type { TelefuncSystemConfig } from '../lib/docs/systemConfig'
-
-export default {
-  defaultSlug: 'get-started',
-  defaultDocConfig: {
-    tableOfContents: true,
-  },
-  search: {
-    indexedWordsPerDoc: 240,
-  },
-} satisfies TelefuncSystemConfig
+```bash
+pnpm install
+pnpm dev
 ```
 
-Docs URLs are derived from the Vike route structure. In the current template, docs resolve at root-level paths such as `/get-started` instead of `/docs/get-started`.
+That starts both workspace packages together:
 
-`search.indexedWordsPerDoc` controls how many parsed words from each doc are included in the generated search index.
+- `@unterberg/universal-mdx-mods` builds in watch mode with `tsup`
+- `packages/telefunc` runs the Vike dev server
 
-### Per-document shared settings
+The app is served from the `telefunc` package on port `3001`.
 
-Use `content.config.ts` or `content.config.js` to define options shared by all translations of a doc route:
+## Common Commands
 
-```ts
-import type { DocConfig } from '@/lib/docs/config'
+From the workspace root:
 
-export default {
-  tableOfContents: false,
-} satisfies DocConfig
-```
+- `pnpm dev`: run the shared package watcher and the app dev server together
+- `pnpm dev:telefunc`: run only the Vike docs app
+- `pnpm dev:mods`: run only the shared package watcher
+- `pnpm build`: build the shared package and then the app
+- `pnpm preview`: preview the built `telefunc` app
+- `pnpm typecheck`: run full-workspace type checks
+- `pnpm knip`: check workspace-level unused dependencies and exports
+- `pnpm format`: format the repo with Biome
+- `pnpm lint`: run Biome lint with fixes
 
-These config files inherit by logical doc path, so higher-level configs can apply defaults to nested docs.
+## Development Model
 
-## Search
+`packages/telefunc` depends on `@unterberg/universal-mdx-mods` via `workspace:*`.
 
-Search indexes are generated from raw MDX content, not from rendered HTML.
+That means:
 
-- In dev, the Vite plugin serves locale-specific JSON at `/@search-index/<locale>.json`.
-- In production builds, the same plugin emits `dist/client/assets/search-index.en.json` and `dist/client/assets/search-index.zh.json`.
-- The plugin also patches `dist/assets.json` so deployments that rely on the asset manifest can discover those files.
-- The navbar search loads the active locale index on demand and ranks matches on the client using title, slug, headings, and truncated body text.
+- app code always imports the shared package by package name
+- local development still exercises the real package boundary
+- changes in `packages/universal-mdx-mods` are rebuilt locally and consumed by `packages/telefunc`
+
+This keeps local development close to the eventual npm-consumer setup without source aliasing the shared package.
+
+## Repo Notes
+
+- The monorepo restructure plan is tracked in `MONOREPO_RESTRUCTURE_PLAN.md`.
+- Repo-specific engineering instructions are tracked in `agents.md`.

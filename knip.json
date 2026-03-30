@@ -1,6 +1,10 @@
 {
   "$schema": "./node_modules/knip/schema.json",
-  "entry": ["lib/mdx/provider.tsx"],
-  "ignoreFiles": ["public/**/*"],
+  "workspaces": {
+    "packages/telefunc": {
+      "entry": ["lib/mdx/provider.tsx"],
+      "ignoreFiles": ["public/**/*"]
+    }
+  },
   "tags": ["-lintignore"]
 }

@@ -2,6 +2,11 @@
 @import './theme.css';
 @import './code.css';
 
+/* Tailwind v4 doesn't scan workspace packages automatically. Register the
+   shared MDX package so classes from the published-style bundle are emitted. */
+@source '../../../universal-mdx-mods/src';
+@source '../../../universal-mdx-mods/dist';
+
 @plugin '@tailwindcss/typography';
 
 /* https://daisyui.com/docs/config/ */

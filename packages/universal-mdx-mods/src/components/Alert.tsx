@@ -2,7 +2,7 @@ import cm, { cmMerge } from '@classmatejs/react'
 import { Check, CircleX, Info, TriangleAlert } from 'lucide-react'
 import type { ReactNode } from 'react'
 
-type AlertVariant = 'info' | 'warning' | 'error' | 'success'
+export type AlertVariant = 'info' | 'warning' | 'error' | 'success'
 
 const alertIconMap = {
   info: Info,
@@ -34,15 +34,15 @@ export const Alert = ({
   return (
     <AlertOuter $variant={type}>
       {!!heading && AlertIcon && (
-        <div className="flex items-center gap-2 mb-3">
-          <AlertIcon className={cmMerge(alertIconTextColorClass, 'float-left w-5 h-5 ')} />
+        <div className="mb-3 flex items-center gap-2">
+          <AlertIcon className={cmMerge(alertIconTextColorClass, 'float-left h-5 w-5')} />
           <AlertHeading>{heading}</AlertHeading>
         </div>
       )}
       {!(!!heading && AlertIcon) && !!heading && <AlertHeading>{heading}</AlertHeading>}
       {!(!!heading && AlertIcon) && AlertIcon && (
         <div className={cmMerge(alertIconTextColorClass, 'float-left mr-2')}>
-          <AlertIcon className="w-5 h-5 mt-1" />
+          <AlertIcon className="mt-1 h-5 w-5" />
         </div>
       )}
       {children}
