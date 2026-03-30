@@ -12,25 +12,24 @@
 - Stack: Vike + `vike-react`, React 19, Vite 7, MDX via `@mdx-js/rollup`, Tailwind CSS 4, DaisyUI 5, Zustand, and `@classmatejs/react`.
 - Global app config lives in `pages/+config.ts`. It enables global `telefunc` config, prerendering, `vike-react`, `htmlAttributes.data-theme = 'telefunc-dark'`, and passes `locale` plus `urlPathnameLocalized` to the client.
 - App-wide docs system config lives in `pages/+telefunc.ts`. Current values are `defaultSlug: 'get-started'`, `defaultDocConfig.tableOfContents: true`, and `search.indexedWordsPerDoc: 120`.
-- Current URL model: `/` is the landing page from `pages/index/+Page.tsx`. Docs pages are served from the single dynamic Vike subtree at `pages/(docs)/(config)` and currently resolve at root-level slugs like `/get-started` and `/intro`.
+- Current URL model: `/` is the landing page from `pages/index/+Page.tsx`. Docs pages resolve at root-level slugs like `/get-started` and `/intro`, and locale-prefixed variants like `/zh/get-started` are mapped back to the same logical routes by `pages/+onBeforeRoute.ts`.
 - Locales are defined in `lib/i18n/config.ts` as `en` and `zh`, with `en` as the default locale. Non-default locale URLs use a pathname prefix like `/zh/...`; default locale URLs stay unprefixed.
 - Routing locale behavior is handled in `pages/+onBeforeRoute.ts`. For non-prefixed URLs, the app may redirect on the client to a stored non-default locale preference. The URL remains the source of truth for the render-time locale.
 - Theme and locale preferences are persisted in local storage under `vike-user-settings` using Zustand persistence. `UserSettingsSync` reapplies theme and keeps the stored locale in sync with explicit locale-prefixed URLs.
 - Theme bootstrapping happens in `pages/+Head.tsx` via `themeBootstrapScript` from `lib/theme.ts`, so `data-theme` is set before hydration. Current theme names are `telefunc-light` and `telefunc-dark`, with `dark` as the default preference.
 - Global CSS entry is `components/css/tailwind.css`, imported from `pages/+Wrapper.tsx`. It imports `components/css/theme.css`, registers Tailwind Typography and DaisyUI, and defines base-level styling for `html`, `body`, prose code blocks, and links.
 - DaisyUI theme tokens are defined in `components/css/theme.css`. The repo currently uses custom `telefunc-light` and `telefunc-dark` themes, custom grey tokens exposed through `@theme inline`, `Inter` as the default sans font, and `Noto Sans SC` for `zh-CN`.
-- Docs content is discovered through `import.meta.glob` in `lib/docs/content.tsx`. The system eagerly loads `pages/**/content.*.mdx`, raw MDX source for heading extraction, and `pages/**/content.config.{ts,js}` for shared content-level config.
-- The docs runtime is content-module based, not page-subtree based. MDX files under `pages/(docs)/(content)/**` are parsed and registered as content entries, while the rendered page remains the single dynamic Vike page under `pages/(docs)/(config)`.
-- Logical doc slugs are derived from folder segments after `(content)`. Route matching is implemented in `pages/(docs)/(config)/+route.ts` using helpers from `lib/docs/systemConfig.ts`.
-- Docs existence and redirects are enforced in `pages/(docs)/(config)/+guard.ts`. Empty slug requests resolve to `defaultSlug`, and missing docs render the docs-specific 404 page.
-- Prerendered docs URLs are generated in `pages/(docs)/(config)/+onBeforePrerenderStart.ts` using `getPrerenderDocUrls()`, which expands all locales and all discovered doc slugs.
+- Docs content is discovered by `lib/docs/vitePlugin.ts`, which scans `pages/(docs)/(content)/**`, generates real Vike pages under `pages/(docs)/(generated)/**`, and exposes metadata through `virtual:docs-content-manifest`.
+- Docs authors still only maintain `content.<locale>.mdx` files and optional `content.config.ts` / `content.config.js`; the Vike page files are generated automatically.
+- Logical doc slugs are derived from folder segments after `(content)`. Shared docs metadata and locale availability are resolved from `lib/docs/contentManifest.tsx`.
+- Docs locale redirects are enforced in `pages/+onBeforeRoute.ts`, and docs URLs for prerender are generated in `pages/+onBeforePrerenderStart.ts` with `getPrerenderDocUrls()`.
 - Current content inventory is limited to the `get-started` doc slug, and it currently has `content.en.mdx` only.
 - Shared per-document options use `content.config.ts` or `content.config.js`, not Vike `+config.ts`. These configs inherit by logical doc path lineage and apply across translations.
-- Current config merge order in `getDocPage()` is: `defaultDocConfig` from `pages/+telefunc.ts`, then inherited `content.config.*`, then `docConfig` exported by the default-locale MDX module, then `docConfig` exported by the active-locale MDX module.
+- Current config merge order in `getGeneratedDocPageData()` is: `defaultDocConfig` from `pages/+telefunc.ts`, then inherited `content.config.*`, then `docConfig` exported by the default-locale MDX module, then `docConfig` exported by the active-locale MDX module.
 - `DocConfig` currently supports `tableOfContents?: boolean` only.
 - Headings are extracted from raw MDX in `lib/docs/headings.ts` for heading depths 2-3. The Table of Contents also re-syncs headings from the rendered DOM on the client and auto-assigns missing heading IDs.
 - Search text is also extracted from raw MDX. The current search index includes title, slug, headings, and a locale-aware body excerpt limited by `pages/+telefunc.ts -> search.indexedWordsPerDoc`.
-- Docs layout is defined in `pages/(docs)/(config)/+Layout.tsx`. It composes `LayoutComponent`, `Sidebar`, a prose-styled content column, `DocsFooter`, and an optional right-side `TableOfContents`.
+- Docs layout is defined in `pages/(docs)/+Layout.tsx`. It composes `LayoutComponent`, `Sidebar`, a prose-styled content column, `DocsFooter`, and an optional right-side `TableOfContents`.
 - Global shell layout is defined in `pages/+Layout.tsx`. It always renders `Navbar` plus a `pt-16` page offset to clear the fixed header.
 - Navigation is manually defined, not generated from the filesystem. Top-level heading metadata lives in `lib/headings.ts`, and sidebar group structure lives in `lib/navigation/menuNavigation.ts`.
 - Current manual navigation is defined in `lib/headings.ts` and `lib/navigation/menuNavigation.ts`. Many configured links currently point to docs that do not exist yet and will 404 until content is added.
@@ -39,11 +38,9 @@
 - Search asset generation is handled by `lib/search/vitePlugin.ts`. In dev it serves JSON from `/@search-index/<locale>.json`; in build it emits `dist/client/assets/search-index.<locale>.json` and patches `dist/assets.json` so deployments can reference the files through the normal asset manifest.
 - The current docs footer in `components/app/Footer.tsx` contains placeholder `href="edit"` links for edit/report actions and is not wired to a repository integration yet.
 
-- Per-document config under `pages/(docs)/(content)/**` cannot use real Vike `+config.ts` resolution with the current architecture.
-- Reason: the rendered docs page is the single dynamic page under `pages/(docs)/(config)`, while the MDX content folders are only parsed as content modules and are not part of the matched Vike page tree.
-- Implication: a file next to `content.en.mdx` or `content.zh.mdx` is not in the rendered page's Vike config ancestry, so Vike will not expose it through `pageContext.config`.
-- Current rule: per-document content options must use the custom content-level config convention, not Vike `+config.ts`.
-- Real Vike per-document config becomes possible only after an architecture refactor where each document directory is itself a real Vike page subtree, for example `pages/(docs)/intro/+Page.tsx` with `pages/(docs)/intro/+config.ts`.
+- Even though docs now render as generated real Vike pages, docs authors still do not create or edit per-doc `+config.ts` files directly.
+- Current rule: per-document content options must use the custom content-level config convention (`content.config.ts` / `content.config.js`) plus optional `docConfig` exports from MDX modules.
+- The generated page layer is implementation detail owned by the docs runtime; maintainers should continue treating `pages/(docs)/(content)/**` as the authoring surface.
 
 - always run typescript checks on the entire codebase, not just changed files, to prevent type errors from creeping in unnoticed
 - always run `pnpm knip` and check for unused dependencies you just introduced with your recent changes

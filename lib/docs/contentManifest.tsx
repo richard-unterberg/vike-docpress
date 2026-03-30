@@ -1,59 +1,30 @@
-import type { ComponentType } from 'react'
+import { docsContentEntries } from 'virtual:docs-content-manifest'
 import type { DocConfig } from '@/lib/docs/config'
-import { type DocHeading, extractDocHeadings } from '@/lib/docs/headings'
+import type { DocHeading } from '@/lib/docs/headings'
 import {
   getDocPath,
   getDocsIndexPath,
-  type TelefuncSystemConfig,
   resolveTelefuncSystemConfig,
+  type TelefuncSystemConfig,
   telefuncSystemConfig,
 } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, isLocale, type Locale, locales } from '@/lib/i18n/config'
 import { localizePathname } from '@/lib/i18n/routing'
 
-type MdxModule = {
-  default: ComponentType
-  docConfig?: DocConfig
-}
-
 type DocConfigModule = {
   default?: DocConfig
 }
 
-type DocContentModule = {
-  Page?: ComponentType
-  headings?: DocHeading[]
-  config?: DocConfig
-  source?: string
-}
-
-type DocEntry = Partial<Record<Locale, DocContentModule>>
 type PagePathInfo = {
   segments: string[]
   filename: string
 }
 
-const pageModules = import.meta.glob<MdxModule>('../../pages/**/content.*.mdx', {
-  eager: true,
-})
-
-type RawContentModule = string | { default?: string }
-
-const rawContentModules = import.meta.glob<RawContentModule>('../../pages/**/content.*.mdx', {
-  eager: true,
-  import: 'default',
-  query: '?raw',
-})
+type DocEntry = Partial<Record<Locale, { headings: DocHeading[] }>>
 
 const docConfigModules = import.meta.glob<DocConfigModule>('../../pages/**/content.config.{ts,js}', {
   eager: true,
 })
-
-const getRawDocSource = (module: RawContentModule) => {
-  if (typeof module === 'string') return module
-  if (typeof module?.default === 'string') return module.default
-  return ''
-}
 
 const getLogicalSegments = (segments: string[]) => {
   return segments.filter((segment) => segment !== '' && !(segment.startsWith('(') && segment.endsWith(')')))
@@ -81,7 +52,7 @@ const getDocSlugFromSegments = (segments: string[]) => {
 }
 
 const getDocsRootSegments = () => {
-  const docModulePath = Object.keys(pageModules)[0]
+  const docModulePath = docsContentEntries[0]?.path
   const pathInfo = docModulePath ? getPagePathInfo(docModulePath) : null
   if (!pathInfo) return []
 
@@ -92,22 +63,6 @@ const getDocsRootSegments = () => {
 }
 
 const docsRootSegments = getDocsRootSegments()
-
-const getDocModuleMeta = (path: string) => {
-  const pathInfo = getPagePathInfo(path)
-  if (!pathInfo) return null
-
-  const localeMatch = pathInfo.filename.match(/^content\.([^.]+)\.mdx$/)
-  if (!localeMatch) return null
-
-  const [, locale] = localeMatch
-  if (!isLocale(locale)) return null
-
-  const routeId = getDocSlugFromSegments(pathInfo.segments)
-  if (routeId === null) return null
-
-  return { locale, routeId }
-}
 
 const getDocConfigRouteId = (path: string) => {
   const pathInfo = getPagePathInfo(path)
@@ -138,30 +93,12 @@ const getRouteLineage = (routeId: string) => {
 const docs = {} as Record<string, DocEntry>
 const sharedDocConfigs = new Map<string, DocConfig>()
 
-for (const [path, mod] of Object.entries(pageModules)) {
-  const meta = getDocModuleMeta(path)
-  if (!meta) continue
+for (const entry of docsContentEntries) {
+  if (!isLocale(entry.locale)) continue
 
-  docs[meta.routeId] ??= {}
-  docs[meta.routeId][meta.locale] ??= {}
-  const localizedDoc = docs[meta.routeId][meta.locale]
-  if (localizedDoc) {
-    localizedDoc.Page = mod.default
-    localizedDoc.config = mod.docConfig
-  }
-}
-
-for (const [path, source] of Object.entries(rawContentModules)) {
-  const meta = getDocModuleMeta(path)
-  if (!meta) continue
-
-  docs[meta.routeId] ??= {}
-  docs[meta.routeId][meta.locale] ??= {}
-  const localizedDoc = docs[meta.routeId][meta.locale]
-  if (localizedDoc) {
-    const rawSource = getRawDocSource(source)
-    localizedDoc.headings = extractDocHeadings(rawSource)
-    localizedDoc.source = rawSource
+  docs[entry.routeId] ??= {}
+  docs[entry.routeId][entry.locale] = {
+    headings: entry.headings,
   }
 }
 
@@ -187,44 +124,44 @@ const getSharedDocConfig = (routeId: string) => {
   }, {})
 }
 
-export const getDocPage = (slug: string, locale: Locale, telefuncConfig?: TelefuncSystemConfig) => {
+const getAllDocSlugs = () => {
+  return Object.keys(docs).sort((left, right) => left.localeCompare(right))
+}
+
+export const resolveDocShell = (slug: string, locale: Locale, telefuncConfig?: TelefuncSystemConfig) => {
   const doc = docs[slug]
   if (!doc) {
     return null
   }
 
-  const docContent = doc[locale] ?? doc[DEFAULT_LOCALE]
-  if (!docContent?.Page) {
+  const resolvedLocale = doc[locale] ? locale : doc[DEFAULT_LOCALE] ? DEFAULT_LOCALE : null
+  if (!resolvedLocale) {
     return null
   }
 
   const resolvedDocsConfig = resolveTelefuncSystemConfig(telefuncConfig ?? telefuncSystemConfig)
-  const config = {
-    ...resolvedDocsConfig.defaultDocConfig,
-    ...getSharedDocConfig(slug),
-    ...(doc[DEFAULT_LOCALE]?.config ?? {}),
-    ...(doc[locale]?.config ?? {}),
-  }
 
   return {
-    Page: docContent.Page,
-    headings: docContent.headings ?? [],
-    config,
-    resolvedLocale: doc[locale] ? locale : DEFAULT_LOCALE,
+    config: {
+      ...resolvedDocsConfig.defaultDocConfig,
+      ...getSharedDocConfig(slug),
+    },
+    resolvedLocale,
   }
 }
 
+export const getDocHeadings = (slug: string, locale: Locale) => {
+  const normalizedSlug = slug.replace(/^\/+|\/+$/g, '')
+  return docs[normalizedSlug]?.[locale]?.headings ?? []
+}
+
 export const hasDocSlug = (slug: string) => {
-  return getAllDocSlugs().includes(slug.replace(/^\/+|\/+$/g, ''))
+  return Boolean(docs[slug.replace(/^\/+|\/+$/g, '')])
 }
 
 export const hasDocPageForLocale = (slug: string, locale: Locale) => {
   const normalizedSlug = slug.replace(/^\/+|\/+$/g, '')
-  return Boolean(docs[normalizedSlug]?.[locale]?.Page)
-}
-
-const getAllDocSlugs = () => {
-  return Object.keys(docs).sort((left, right) => left.localeCompare(right))
+  return Boolean(docs[normalizedSlug]?.[locale])
 }
 
 export const getPrerenderDocUrls = (telefuncConfig?: TelefuncSystemConfig) => {

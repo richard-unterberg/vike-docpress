@@ -7,9 +7,9 @@ import LayoutComponent from '@/app-components/LayoutComponent'
 import Sidebar from '@/app-components/Sidebar'
 import TableOfContents from '@/app-components/TableOfContents'
 import baseAssets from '@/lib/baseAssets'
-import { getDocPage } from '@/lib/docs/content'
-import { getTelefuncSystemConfig } from '@/lib/docs/systemConfig'
-import { getDocsHeadMetadata } from '@/pages/(docs)/(config)/docMetadata'
+import type { DocPageData } from '@/lib/docs/contentData'
+import { getDocPageDataFromPageContext } from '@/lib/docs/pageContext'
+import { getDocsHeadMetadata } from './docMetadata'
 
 const ProseContainer = cm.section`
   min-h-[calc(100svh-92*var(--spacing))]
@@ -55,13 +55,10 @@ const ProseContainer = cm.section`
 const DocsLayout = ({ children }: { children: ReactNode }) => {
   const pageContext = usePageContext()
   const { locale, pageId, is404, errorWhileRendering } = pageContext
-  const docsConfig = getTelefuncSystemConfig(pageContext)
-  const routeParams = pageContext.routeParams as { slug?: string }
-  const docSlug = (routeParams.slug ?? '').replace(/^\/+|\/+$/g, '') || docsConfig.defaultSlug
   const isDocsErrorPage = is404 || errorWhileRendering
-  const doc = isDocsErrorPage ? null : getDocPage(docSlug, locale, docsConfig)
-  const showTableOfContents = !isDocsErrorPage && (doc?.config.tableOfContents ?? true)
-  const tocKey = `${pageId}:${docSlug}:${locale}`
+  const docData = (!isDocsErrorPage ? getDocPageDataFromPageContext(pageContext) : null) as DocPageData | null
+  const showTableOfContents = !isDocsErrorPage && (docData?.config.tableOfContents ?? true)
+  const tocKey = `${pageId}:${docData?.docSlug ?? 'docs-error'}:${locale}`
   const docTitle = getDocsHeadMetadata(pageContext)?.title ?? ''
 
   return (
@@ -90,7 +87,7 @@ const DocsLayout = ({ children }: { children: ReactNode }) => {
             <DocsPagination />
             <DocsFooter />
           </div>
-          {showTableOfContents && <TableOfContents key={tocKey} headings={doc?.headings ?? []} />}
+          {showTableOfContents && <TableOfContents key={tocKey} headings={docData?.headings ?? []} />}
         </div>
       </LayoutComponent>
     </>

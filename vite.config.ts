@@ -7,6 +7,7 @@ import vike from 'vike/plugin'
 import { defineConfig, type PluginOption } from 'vite'
 import { rehypeDocHeadings } from './lib/docs/rehypeDocHeadings'
 import { rehypeShikiCodeBlocks } from './lib/docs/rehypeShikiCodeBlocks'
+import { docsPagesPlugin } from './lib/docs/vitePlugin'
 import { searchIndexPlugin } from './lib/search/vitePlugin'
 import tsConf from './tsconfig.json'
 
@@ -44,6 +45,7 @@ export default defineConfig({
       }),
       enforce: 'pre',
     },
+    docsPagesPlugin(),
     react(),
     vike(),
     tailwindcss() as PluginOption,

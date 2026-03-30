@@ -1,7 +1,7 @@
 import { redirect } from 'vike/abort'
 import { modifyUrl } from 'vike/modifyUrl'
 import type { PageContext } from 'vike/types'
-import { hasDocPageForLocale, hasDocSlug } from '@/lib/docs/content'
+import { hasDocPageForLocale, hasDocSlug } from '@/lib/docs/contentManifest'
 import { matchDocPath } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE } from '@/lib/i18n/config'
 import { hasLocalePrefix, localizeHref, stripLocaleFromPathname } from '@/lib/i18n/routing'

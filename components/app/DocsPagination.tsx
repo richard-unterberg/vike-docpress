@@ -2,11 +2,10 @@ import { cmMerge } from '@classmatejs/react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Fragment, type ReactNode } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
+import { getCurrentDocSlug } from '@/lib/docs/pageContext'
 import { getTelefuncSystemConfig } from '@/lib/docs/systemConfig'
 import { t } from '@/lib/messages'
 import { getMenuDocLinks, type MenuDocLink } from '@/lib/navigation/menuNavigation'
-
-const normalizeSlug = (value: string) => value.replace(/^\/+|\/+$/g, '')
 
 const renderInlineMarkdown = (title: ReactNode): ReactNode => {
   if (typeof title !== 'string') return title
@@ -69,8 +68,7 @@ const DocsPagination = () => {
     return null
   }
 
-  const routeParams = pageContext.routeParams as { slug?: string }
-  const docSlug = normalizeSlug(routeParams.slug ?? '') || docsConfig.defaultSlug
+  const docSlug = getCurrentDocSlug(pageContext)
   const menuDocLinks = getMenuDocLinks(locale, docsConfig)
   const currentIndex = menuDocLinks.findIndex((item) => item.docPath === docSlug)
 

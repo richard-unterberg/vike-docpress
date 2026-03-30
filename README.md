@@ -45,16 +45,16 @@ The goal of this template is to give you a fully fledged SSR React app with a do
 
 ## Docs Runtime Model
 
-This repo does not render each document as its own Vike page subtree.
+This repo keeps docs authoring content-only while still rendering docs as real Vike pages.
 
 Instead:
 
-- MDX files under `pages/(docs)/(content)/**` are treated as content modules.
-- The rendered docs page lives in the single dynamic Vike subtree at `pages/(docs)/(config)`.
+- MDX files under `pages/(docs)/(content)/**` are the authoring source of truth.
+- `lib/docs/vitePlugin.ts` generates routable Vike pages under `pages/(docs)/(generated)/**`.
 - Shared per-document options live in `content.config.ts` / `content.config.js`.
 - Global docs behavior lives in `pages/+telefunc.ts`.
 
-This is the main tradeoff in the current architecture: you get a straightforward, app-centric docs runtime, but you do not get native Vike `+config.ts` inheritance next to each MDX file.
+This keeps SPA page-level routing/prefetch behavior without requiring maintainers to hand-author `+Page.tsx` / `+config.ts` files for each doc.
 
 ## Configuration
 
