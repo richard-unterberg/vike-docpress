@@ -1,7 +1,7 @@
 <!DOCTYPE html>
     <html data-theme="telefunc-dark" lang="en">
       <head>
-        <link rel="stylesheet" type="text/css" href="/vike-docpress/assets/static/components_css_tailwind-80b22bf9.CoSTewLx.css">
+        <link rel="stylesheet" type="text/css" href="/vike-docpress/assets/static/components_css_tailwind-80b22bf9.vUVIzBwU.css">
         <meta charset="UTF-8" />
         
         
@@ -42,7 +42,7 @@
 <li>To handle invalid telefunction arguments, see: <a href="/vike-docpress/validation" class="">Validation</a></li>
 <li>To install error tracking, see: <a href="/vike-docpress/on-bug" class=""><code>onBug()</code></a></li>
 </ul>
-<section class="p-4 mb-5 border rounded-lg prose-p:leading-7 prose-p:last:mb-0 prose-p:first:mt-0 prose-headings:first:mt-0 prose-headings:last:mb-0 prose-ul:first:mt-0 prose-ul:last:mb-0 prose-div:my-0! text-sm bg-success/5 border-success/35"><p>To prevent leaking sensitive information, Telefunc never forwards unexpected server errors to the client.</p></section>
+<section class="p-4 mb-5 border rounded-lg prose-p:last:mb-0 prose-p:mt-0 prose-headings:first:mt-0 prose-headings:last:mb-0 prose-ul:first:mt-0 prose-ul:last:mb-0 prose-div:my-0! text-sm bg-success/10 border-success/35"><div class="text-success float-left mr-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check w-5 h-5 mt-1"><path d="M20 6 9 17l-5-5"></path></svg></div><p>To prevent leaking sensitive information, Telefunc never forwards unexpected server errors to the client.</p></section>
 <h2 id="error-flows" class="scroll-mt-24">Error flows</h2>
 <table><thead><tr><th></th><th><code>return someErrorData</code></th><th><code>throw Abort()</code></th><th><code>throw Error()</code></th></tr></thead><tbody><tr><td>When to use</td><td>For expected failures</td><td>For control flow</td><td>For <strong>bugs</strong></td></tr><tr><td>triggers <code>onBug</code> (server)</td><td>❌</td><td>❌</td><td>✅</td></tr><tr><td><code>onAbort</code> (client)</td><td>❌</td><td>✅</td><td>❌</td></tr><tr><td>Passes error data to client</td><td>✅</td><td>✅</td><td>❌</td></tr><tr><td>Logged with <code>console.error</code></td><td>❌</td><td>❌</td><td>✅</td></tr></tbody></table>
 <h3 id="security-errors" class="scroll-mt-24">Security errors</h3>
@@ -102,15 +102,15 @@
         
         <script id="vike_pageContext" type="application/json">{"locale":"en","urlPathnameLocalized":"\\/error-handling","pageId":"\\/pages\\/(docs)\\/(generated)\\/error-handling","routeParams":{},"data":{"config":{"tableOfContents":true},"docSlug":"error-handling","headings":[{"depth":2,"id":"error-flows","title":"Error flows"},{"depth":3,"id":"security-errors","title":"Security errors"},{"depth":3,"id":"app-errors","title":"App errors"},{"depth":3,"id":"network-errors","title":"Network errors"},{"depth":2,"id":"client-side-handling","title":"Client side handling"},{"depth":2,"id":"server-side-handling","title":"Server side handling"},{"depth":2,"id":"see-also","title":"See also"}],"resolvedLocale":"en"}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
-        <script src="/vike-docpress/assets/entries/entry-client-routing.bqcIgd62.js" type="module" async></script>
-        <link rel="modulepreload" href="/vike-docpress/assets/entries/pages_-docs-_-generated-_error-handling.DbcXQoTD.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-CC3n88ML.js" as="script" type="text/javascript">
+        <script src="/vike-docpress/assets/entries/entry-client-routing.pa98dme8.js" type="module" async></script>
+        <link rel="modulepreload" href="/vike-docpress/assets/entries/pages_-docs-_-generated-_error-handling.f9AglpAG.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-04gXyayP.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-DyzkorZf.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-OIjQRuVh.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-DSmvURAe.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-C93NeD2O.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-Cp7Rz6Uf.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-BgmHTy_T.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-BVZWJIfa.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-CMl7onQI.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-DBtDaJ0C.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-Cmd-VFN-.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-BuQ50V5W.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-_u834Z61.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/vike-docpress/assets/chunks/chunk-LLu7OENk.js" as="script" type="text/javascript">
       </body>
     </html>
