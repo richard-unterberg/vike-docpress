@@ -43,7 +43,7 @@ const PaginationCard = (props: {
       )}
     >
       <div className="flex flex-col justify-between">
-        <p className="text-xl mb-2 font-semibold text-base-content">{renderInlineMarkdown(props.item.title)}</p>
+        <p className="text-lg mb-2 font-semibold text-base-content">{renderInlineMarkdown(props.item.title)}</p>
         <div
           className={cmMerge(
             'flex items-center gap-1 text-base-muted transition-colors group-hover:text-base-content',

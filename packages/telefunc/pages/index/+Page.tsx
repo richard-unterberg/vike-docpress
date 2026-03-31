@@ -14,7 +14,7 @@ const Page = () => {
   const { locale } = usePageContext()
 
   return (
-    <>
+    <div className="landing-code-samples">
       <div className="overflow-x-clip min-h-[calc(100svh-16*var(--spacing))] flex flex-col justify-center py-16 w-full">
         <LayoutComponent className="relative">
           <div className="text-center mx-auto z-2 relative">
@@ -68,7 +68,7 @@ const Page = () => {
         <SectionHeading className="mt-24">You may not need an API schema</SectionHeading>
         <StartPageFooter />
       </LayoutComponent>
-    </>
+    </div>
   )
 }
 

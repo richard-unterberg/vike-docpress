@@ -7,11 +7,11 @@ export function RepoLink({ repo, timestamp }: { repo: Repo; timestamp: Timestamp
   }
 
   return (
-    <>
-      <span className="mr-0.5 bg-white font-mono font-bold">{timestamp}</span>
+    <span className="inline-flex items-center gap-1">
+      <span className="bg-white font-mono font-bold h-fit px-1 text-sm!">{timestamp}</span>
       <a href={`https://github.com/${repo}`} target="_blank" rel="noopener">
         GitHub &gt; <code>{repo}</code>
       </a>
-    </>
+    </span>
   )
 }
