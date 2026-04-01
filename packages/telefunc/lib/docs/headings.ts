@@ -144,6 +144,8 @@ export type HeadingConfig = Record<string, HeadingDefinition>
 
 export type HeadingKey = keyof typeof headingDefinitions
 
+export const isHeadingKey = (value: string): value is HeadingKey => value in headingDefinitions
+
 const normalizeDocPath = (value: string) => value.replace(/^\/+|\/+$/g, '')
 
 const getHeadingDefinition = (headingKey: HeadingKey) => {

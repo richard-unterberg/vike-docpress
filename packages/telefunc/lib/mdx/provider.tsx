@@ -1,11 +1,16 @@
 export { useMDXComponents }
 
-import { Alert, RepoLink, Table } from '@unterberg/universal-mdx-mods'
-import { ChoiceGroup } from '@/components/docs/code-blocks/ChoiceGroup'
-import { CodeBlockTransformer } from '@/components/docs/code-blocks/CodeBlockTransformer'
-import { FileAdded, FileRemoved } from '@/components/docs/code-blocks/FileState'
-import Link from '@/components/docs/Link'
-import { Pre } from '@/components/docs/code-blocks/Pre'
+import {
+  Alert,
+  ChoiceGroup,
+  CodeBlockTransformer,
+  FileAdded,
+  FileRemoved,
+  Link,
+  Pre,
+  RepoLink,
+  Table,
+} from '@unterberg/universal-mdx-mods'
 
 type MdxComponents = Record<string, unknown>
 

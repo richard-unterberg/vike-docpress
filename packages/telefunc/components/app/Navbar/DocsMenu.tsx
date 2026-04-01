@@ -3,12 +3,14 @@ import { BookText, Map as MapIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import { matchDocPath } from '@/lib/docs/systemConfig'
-import { getLogicalPathname } from '@/lib/i18n/routing'
+import { headingDefinitions } from '@/lib/headings'
+import { getLogicalPathname, localizeHref } from '@/lib/i18n/routing'
+import { getMenuGroupKeyForDocPath } from '@/lib/menuNavigation'
 import { t } from '@/lib/messages'
 
-type DocsMenuSection = 'docsHome' | 'components' | 'guides'
+type DocsMenuSection = 'docsHome' | 'api'
 
-const MenuItem = cm.div.variants<{ $active?: boolean }>({
+const MenuItem = cm.a.variants<{ $active?: boolean }>({
   base: 'btn btn px-2 whitespace-nowrap',
   variants: {
     $active: {
@@ -28,14 +30,10 @@ const getActiveSection = (pathname: string): DocsMenuSection | null => {
     return null
   }
 
-  const [section = ''] = docSlug.split('/').filter(Boolean)
+  const menuGroupKey = getMenuGroupKeyForDocPath(docSlug)
 
-  if (section === 'components') {
-    return 'components'
-  }
-
-  if (section === 'guides') {
-    return 'guides'
+  if (menuGroupKey === 'api') {
+    return 'api'
   }
 
   return 'docsHome'
@@ -52,11 +50,13 @@ const DocsMenu = () => {
         key: 'docsHome',
         title: t(locale, 'header', 'menuDocumentation'),
         icon: BookText,
+        href: localizeHref(headingDefinitions.quickStart.docPath, locale),
       },
       {
         key: 'api',
         title: t(locale, 'header', 'menuAPI'),
         icon: MapIcon,
+        href: localizeHref(headingDefinitions.apiOverview.docPath, locale),
       },
     ],
     [locale],
@@ -69,7 +69,7 @@ const DocsMenu = () => {
 
         return (
           <li key={item.key}>
-            <MenuItem $active={item.key === activeSection} tabIndex={0}>
+            <MenuItem $active={item.key === activeSection} tabIndex={0} href={item.href}>
               <Icon className="w-4 h-4" />
               {item.title}
             </MenuItem>

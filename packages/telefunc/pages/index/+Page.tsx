@@ -1,6 +1,6 @@
+import { Link } from '@unterberg/universal-mdx-mods'
 import { usePageContext } from 'vike-react/usePageContext'
 import LayoutComponent from '@/app-components/LayoutComponent'
-import Link from '@/components/docs/Link'
 import { headingDefinitions } from '@/lib/headings'
 import { t } from '@/lib/messages'
 import BackendCode from '@/pages/index/backendCode.mdx'
@@ -14,7 +14,7 @@ const Page = () => {
   const { locale } = usePageContext()
 
   return (
-    <>
+    <div className="landing-code-samples">
       <div className="overflow-x-clip min-h-[calc(100svh-16*var(--spacing))] flex flex-col justify-center py-16 w-full">
         <LayoutComponent className="relative">
           <div className="text-center mx-auto z-2 relative">
@@ -68,7 +68,7 @@ const Page = () => {
         <SectionHeading className="mt-24">You may not need an API schema</SectionHeading>
         <StartPageFooter />
       </LayoutComponent>
-    </>
+    </div>
   )
 }
 

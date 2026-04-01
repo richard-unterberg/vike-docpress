@@ -376,4 +376,15 @@ export const headingDefinitions = {
       zh: '开始使用 telefunc, 学习如何创建你自己的文档站点。',
     },
   },
+  apiOverview: {
+    docPath: 'api',
+    title: {
+      en: 'API Overview',
+      zh: 'API 概览',
+    },
+    excerpt: {
+      en: 'Get started with telefunc and learn how to create your own documentation site.',
+      zh: '开始使用 telefunc, 学习如何创建你自己的文档站点。',
+    },
+  },
 } satisfies HeadingConfig

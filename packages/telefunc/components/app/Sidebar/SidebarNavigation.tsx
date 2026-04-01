@@ -1,9 +1,13 @@
 import { cmMerge } from '@classmatejs/react'
-import { Fragment, type ReactNode, useEffect, useRef } from 'react'
+import { renderInlineMarkdown } from '@unterberg/universal-mdx-mods'
+import { type MouseEvent, type ReactNode, useEffect, useRef } from 'react'
+import { navigate } from 'vike/client/router'
 import { getLogicalPathname } from '@/lib/i18n/routing'
-import type { MenuRendererGroup, SidebarItem, SidebarLinkItem } from '@/lib/navigation/navigation'
+import type { MenuRendererGroup, SidebarGroupItem, SidebarItem, SidebarLinkItem } from '@/lib/types/navigation'
 
-const isSidebarLink = (item: SidebarItem): item is SidebarLinkItem => 'href' in item
+const isSidebarLink = (item: SidebarItem): item is SidebarLinkItem => 'href' in item && !('items' in item)
+
+const isSidebarGroup = (item: SidebarItem): item is SidebarGroupItem => 'items' in item
 
 const isActiveHref = (currentPathname: string, href: string) => {
   const normalizeLogicalPathname = (pathname: string) => {
@@ -20,52 +24,91 @@ const isActiveHref = (currentPathname: string, href: string) => {
   return currentLogicalPathname === hrefLogicalPathname || currentLogicalPathname.startsWith(`${hrefLogicalPathname}/`)
 }
 
-const getActiveHref = (groups: MenuRendererGroup[], currentPathname: string) => {
+const getActiveHrefFromItems = (items: SidebarItem[] | undefined, currentPathname: string) => {
   let activeHref: string | null = null
   let activeHrefLength = -1
 
-  for (const group of groups) {
-    for (const link of group.links ?? []) {
-      if (!isSidebarLink(link)) {
+  for (const item of items ?? []) {
+    if (isSidebarGroup(item)) {
+      if (item.href && isActiveHref(currentPathname, item.href)) {
+        const hrefLength = getLogicalPathname(item.href).length
+
+        if (hrefLength > activeHrefLength) {
+          activeHref = item.href
+          activeHrefLength = hrefLength
+        }
+      }
+
+      const nestedActiveHref = getActiveHrefFromItems(item.items, currentPathname)
+
+      if (!nestedActiveHref) {
         continue
       }
 
-      if (!isActiveHref(currentPathname, link.href)) {
-        continue
+      const nestedHrefLength = getLogicalPathname(nestedActiveHref).length
+
+      if (nestedHrefLength > activeHrefLength) {
+        activeHref = nestedActiveHref
+        activeHrefLength = nestedHrefLength
       }
 
-      const hrefLength = getLogicalPathname(link.href).length
+      continue
+    }
 
-      if (hrefLength > activeHrefLength) {
-        activeHref = link.href
-        activeHrefLength = hrefLength
-      }
+    if (!isSidebarLink(item) || !isActiveHref(currentPathname, item.href)) {
+      continue
+    }
+
+    const hrefLength = getLogicalPathname(item.href).length
+
+    if (hrefLength > activeHrefLength) {
+      activeHref = item.href
+      activeHrefLength = hrefLength
     }
   }
 
   return activeHref
 }
 
-const renderInlineMarkdown = (title: ReactNode): ReactNode => {
-  if (typeof title !== 'string') return title
+const getActiveHref = (groups: MenuRendererGroup[], currentPathname: string) => {
+  let activeHref: string | null = null
+  let activeHrefLength = -1
 
-  return title.split(/(`[^`]+`)/g).map((part, index) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        // biome-ignore lint/suspicious/noArrayIndexKey: not worth the effort
-        <code className="text-sm!" key={index}>
-          {part.slice(1, -1)}
-        </code>
-      )
+  for (const group of groups) {
+    const groupActiveHref = getActiveHrefFromItems(group.items, currentPathname)
+
+    if (!groupActiveHref) {
+      continue
     }
 
-    // biome-ignore lint/suspicious/noArrayIndexKey: not worth the effort
-    return <Fragment key={index}>{part}</Fragment>
+    const hrefLength = getLogicalPathname(groupActiveHref).length
+
+    if (hrefLength > activeHrefLength) {
+      activeHref = groupActiveHref
+      activeHrefLength = hrefLength
+    }
+  }
+
+  return activeHref
+}
+
+const hasActiveItem = (items: SidebarItem[] | undefined, activeHref: string | null): boolean => {
+  return (items ?? []).some((item) => {
+    if (isSidebarGroup(item)) {
+      return item.href === activeHref || hasActiveItem(item.items, activeHref)
+    }
+
+    return isSidebarLink(item) && item.href === activeHref
   })
 }
 
-const getSidebarItemKey = (item: SidebarItem, index: number) =>
-  ('href' in item ? item.href : item.id) ?? `sidebar-item-${index}`
+const getSidebarItemKey = (item: SidebarItem, index: number) => {
+  if (isSidebarGroup(item)) {
+    return item.id
+  }
+
+  return ('href' in item ? item.href : item.id) ?? `sidebar-item-${index}`
+}
 
 const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => {
   return (
@@ -77,7 +120,7 @@ const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => 
           props.activeHref === props.href && 'text-primary! font-semibold bg-base-200',
         )}
       >
-        {renderInlineMarkdown(props.title)}
+        {renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}
       </a>
     </li>
   )
@@ -85,30 +128,103 @@ const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => 
 
 const SidebarDivider = (props: { title: ReactNode }) => {
   return (
-    <li className="ml-3 mt-2 text-xs text-base-muted-medium pointer-events-none font-semibold border-b border-base-muted-light mb-2">
-      <span className="-ml-3">{renderInlineMarkdown(props.title)}</span>
+    <li className="ml-3 mt-2 mb-2 border-b border-base-muted-light text-xs text-base-muted-medium pointer-events-none font-semibold">
+      <span className="-ml-3">{renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}</span>
     </li>
   )
 }
 
-const SidebarGroupLabel = (props: Pick<MenuRendererGroup, 'icon' | 'title'>) => {
-  const Icon = props.icon
-
-  return (
-    <>
-      {Icon && <Icon className="inline w-3 h-3" />}
-      <span className="text-base-content font-semibold">{renderInlineMarkdown(props.title)}</span>
-    </>
+const shouldUseClientNavigation = (event: MouseEvent<HTMLAnchorElement>) => {
+  return !(
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.shiftKey
   )
 }
 
-const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string | null; showSeparator: boolean }) => {
+const SidebarGroupTitle = (props: {
+  title: ReactNode
+  icon?: MenuRendererGroup['icon']
+  href?: string
+  activeHref: string | null
+  isActive: boolean
+  allowNavigation?: boolean
+}) => {
+  const content = (
+    <>
+      {props.icon && <props.icon className="inline w-3 h-3" />}
+      <span
+        className={cmMerge(
+          props.allowNavigation ? 'font-medium' : 'font-semibold',
+          props.isActive && (props.allowNavigation ? 'text-primary!' : 'text-base-content'),
+        )}
+      >
+        {renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}
+      </span>
+    </>
+  )
+
+  if (props.allowNavigation && props.href) {
+    const href = props.href
+
+    return (
+      <a
+        href={href}
+        onClick={(event) => {
+          event.stopPropagation()
+
+          if (!shouldUseClientNavigation(event)) {
+            return
+          }
+
+          event.preventDefault()
+          void navigate(href)
+        }}
+        className={cmMerge(
+          'flex items-center gap-2 text-base-muted hover:text-base-content no-underline',
+          props.activeHref === href && 'text-primary! font-semibold',
+        )}
+      >
+        {content}
+      </a>
+    )
+  }
+
+  return (
+    <span className={cmMerge('flex items-center gap-2 text-base-content', !props.allowNavigation && 'font-semibold')}>
+      {content}
+    </span>
+  )
+}
+
+const SidebarItemList = (props: { items: SidebarItem[]; activeHref: string | null }) => {
+  return (
+    <ul>
+      {props.items.map((item, index) => {
+        if (isSidebarGroup(item)) {
+          return <SidebarNestedGroup key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
+        }
+
+        if (isSidebarLink(item)) {
+          return <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
+        }
+
+        return <SidebarDivider key={getSidebarItemKey(item, index)} title={item.title} />
+      })}
+    </ul>
+  )
+}
+
+const SidebarNestedGroup = (props: SidebarGroupItem & { activeHref: string | null }) => {
   const isCollapsible = props.collapsible !== false && props.collapsible !== undefined
   const isOpenByDefault = typeof props.collapsible === 'object' ? (props.collapsible.isDefaultOpen ?? true) : false
-  const hasActiveLink = (props.links ?? []).some((link) => isSidebarLink(link) && link.href === props.activeHref)
+  const nestedHasActiveItem = props.href === props.activeHref || hasActiveItem(props.items, props.activeHref)
   const detailsRef = useRef<HTMLDetailsElement>(null)
   const hasMountedRef = useRef(false)
-  const wasActiveRef = useRef(hasActiveLink)
+  const wasActiveRef = useRef(nestedHasActiveItem)
 
   useEffect(() => {
     if (!isCollapsible || !detailsRef.current) {
@@ -118,52 +234,110 @@ const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string |
     if (!hasMountedRef.current) {
       hasMountedRef.current = true
 
-      if (isOpenByDefault || hasActiveLink) {
+      if (isOpenByDefault || nestedHasActiveItem) {
         detailsRef.current.open = true
       }
 
-      wasActiveRef.current = hasActiveLink
+      wasActiveRef.current = nestedHasActiveItem
       return
     }
 
-    if (hasActiveLink && !wasActiveRef.current) {
+    if (nestedHasActiveItem && !wasActiveRef.current) {
       detailsRef.current.open = true
     }
 
-    wasActiveRef.current = hasActiveLink
-  }, [hasActiveLink, isCollapsible, isOpenByDefault])
+    wasActiveRef.current = nestedHasActiveItem
+  }, [isCollapsible, isOpenByDefault, nestedHasActiveItem])
+
+  return (
+    <li>
+      {isCollapsible ? (
+        <details ref={detailsRef}>
+          <summary>
+            <SidebarGroupTitle
+              title={props.title}
+              href={props.href}
+              activeHref={props.activeHref}
+              isActive={nestedHasActiveItem}
+              allowNavigation
+            />
+          </summary>
+          <SidebarItemList items={props.items} activeHref={props.activeHref} />
+        </details>
+      ) : (
+        <>
+          <div className="px-4 py-2">
+            <SidebarGroupTitle
+              title={props.title}
+              href={props.href}
+              activeHref={props.activeHref}
+              isActive={nestedHasActiveItem}
+              allowNavigation
+            />
+          </div>
+          <SidebarItemList items={props.items} activeHref={props.activeHref} />
+        </>
+      )}
+    </li>
+  )
+}
+
+const SidebarGroupComponent = (props: MenuRendererGroup & { activeHref: string | null; showSeparator: boolean }) => {
+  const isCollapsible = props.collapsible !== false && props.collapsible !== undefined
+  const isOpenByDefault = typeof props.collapsible === 'object' ? (props.collapsible.isDefaultOpen ?? true) : false
+  const groupHasActiveItem = hasActiveItem(props.items, props.activeHref)
+  const detailsRef = useRef<HTMLDetailsElement>(null)
+  const hasMountedRef = useRef(false)
+  const wasActiveRef = useRef(groupHasActiveItem)
+
+  useEffect(() => {
+    if (!isCollapsible || !detailsRef.current) {
+      return
+    }
+
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true
+
+      if (isOpenByDefault || groupHasActiveItem) {
+        detailsRef.current.open = true
+      }
+
+      wasActiveRef.current = groupHasActiveItem
+      return
+    }
+
+    if (groupHasActiveItem && !wasActiveRef.current) {
+      detailsRef.current.open = true
+    }
+
+    wasActiveRef.current = groupHasActiveItem
+  }, [groupHasActiveItem, isCollapsible, isOpenByDefault])
 
   return (
     <li className="pb-4">
       {isCollapsible ? (
         <details ref={detailsRef}>
           <summary>
-            <SidebarGroupLabel icon={props.icon} title={props.title} />
+            <SidebarGroupTitle
+              icon={props.icon}
+              title={props.title}
+              activeHref={props.activeHref}
+              isActive={groupHasActiveItem}
+            />
           </summary>
-          <ul>
-            {props.links?.map((item, index) =>
-              isSidebarLink(item) ? (
-                <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
-              ) : (
-                <SidebarDivider key={getSidebarItemKey(item, index)} title={item.title} />
-              ),
-            )}
-          </ul>
+          <SidebarItemList items={props.items ?? []} activeHref={props.activeHref} />
         </details>
       ) : (
         <>
           <span className="pointer-events-none">
-            <SidebarGroupLabel icon={props.icon} title={props.title} />
+            <SidebarGroupTitle
+              icon={props.icon}
+              title={props.title}
+              activeHref={props.activeHref}
+              isActive={groupHasActiveItem}
+            />
           </span>
-          <ul>
-            {props.links?.map((item, index) =>
-              isSidebarLink(item) ? (
-                <SidebarLink key={getSidebarItemKey(item, index)} {...item} activeHref={props.activeHref} />
-              ) : (
-                <SidebarDivider key={getSidebarItemKey(item, index)} title={item.title} />
-              ),
-            )}
-          </ul>
+          <SidebarItemList items={props.items ?? []} activeHref={props.activeHref} />
         </>
       )}
       {props.showSeparator && (

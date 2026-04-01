@@ -1,3 +1,4 @@
+import { renderInlineMarkdown } from '@unterberg/universal-mdx-mods'
 import type { ReactNode } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import DocsPagination from '@/app-components/DocsPagination'
@@ -40,7 +41,7 @@ const DocsLayout = ({ children }: { children: ReactNode }) => {
           </div>
           <div className="mt-10 flex-1 min-w-0 relative basis-auto shrink">
             <ProseContainer className="flex-1 z-1 relative min-h-[calc(100svh-92*var(--spacing))]" data-doc-content>
-              <h1>{docTitle}</h1>
+              <h1>{renderInlineMarkdown(docTitle)}</h1>
               {children}
             </ProseContainer>
             <DocsPagination />

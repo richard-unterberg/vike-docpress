@@ -12,6 +12,7 @@ import { CodeBlockCopyButton, trimTrailingWhitespace } from './CopyButton'
 import { useIsInCodeBlockGroup } from './context'
 
 type PreProps = ComponentPropsWithoutRef<'pre'> & {
+  'data-code-title'?: string
   'data-language'?: string
   'data-language-label'?: string
   'file-added'?: string
@@ -53,7 +54,7 @@ const getLanguageLabel = (props: PreProps) => {
 function Pre({ children, className, ...props }: PreProps) {
   const preRef = useRef<HTMLPreElement>(null)
   const isInChoiceGroup = useIsInCodeBlockGroup()
-  const label = getLanguageLabel(props)
+  const label = asTrimmedString(props['data-code-title']) ?? getLanguageLabel(props)
   const fileState = props['file-added'] ? 'added' : props['file-removed'] ? 'removed' : null
   const hideMenu = props['hide-menu'] === 'true'
 
@@ -73,10 +74,10 @@ function Pre({ children, className, ...props }: PreProps) {
       />
     )
 
-  const codeBlock = (
+  return (
     <div
       className={[
-        'group relative not-prose overflow-hidden h-full',
+        'group relative h-full not-prose overflow-hidden',
         isInChoiceGroup ? '' : 'mb-6 rounded-box border border-base-muted-light bg-base-100/60',
       ]
         .filter(Boolean)
@@ -89,14 +90,14 @@ function Pre({ children, className, ...props }: PreProps) {
           className="flex min-h-10 items-center justify-between gap-3 border-b border-base-muted-light bg-base-muted-superlight! px-4"
           data-code-block-header=""
         >
-          <div className="text-xs font-semibold font-mono tracking-[0.08em] text-base-muted">{label}</div>
+          <div className="font-mono text-xs font-semibold tracking-[0.08em] text-base-muted">{label}</div>
           {copyButton}
         </div>
       )}
       <pre
         {...props}
         ref={preRef}
-        className={['doc-code-pre m-0 overflow-x-auto p-4 text-sm bg-base-200! h-full', className]
+        className={['doc-code-pre m-0 h-full overflow-x-auto bg-base-200! p-4 text-sm', className]
           .filter(Boolean)
           .join(' ')}
         data-code-block-content=""
@@ -105,10 +106,4 @@ function Pre({ children, className, ...props }: PreProps) {
       </pre>
     </div>
   )
-
-  if (isInChoiceGroup) {
-    return codeBlock
-  }
-
-  return codeBlock
 }
