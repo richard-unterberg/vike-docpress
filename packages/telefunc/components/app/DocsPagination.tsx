@@ -1,29 +1,11 @@
 import { cmMerge } from '@classmatejs/react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { Fragment, type ReactNode } from 'react'
+import { renderInlineMarkdown } from '@unterberg/universal-mdx-mods'
 import { usePageContext } from 'vike-react/usePageContext'
 import { getCurrentDocSlug } from '@/lib/docs/pageContext'
 import { getTelefuncSystemConfig } from '@/lib/docs/systemConfig'
+import { getMenuDocLinks, type MenuDocLink } from '@/lib/menuNavigation'
 import { t } from '@/lib/messages'
-import { getMenuDocLinks, type MenuDocLink } from '@/lib/navigation/menuNavigation'
-
-const renderInlineMarkdown = (title: ReactNode): ReactNode => {
-  if (typeof title !== 'string') return title
-
-  return title.split(/(`[^`]+`)/g).map((part, index) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        // biome-ignore lint/suspicious/noArrayIndexKey: local presentational split
-        <code className="font-medium" key={index}>
-          {part.slice(1, -1)}
-        </code>
-      )
-    }
-
-    // biome-ignore lint/suspicious/noArrayIndexKey: local presentational split
-    return <Fragment key={index}>{part}</Fragment>
-  })
-}
 
 const PaginationCard = (props: {
   item: MenuDocLink

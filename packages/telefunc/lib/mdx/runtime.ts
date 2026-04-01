@@ -3,14 +3,20 @@ import type {
   UniversalMdxRuntimeValue,
   UniversalResolveDocLinkArgs,
   UniversalResolvedDocLink,
+  UniversalResolvedOverviewItem,
 } from '@unterberg/universal-mdx-mods'
 import { getDocHeadings, hasDocSlug } from '@/lib/docs/contentManifest'
-import { getDocHeadingMetadata, resolveHeadingByHrefPathname } from '@/lib/docs/headings'
+import {
+  getDocHeadingMetadata,
+  getHeadingLinkData,
+  isHeadingKey,
+  resolveHeadingByHrefPathname,
+} from '@/lib/docs/headings'
 import { getDocPageDataFromPageContext } from '@/lib/docs/pageContext'
-import { getDocPath } from '@/lib/docs/systemConfig'
+import { getDocPath, getTelefuncSystemConfig } from '@/lib/docs/systemConfig'
 import { DEFAULT_LOCALE, resolveLocale } from '@/lib/i18n/config'
 import { localizeHref } from '@/lib/i18n/routing'
-import { getHeadingGroupTitle } from '@/lib/navigation/menuNavigation'
+import { getHeadingGroupTitle } from '@/lib/menuNavigation'
 import { readLegacyCodeBlockChoice } from '@/lib/store/settings-storage'
 import { useUserSettingsStore } from '@/lib/store/settings-store'
 
@@ -166,6 +172,24 @@ const resolveTelefuncDocLink = (
   }
 }
 
+const resolveTelefuncOverviewItem = (
+  pageContext: TelefuncMdxPageContext,
+  key: string,
+): UniversalResolvedOverviewItem | null => {
+  if (!isHeadingKey(key)) {
+    return null
+  }
+
+  const telefuncConfig = getTelefuncSystemConfig(pageContext)
+  const { description, href, title } = getHeadingLinkData(key, pageContext.locale, telefuncConfig)
+
+  return {
+    title,
+    href,
+    excerpt: description,
+  }
+}
+
 export const getTelefuncMdxRuntimeValue = (pageContext: TelefuncMdxPageContext): UniversalMdxRuntimeValue => {
   const { locale } = pageContext
 
@@ -173,6 +197,7 @@ export const getTelefuncMdxRuntimeValue = (pageContext: TelefuncMdxPageContext):
     locale,
     localizeHref: (href) => localizeHref(href, locale),
     resolveDocLink: (args) => resolveTelefuncDocLink(pageContext, args),
+    resolveOverviewItem: (key) => resolveTelefuncOverviewItem(pageContext, key),
     codeBlockChoices: telefuncCodeBlockChoiceStore,
   }
 }

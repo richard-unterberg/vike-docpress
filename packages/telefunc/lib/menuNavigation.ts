@@ -1,9 +1,9 @@
 import { Map as MapIcon, Sprout } from 'lucide-react'
-import { getHeadingData, getHeadingLinkData, type HeadingKey } from '@/lib/docs/headings'
+import { getHeadingData, getHeadingLinkData, resolveHeadingByHrefPathname, type HeadingKey } from '@/lib/docs/headings'
 import type { TelefuncSystemConfig } from '@/lib/docs/systemConfig'
 import type { Locale } from '@/lib/i18n/config'
 import { t } from '@/lib/messages'
-import type { MenuGroupShared, MenuRendererGroup, SidebarDividerItem, SidebarItem } from '@/lib/navigation/navigation'
+import type { MenuGroupShared, MenuRendererGroup, SidebarDividerItem, SidebarItem } from '@/lib/types/navigation'
 
 const GroupKeys = {
   getStarted: 'getStarted',
@@ -72,6 +72,7 @@ const menuGroups: MenuGroupDefinition[] = [
       isDefaultOpen: false,
     },
     items: [
+      { heading: 'apiOverview' },
       { dividerText: 'Server' },
       { heading: 'apiTelefunc' },
       { heading: 'throwAbort' },
@@ -122,6 +123,10 @@ const flattenMenuHeadings = (items: MenuItemDefinition[]): HeadingKey[] => {
   })
 }
 
+const getMenuGroupDefinitionForHeading = (headingKey: HeadingKey) => {
+  return menuGroups.find((menuGroup) => flattenMenuHeadings(menuGroup.items).includes(headingKey)) ?? null
+}
+
 const renderMenuItem = (
   item: MenuItemDefinition,
   locale: Locale,
@@ -147,8 +152,17 @@ const renderMenuItem = (
 }
 
 export const getHeadingGroupTitle = (headingKey: HeadingKey, locale: Locale) => {
-  const group = menuGroups.find((menuGroup) => flattenMenuHeadings(menuGroup.items).includes(headingKey))
+  const group = getMenuGroupDefinitionForHeading(headingKey)
   return group ? t(locale, 'sidebar', group.groupKey) : null
+}
+
+export const getMenuGroupKeyForDocPath = (docPath: string) => {
+  const resolvedHeading = resolveHeadingByHrefPathname(docPath)
+  if (!resolvedHeading) {
+    return null
+  }
+
+  return getMenuGroupDefinitionForHeading(resolvedHeading.headingKey)?.groupKey ?? null
 }
 
 export const getMenuDocLinks = (locale: Locale, telefuncConfig?: TelefuncSystemConfig): MenuDocLink[] => {

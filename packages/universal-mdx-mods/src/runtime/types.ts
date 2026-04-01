@@ -18,6 +18,14 @@ export type UniversalResolvedDocLink = {
 
 export type UniversalResolveDocLinkFn = (args: UniversalResolveDocLinkArgs) => UniversalResolvedDocLink | null
 
+export type UniversalResolvedOverviewItem = {
+  title: ReactNode
+  href: string
+  excerpt?: ReactNode | null
+}
+
+export type UniversalResolveOverviewItemFn = (key: string) => UniversalResolvedOverviewItem | null
+
 export interface UniversalMdxCodeBlockChoiceStore {
   subscribe: (listener: () => void) => () => void
   getChoice: (choiceGroupName: string) => string | null
@@ -30,5 +38,6 @@ export interface UniversalMdxRuntimeValue {
   t?: UniversalMdxTranslationFn
   localizeHref?: (href: string) => string
   resolveDocLink?: UniversalResolveDocLinkFn
+  resolveOverviewItem?: UniversalResolveOverviewItemFn
   codeBlockChoices?: UniversalMdxCodeBlockChoiceStore
 }

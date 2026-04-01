@@ -1,8 +1,9 @@
 import { cmMerge } from '@classmatejs/react'
-import { Fragment, type MouseEvent, type ReactNode, useEffect, useRef } from 'react'
+import { renderInlineMarkdown } from '@unterberg/universal-mdx-mods'
+import { type MouseEvent, type ReactNode, useEffect, useRef } from 'react'
 import { navigate } from 'vike/client/router'
 import { getLogicalPathname } from '@/lib/i18n/routing'
-import type { MenuRendererGroup, SidebarGroupItem, SidebarItem, SidebarLinkItem } from '@/lib/navigation/navigation'
+import type { MenuRendererGroup, SidebarGroupItem, SidebarItem, SidebarLinkItem } from '@/lib/types/navigation'
 
 const isSidebarLink = (item: SidebarItem): item is SidebarLinkItem => 'href' in item && !('items' in item)
 
@@ -101,24 +102,6 @@ const hasActiveItem = (items: SidebarItem[] | undefined, activeHref: string | nu
   })
 }
 
-const renderInlineMarkdown = (title: ReactNode): ReactNode => {
-  if (typeof title !== 'string') return title
-
-  return title.split(/(`[^`]+`)/g).map((part, index) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        // biome-ignore lint/suspicious/noArrayIndexKey: not worth the effort
-        <code className="text-sm!" key={index}>
-          {part.slice(1, -1)}
-        </code>
-      )
-    }
-
-    // biome-ignore lint/suspicious/noArrayIndexKey: not worth the effort
-    return <Fragment key={index}>{part}</Fragment>
-  })
-}
-
 const getSidebarItemKey = (item: SidebarItem, index: number) => {
   if (isSidebarGroup(item)) {
     return item.id
@@ -137,7 +120,7 @@ const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => 
           props.activeHref === props.href && 'text-primary! font-semibold bg-base-200',
         )}
       >
-        {renderInlineMarkdown(props.title)}
+        {renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}
       </a>
     </li>
   )
@@ -146,7 +129,7 @@ const SidebarLink = (props: SidebarLinkItem & { activeHref: string | null }) => 
 const SidebarDivider = (props: { title: ReactNode }) => {
   return (
     <li className="ml-3 mt-2 mb-2 border-b border-base-muted-light text-xs text-base-muted-medium pointer-events-none font-semibold">
-      <span className="-ml-3">{renderInlineMarkdown(props.title)}</span>
+      <span className="-ml-3">{renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}</span>
     </li>
   )
 }
@@ -179,7 +162,7 @@ const SidebarGroupTitle = (props: {
           props.isActive && (props.allowNavigation ? 'text-primary!' : 'text-base-content'),
         )}
       >
-        {renderInlineMarkdown(props.title)}
+        {renderInlineMarkdown(props.title, { codeClassName: 'text-sm!' })}
       </span>
     </>
   )
