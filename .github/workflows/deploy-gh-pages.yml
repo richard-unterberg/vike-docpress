@@ -3,7 +3,7 @@ name: Deploy Page
 on:
   push:
     branches:
-      - master
+      - create-monorepo
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -23,7 +23,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10.28.1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -50,8 +50,8 @@ jobs:
         run: pnpm build
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/telefunc'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/client
+          publish_dir: ./packages/telefunc/dist/client

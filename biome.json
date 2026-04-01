@@ -8,8 +8,10 @@
       "!*.mjs",
       "!*.spec.ts",
       "!**/*.ts.build-*.mjs",
-      "!dist/*",
-      "!node_modules/*",
+      "!dist/**",
+      "!**/dist/**",
+      "!node_modules/**",
+      "!**/node_modules/**",
       "!**/.DS_Store"
     ]
   },

@@ -1,7 +1,13 @@
 node_modules/
+**/node_modules/
 # https://github.com/vikejs/vike/pull/1997
 /.pnpm-store/
 dist
+**/dist
 .vscode
 
 .DS_Store
+*.tsbuildinfo
+
+# generated docs pages
+(generated)

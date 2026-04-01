@@ -1,0 +1,21 @@
+import './landing-code-samples.css'
+
+```ts ts-only
+// CreateTodo.tsx
+// Environment: client
+import { onNewTodo } from './CreateTodo.telefunc.ts'
+ 
+async function onClick(form) {
+  const text = form.input.value
+  await onNewTodo(text)
+}
+ 
+function CreateTodo() {
+  return (
+    <form>
+      <input input="text"></input>
+      <button onClick={onClick}>Add To-Do</button>
+    </form>
+  )
+}
+```
