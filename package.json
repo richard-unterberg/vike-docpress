@@ -1,15 +1,25 @@
 {
-  "name": "docsengine-monorepo",
+  "name": "nivel",
   "private": true,
   "packageManager": "pnpm@10.28.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/richard-unterberg/nivel.git"
+  },
+  "homepage": "https://github.com/richard-unterberg/nivel",
+  "bugs": {
+    "url": "https://github.com/richard-unterberg/nivel/issues"
+  },
   "scripts": {
-    "preview": "pnpm --filter ./packages/consumer preview",
-    "dev": "pnpm --parallel --filter @unterberg/docsengine --filter ./packages/consumer dev",
-    "build": "pnpm --filter @unterberg/docsengine build && pnpm --filter ./packages/consumer build",
-    "typecheck": "pnpm --filter @unterberg/docsengine typecheck && pnpm --filter ./packages/consumer typecheck",
+    "preview": "pnpm --filter ./packages/consumer-test preview",
+    "dev": "pnpm --parallel --filter @unterberg/nivel --filter ./packages/consumer-test dev",
+    "build": "pnpm --filter @unterberg/nivel build && pnpm --filter ./packages/consumer-test build",
+    "build:consumer-test:prod": "node ./scripts/buildConsumerTestProd.mjs",
+    "typecheck": "pnpm --filter @unterberg/nivel typecheck && pnpm --filter ./packages/consumer-test typecheck",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
-    "knip": "pnpm --filter @unterberg/docsengine build && pnpm --filter ./packages/consumer generate:docs && knip",
+    "knip": "pnpm --filter @unterberg/nivel build && pnpm --filter ./packages/consumer-test generate:docs && knip",
+    "deploy:npm": "node ./scripts/deployNpm.mjs",
     "prepare": "lefthook install"
   },
   "devDependencies": {

@@ -21,11 +21,11 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  packages/consumer:
+  packages/consumer-test:
     dependencies:
-      '@unterberg/docsengine':
+      '@unterberg/nivel':
         specifier: workspace:*
-        version: link:../docsengine
+        version: link:../engine
       react:
         specifier: ^19.1.1
         version: 19.2.4
@@ -106,7 +106,7 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
 
-  packages/docsengine:
+  packages/engine:
     dependencies:
       '@brillout/shiki-transformers':
         specifier: ^4.0.2

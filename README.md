@@ -1,11 +1,13 @@
-# docsengine monorepo
+# nivel (alpha)
 
-Minimal pnpm workspace for extracting a reusable docs engine into `@unterberg/docsengine`.
+minimal documentation engine based on vike.
+
+Minimal pnpm workspace for extracting a reusable docs engine into `@unterberg/nivel`.
 
 Packages:
 
-- `packages/docsengine`: the engine package
-- `packages/consumer`: the minimal proof consumer
+- `packages/engine`: the engine package
+- `packages/consumer-test`: the minimal proof consumer
 
 Common commands:
 

@@ -37,11 +37,11 @@ jobs:
       - name: Build Page
         env:
           PAGES_BASE_PATH: /${{ github.event.repository.name }}
-        run: pnpm build
+        run: pnpm build:consumer-test:prod
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/new-engine'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/consumer/dist/client
+          publish_dir: ./packages/consumer-test/dist/client

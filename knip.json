@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/knip/schema.json",
-  "ignore": ["packages/docsengine/assets/**"],
+  "ignore": ["packages/engine/assets/**"],
   "ignoreDependencies": [
     "@brillout/shiki-transformers",
     "@mdx-js/rollup",
@@ -16,7 +16,9 @@
     "unist-util-visit"
   ],
   "ignoreIssues": {
-    "packages/consumer/docs/content/concepts/CodeComparison.tsx": ["exports"],
-    "packages/docsengine/src/index.ts": ["exports", "types"]
+    "packages/consumer-test/docs/content/concepts/CodeComparison.tsx": [
+      "exports"
+    ],
+    "packages/engine/src/index.ts": ["exports", "types"]
   }
 }
