@@ -1,60 +1,109 @@
-# solid-docpress workspace
+# nivel
 
-This repo is a pnpm workspace with two packages:
+docs builder proof of concept for generating vike-based documentation sites with a single docs graph as the source of truth.
 
-- `packages/telefunc`: the Vike docs application
-- `packages/universal-mdx-mods`: the publishable shared MDX component package
+monorepo structure:
 
-Package-specific details live in their local READMEs:
+- `packages/engine`: the reusable `@unterberg/nivel` package
+- `packages/consumer-test`: the reference consumer used to exercise the engine against real docs content, currently based on the [Telefunc docs](https://telefunc.com)
 
-- `packages/telefunc/README.md`
-- `packages/universal-mdx-mods/README.md`
+## Alpha Status
 
-## Getting Started
+This project is an early proof of concept and should be expected to have rough edges. The main goal is to validate the core engine ideas and architecture, not to provide a polished general-purpose doc builder right now. Some specific things to keep in mind:
+
+- Expect breaking changes.
+- The public API is not stable yet. (blackbox)
+- The supported stack fixed currently to Vike + Vite + React.
+- `basePath` is currently fixed to `/docs`.
+- The consumer app in this repo is still the main integration example.
+
+If you need a polished general-purpose docpress replacement today, this is not that yet.
+
+## What It Does
+
+The engine currently owns the core docs runtime:
+
+- typed docs config via `defineDocsConfig()`
+- typed docs graph via `defineDocsGraph()`
+- docs graph validation and resolution
+- generated Vike routes from MDX content
+- shared docs layout pieces such as navbar, sidebar, table of contents, pagination, and meta head wiring
+- MDX setup with built-in docs components and code-block transforms
+- asset handling for engine-owned fonts and shared static assets
+
+The intended split is:
+
+- the engine owns behavior, runtime wiring, and reusable UI primitives
+- the consumer owns docs content, `docs/docs.graph.ts`, `pages/+docs.ts`, and brand/theme assets
+
+## Minimal Shape
+
+At the moment, a consumer looks roughly like this:
+
+```ts
+// pages/+docs.ts
+import { defineDocsConfig } from '@unterberg/nivel'
+import { docsGraph } from '../docs/docs.graph'
+
+export default defineDocsConfig({
+  siteTitle: 'My Docs',
+  basePath: '/docs',
+  graph: docsGraph,
+})
+```
+
+```ts
+// docs/docs.graph.ts
+import { defineDocsGraph } from '@unterberg/nivel'
+
+export const docsGraph = defineDocsGraph({
+  items: [
+    {
+      kind: 'section',
+      id: 'docs',
+      title: 'Documentation',
+      items: [
+        {
+          kind: 'page',
+          id: 'quickStart',
+          title: 'Quick Start',
+          slug: 'quick-start',
+          source: 'content/quick-start/content.mdx',
+        },
+      ],
+    },
+  ],
+})
+```
+
+Then the consumer wires:
+
+- `@unterberg/nivel/config` into Vike config
+- `MetaHead` in global `+Head`
+- `AppLayout` in global `+Layout`
+- `syncGeneratedDocsPages()` before dev/build/typecheck
+
+## Current Limitations
+
+- The package is still alpha and should be expected to change.
+- The supported stack is currently narrow: Vike + Vite + React.
+- `basePath` is currently fixed to `/docs`.
+- The package is still validated mainly through one real consumer, not a broad set of independent adopters.
+- The setup and examples are still catching up with the implementation, so the integration story is not fully polished yet.
+
+## Future Plans
+
+- Continue hardening the engine/consumer split so docs behavior stays in `@unterberg/nivel` and the consumer remains thin.
+- Improve the package-level docs and examples so setup is easier to understand without reading the consumer app in detail.
+- Reduce hard-coded assumptions where it makes sense, starting with the areas that currently make the engine feel too tied to its first consumer.
+
+## Commands
 
 ```bash
 pnpm install
 pnpm dev
-```
-
-That starts both workspace packages together:
-
-- `@unterberg/universal-mdx-mods` builds in watch mode with `tsup`
-- `packages/telefunc` runs the Vike dev server
-
-The app is served from the `telefunc` package on port `3001`.
-
-## Common Commands
-
-From the workspace root:
-
-- `pnpm dev`: run the shared package watcher and the app dev server together
-- `pnpm dev:telefunc`: run only the Vike docs app
-- `pnpm dev:mods`: run only the shared package watcher
-- `pnpm build`: build the shared package and then the app
-- `pnpm preview`: preview the built `telefunc` app
-- `pnpm typecheck`: run full-workspace type checks
-- `pnpm knip`: check workspace-level unused dependencies and exports
-- `pnpm format`: format the repo with Biome
-- `pnpm lint`: run Biome lint with fixes
-
-## Development Model
-
-`packages/telefunc` depends on `@unterberg/universal-mdx-mods` via `workspace:*`.
-
-That means:
-
-- app code always imports the shared package by package name
-- local development still exercises the real package boundary
-- changes in `packages/universal-mdx-mods` are rebuilt locally and consumed by `packages/telefunc`
-
-This keeps local development close to the eventual npm-consumer setup without source aliasing the shared package.
-
-## Repo Notes
-
-- Repo-specific engineering instructions are tracked in `agents.md`.
-
-## Publishing override
-```
-pnpm publish --access public --no-git-checks
+pnpm build
+pnpm typecheck
+pnpm format
+pnpm knip
 ```
