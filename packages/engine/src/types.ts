@@ -14,6 +14,10 @@ export type DocsFooterConfig = {
   pagination?: boolean
 }
 
+export type JsonPrimitive = string | number | boolean | null
+
+export type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue }
+
 export type DocsBrandConfig = {
   text?: string
   href?: string
@@ -33,6 +37,21 @@ export type DocsPartnerConfig = {
 export type DocsPartnersConfig = {
   primary?: DocsPartnerConfig[]
   gold?: DocsPartnerConfig[]
+}
+
+export type DocsAlgoliaFieldsConfig = {
+  href?: string
+  title?: string
+  excerpt?: string
+  sectionTitle?: string
+}
+
+export type DocsAlgoliaConfig = {
+  appId: string
+  apiKey: string
+  indexName: string
+  fields?: DocsAlgoliaFieldsConfig
+  searchParams?: Record<string, JsonValue>
 }
 
 export type DocsHeadConfig = {
@@ -94,6 +113,7 @@ export type DocsConfig = {
   brand?: DocsBrandConfig
   head?: DocsHeadConfig
   partners?: DocsPartnersConfig
+  algolia?: DocsAlgoliaConfig
 }
 
 export type ResolvedDocsBrandConfig = {
@@ -115,6 +135,21 @@ export type ResolvedDocsPartnerConfig = {
 export type ResolvedDocsPartnersConfig = {
   primary: ResolvedDocsPartnerConfig[]
   gold: ResolvedDocsPartnerConfig[]
+}
+
+export type ResolvedDocsAlgoliaFieldsConfig = {
+  href: string
+  title: string
+  excerpt: string
+  sectionTitle: string
+}
+
+export type ResolvedDocsAlgoliaConfig = {
+  appId: string
+  apiKey: string
+  indexName: string
+  fields: ResolvedDocsAlgoliaFieldsConfig
+  searchParams: Record<string, JsonValue>
 }
 
 export type ResolvedDocsHeadConfig = DocsHeadConfig
@@ -180,6 +215,7 @@ export type ResolvedDocsConfig = {
   brand: ResolvedDocsBrandConfig
   head: ResolvedDocsHeadConfig
   partners: ResolvedDocsPartnersConfig
+  algolia: ResolvedDocsAlgoliaConfig | null
   pages: ResolvedDocsPage[]
   sections: ResolvedDocsSection[]
   navbarItems: ResolvedNavbarItem[]

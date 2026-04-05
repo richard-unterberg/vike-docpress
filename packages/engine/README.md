@@ -49,6 +49,11 @@ export default defineDocsConfig({
   siteTitle: 'My Docs',
   basePath: '/docs',
   graph: docsGraph,
+  algolia: {
+    appId: 'YOUR_APP_ID',
+    apiKey: 'YOUR_SEARCH_ONLY_API_KEY',
+    indexName: 'YOUR_INDEX_NAME',
+  },
 })
 ```
 
@@ -82,6 +87,8 @@ Then the consumer wires:
 - `MetaHead` in global `+Head`
 - `AppLayout` in global `+Layout`
 - `syncGeneratedDocsPages()` before dev/build/typecheck
+
+Algolia search is optional. When configured, `apiKey` must be a search-only public key because requests are made from the browser.
 
 ## Current Limitations
 

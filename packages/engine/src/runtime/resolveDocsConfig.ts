@@ -1,5 +1,6 @@
 import { nivelAssetUrl, resolvePublicAssetUrl, withSiteBaseUrl } from '../nivelAssets.js'
 import type {
+  DocsAlgoliaConfig,
   DocsBrandConfig,
   DocsConfig,
   DocsDividerNode,
@@ -9,6 +10,7 @@ import type {
   DocsPageNode,
   DocsSectionNode,
   DocsSidebarNode,
+  ResolvedDocsAlgoliaConfig,
   ResolvedDocsBrandConfig,
   ResolvedDocsConfig,
   ResolvedDocsPartnerConfig,
@@ -142,6 +144,35 @@ const resolvePartnersConfig = (partners: DocsConfig['partners']): ResolvedDocsPa
   return {
     primary: (partners?.primary ?? []).map(resolvePartner),
     gold: (partners?.gold ?? []).map(resolvePartner),
+  }
+}
+
+const requireTrimmedString = (value: string, fieldName: string) => {
+  const normalized = value.trim()
+
+  if (!normalized) {
+    throw new Error(`Docs algolia config "${fieldName}" must be a non-empty string.`)
+  }
+
+  return normalized
+}
+
+const resolveAlgoliaConfig = (algolia: DocsAlgoliaConfig | undefined): ResolvedDocsAlgoliaConfig | null => {
+  if (!algolia) {
+    return null
+  }
+
+  return {
+    appId: requireTrimmedString(algolia.appId, 'appId'),
+    apiKey: requireTrimmedString(algolia.apiKey, 'apiKey'),
+    indexName: requireTrimmedString(algolia.indexName, 'indexName'),
+    fields: {
+      href: algolia.fields?.href?.trim() || 'href',
+      title: algolia.fields?.title?.trim() || 'title',
+      excerpt: algolia.fields?.excerpt?.trim() || 'excerpt',
+      sectionTitle: algolia.fields?.sectionTitle?.trim() || 'sectionTitle',
+    },
+    searchParams: algolia.searchParams ?? {},
   }
 }
 
@@ -311,6 +342,7 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
     brand: resolveBrandConfig(config.brand, config.siteTitle),
     head: resolveHeadConfig(config.head),
     partners: resolvePartnersConfig(config.partners),
+    algolia: resolveAlgoliaConfig(config.algolia),
     pages,
     sections,
     navbarItems,

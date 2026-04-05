@@ -6,7 +6,7 @@ export const docsGraph = defineDocsGraph({
       kind: 'section',
       id: 'documentation',
       title: 'Get Started',
-      navTitle: 'Documentation',
+      navTitle: 'Docs',
       items: [
         {
           kind: 'page',
