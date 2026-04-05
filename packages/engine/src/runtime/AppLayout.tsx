@@ -28,6 +28,7 @@ export const AppLayout = ({ children, docsConfig }: AppLayoutProps) => {
           activeSectionId={activeSection?.id ?? null}
           algolia={resolvedConfig.algolia}
           navbarItems={resolvedConfig.navbarItems}
+          sections={resolvedConfig.sections}
           theme={resolvedConfig.theme}
         />
         <div className="pt-16">{children}</div>

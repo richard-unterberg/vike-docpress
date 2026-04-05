@@ -8,6 +8,7 @@ import type {
   DocsThemeConfig,
   ResolvedDocsAlgoliaConfig,
   ResolvedDocsBrandConfig,
+  ResolvedDocsSection,
   ResolvedNavbarItem,
 } from '../../../types.js'
 import { Brand } from '../Brand.js'
@@ -23,9 +24,10 @@ interface NavbarProps {
   algolia: ResolvedDocsAlgoliaConfig | null
   navbarItems: ResolvedNavbarItem[]
   theme: Required<DocsThemeConfig>
+  sections: ResolvedDocsSection[]
 }
 
-export const Navbar = ({ brand, activeSectionId, algolia, navbarItems, theme }: NavbarProps) => {
+export const Navbar = ({ brand, activeSectionId, algolia, navbarItems, theme, sections }: NavbarProps) => {
   const { urlPathname } = usePageContext()
   const isLandingPage = urlPathname === '/'
   const { isLandingPageScrolled } = useNavbarScroll(isLandingPage)
@@ -88,15 +90,19 @@ export const Navbar = ({ brand, activeSectionId, algolia, navbarItems, theme }: 
                     <li key={item.id}>
                       <a
                         href={withSiteBaseUrl(item.href)}
-                        className={cmMerge('btn text-lg btn-ghost min-w-30 px-2 whitespace-nowrap tracking-tight')}
+                        className={'h-full block py-3.25'}
                         onPointerEnter={openMegaMenu}
                         onPointerLeave={scheduleMegaMenuClose}
                         onFocus={openMegaMenu}
                         onBlur={scheduleMegaMenuClose}
                         onClick={closeMegaMenu}
                       >
-                        {renderInlineMarkdown(item.title)}
-                        <ChevronDown className="h-4 w-4 shrink-0" />
+                        <span
+                          className={cmMerge('btn text-lg btn-ghost min-w-30 px-2 whitespace-nowrap tracking-tight')}
+                        >
+                          {renderInlineMarkdown(item.title)}
+                          <ChevronDown className="h-4 w-4 shrink-0" />
+                        </span>
                       </a>
                     </li>
                   ))}
@@ -145,8 +151,7 @@ export const Navbar = ({ brand, activeSectionId, algolia, navbarItems, theme }: 
           )}
         </LayoutComponent>
       </StyledNavbar>
-
-      <MegaMenu isActive={isMegaMenuOpen} onOpen={openMegaMenu} onClose={scheduleMegaMenuClose} />
+      <MegaMenu sections={sections} isActive={isMegaMenuOpen} onOpen={openMegaMenu} onClose={scheduleMegaMenuClose} />
     </>
   )
 }

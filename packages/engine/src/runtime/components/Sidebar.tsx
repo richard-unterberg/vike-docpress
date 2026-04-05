@@ -1,8 +1,8 @@
 import { cmMerge } from '@classmatejs/react'
 import { useEffect } from 'react'
 import { create } from 'zustand'
-import { withSiteBaseUrl } from '../../nivelAssets.js'
 import { renderInlineMarkdown } from '../../components/renderInlineMarkdown.js'
+import { withSiteBaseUrl } from '../../nivelAssets.js'
 import type {
   ResolvedDocsSection,
   ResolvedSidebarGroup,
@@ -151,9 +151,6 @@ const SidebarGroupTitle = ({ title, href, isActive, allowNavigation = false }: S
     return (
       <a
         href={withSiteBaseUrl(href)}
-        onClick={(event) => {
-          event.stopPropagation()
-        }}
         className={cmMerge(
           'flex items-center gap-2 text-base-muted hover:text-base-content no-underline',
           isActive && 'text-primary! font-semibold',
