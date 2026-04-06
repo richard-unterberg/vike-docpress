@@ -190,7 +190,7 @@ const _menuShapeNew = {
     {
       kind: 'group',
       id: 'guides',
-      title: 'Guides',
+      title: 'Guides', // can be optional - if not there the divider should not show
       items: [
         {
           kind: 'group',

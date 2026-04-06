@@ -1,10 +1,11 @@
 import { cmMerge } from '@classmatejs/react'
+import type { ReactNode } from 'react'
 import { useEffect } from 'react'
 import { create } from 'zustand'
 import type { ResolvedDocsSection, ResolvedSidebarGroup, ResolvedSidebarNode } from '../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../shared/renderInlineMarkdown.js'
-import { containsActiveHref, getGroupLandingPage, getVisibleGroupItems, hasActiveItem } from './docsNavigation.js'
+import { containsActiveHref, getGroupHref, getVisibleGroupItems, hasActiveItem } from './docsNavigation.js'
 
 type SidebarDisclosureState = {
   openNodes: Record<string, boolean>
@@ -72,7 +73,7 @@ const SidebarPageLink = ({ title, href, currentHref }: SidebarPageLinkProps) => 
   )
 }
 
-const SidebarDivider = ({ title }: { title: string }) => {
+const SidebarGroupDivider = ({ title }: { title: string }) => {
   return (
     <li className="ml-3 mt-2 mb-2 border-b border-base-muted-light text-xs text-base-muted-medium pointer-events-none font-semibold">
       <span className="-ml-3">{renderInlineMarkdown(title, { codeClassName: 'text-sm!' })}</span>
@@ -81,7 +82,7 @@ const SidebarDivider = ({ title }: { title: string }) => {
 }
 
 interface SidebarGroupTitleProps {
-  title: string
+  title?: string
   href?: string
   isActive: boolean
   allowNavigation?: boolean
@@ -95,7 +96,7 @@ const SidebarGroupTitle = ({ title, href, isActive, allowNavigation = false }: S
         isActive && allowNavigation && 'text-primary!',
       )}
     >
-      {renderInlineMarkdown(title, { codeClassName: 'text-sm!' })}
+      {title ? renderInlineMarkdown(title, { codeClassName: 'text-sm!' }) : null}
     </span>
   )
 
@@ -116,27 +117,23 @@ const SidebarGroupTitle = ({ title, href, isActive, allowNavigation = false }: S
   return <span className="flex items-center gap-2 text-base-content">{content}</span>
 }
 
+const renderSidebarItems = (items: ResolvedSidebarNode[], currentHref: string): ReactNode[] => {
+  return items.map((item) => {
+    if (item.kind === 'page') {
+      return <SidebarPageLink key={item.id} title={item.navTitle} href={item.href} currentHref={currentHref} />
+    }
+
+    return <SidebarNestedGroup key={item.id} group={item} currentHref={currentHref} />
+  })
+}
+
 interface SidebarItemListProps {
   items: ResolvedSidebarNode[]
   currentHref: string
 }
 
 const SidebarItemList = ({ items, currentHref }: SidebarItemListProps) => {
-  return (
-    <ul className="menu">
-      {items.map((item) => {
-        if (item.kind === 'divider') {
-          return <SidebarDivider key={item.id} title={item.title} />
-        }
-
-        if (item.kind === 'page') {
-          return <SidebarPageLink key={item.id} title={item.navTitle} href={item.href} currentHref={currentHref} />
-        }
-
-        return <SidebarNestedGroup key={item.id} group={item} currentHref={currentHref} />
-      })}
-    </ul>
-  )
+  return <ul className="menu w-full">{renderSidebarItems(items, currentHref)}</ul>
 }
 
 interface SidebarNestedGroupProps {
@@ -145,26 +142,23 @@ interface SidebarNestedGroupProps {
 }
 
 const SidebarNestedGroup = ({ group, currentHref }: SidebarNestedGroupProps) => {
-  const landingPage = getGroupLandingPage(group)
-  const visibleItems = getVisibleGroupItems(group, landingPage)
+  const groupHref = getGroupHref(group)
+  const visibleItems = getVisibleGroupItems(group)
   const isCollapsible = group.collapsible !== undefined
   const isOpenByDefault = group.collapsible?.isDefaultOpen ?? true
-  const nestedHasActiveItem = landingPage?.href === currentHref || hasActiveItem(visibleItems, currentHref)
+  const nestedHasActiveItem = groupHref === currentHref || hasActiveItem(visibleItems, currentHref)
   const { isOpen, setIsOpen } = useAutoOpenDetails(`group:${group.id}`, isOpenByDefault, nestedHasActiveItem)
 
   if (!isCollapsible) {
+    if (!group.title) {
+      return <>{renderSidebarItems(visibleItems, currentHref)}</>
+    }
+
     return (
-      <li>
-        <div className="px-4 py-2">
-          <SidebarGroupTitle
-            title={group.title}
-            href={landingPage?.href}
-            isActive={nestedHasActiveItem}
-            allowNavigation={Boolean(landingPage)}
-          />
-        </div>
-        {visibleItems.length > 0 ? <SidebarItemList items={visibleItems} currentHref={currentHref} /> : null}
-      </li>
+      <>
+        <SidebarGroupDivider title={group.title} />
+        {renderSidebarItems(visibleItems, currentHref)}
+      </>
     )
   }
 
@@ -179,9 +173,9 @@ const SidebarNestedGroup = ({ group, currentHref }: SidebarNestedGroupProps) => 
         <summary>
           <SidebarGroupTitle
             title={group.title}
-            href={landingPage?.href}
+            href={groupHref ?? undefined}
             isActive={nestedHasActiveItem}
-            allowNavigation={Boolean(landingPage)}
+            allowNavigation={Boolean(groupHref)}
           />
         </summary>
         {visibleItems.length > 0 ? <SidebarItemList items={visibleItems} currentHref={currentHref} /> : null}

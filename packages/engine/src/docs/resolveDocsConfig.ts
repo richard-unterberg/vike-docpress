@@ -3,7 +3,6 @@ import type {
   DocsAlgoliaConfig,
   DocsBrandConfig,
   DocsConfig,
-  DocsDividerNode,
   DocsFooterConfig,
   DocsHeadConfig,
   DocsPartnerConfig,
@@ -72,6 +71,16 @@ const getSectionHref = (items: ResolvedSidebarNode[]): string | null => {
   }
 
   return null
+}
+
+const resolveNavigationHref = (value: string, fieldName: string) => {
+  const normalized = value.trim()
+
+  if (!normalized) {
+    throw new Error(`Docs ${fieldName} must be a non-empty string.`)
+  }
+
+  return normalizePathname(normalized)
 }
 
 const resolveThemeConfig = (theme: DocsConfig['theme']) => {
@@ -201,7 +210,6 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
   const pageAliases = new Set<string>()
   const groupIds = new Set<string>()
   const sectionIds = new Set<string>()
-  const dividerIds = new Set<string>()
   const pages: ResolvedDocsPage[] = []
   const navbarItems: ResolvedNavbarItem[] = []
 
@@ -218,23 +226,9 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
           kind: 'group',
           id: node.id,
           title: node.title,
+          href: node.href ? resolveNavigationHref(node.href, `group "${node.id}" href`) : undefined,
           collapsible: node.collapsible,
           items: resolveSidebarNodes(node.items, sectionId),
-        }
-      }
-
-      if (node.kind === 'divider') {
-        const divider = node as DocsDividerNode
-        if (dividerIds.has(divider.id)) {
-          throw new Error(`Duplicate docs divider id "${divider.id}".`)
-        }
-
-        dividerIds.add(divider.id)
-
-        return {
-          kind: 'divider',
-          id: divider.id,
-          title: divider.title,
         }
       }
 
@@ -306,7 +300,9 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
     sectionIds.add(section.id)
 
     const items = resolveSidebarNodes(section.items, section.id)
-    const href = getSectionHref(items)
+    const href = section.href
+      ? resolveNavigationHref(section.href, `section "${section.id}" href`)
+      : getSectionHref(items)
 
     if (!href) {
       throw new Error(`Docs section "${section.id}" must contain at least one page.`)

@@ -50,7 +50,6 @@ export type {
   DocsBrandConfig,
   DocsCollapsible,
   DocsConfig,
-  DocsDividerNode,
   DocsFooterConfig,
   DocsGlobalContextData,
   DocsGraph,

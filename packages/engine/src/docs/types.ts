@@ -78,15 +78,10 @@ export type DocsPageNode = {
 export type DocsGroupNode = {
   kind: 'group'
   id: string
-  title: string
+  title?: string
+  href?: string
   items: DocsSidebarNode[]
   collapsible?: DocsCollapsible
-}
-
-export type DocsDividerNode = {
-  kind: 'divider'
-  id: string
-  title: string
 }
 
 export type DocsSectionNode = {
@@ -94,10 +89,11 @@ export type DocsSectionNode = {
   id: string
   title: string
   navTitle?: string
+  href?: string
   items: DocsSidebarNode[]
 }
 
-export type DocsSidebarNode = DocsGroupNode | DocsDividerNode | DocsPageNode
+export type DocsSidebarNode = DocsGroupNode | DocsPageNode
 
 export type DocsGraph = {
   items: DocsSectionNode[]
@@ -171,7 +167,8 @@ export type ResolvedDocsPage = DocsPageNode & {
 export type ResolvedSidebarGroup = {
   kind: 'group'
   id: string
-  title: string
+  title?: string
+  href?: string
   items: ResolvedSidebarNode[]
   collapsible?: DocsCollapsible
 }
@@ -184,13 +181,7 @@ export type ResolvedSidebarPage = {
   href: string
 }
 
-export type ResolvedSidebarDivider = {
-  kind: 'divider'
-  id: string
-  title: string
-}
-
-export type ResolvedSidebarNode = ResolvedSidebarGroup | ResolvedSidebarDivider | ResolvedSidebarPage
+export type ResolvedSidebarNode = ResolvedSidebarGroup | ResolvedSidebarPage
 
 export type ResolvedDocsSection = {
   id: string
