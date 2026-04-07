@@ -1,6 +1,7 @@
 import { cmMerge } from '@classmatejs/react'
 import { useEffect, useState } from 'react'
 import type { ResolvedDocsSection } from '../../../../../docs/types.js'
+import { withSiteBaseUrl } from '../../../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../../../shared/renderInlineMarkdown.js'
 import { LayoutComponent } from '../../LayoutComponent.js'
 
@@ -94,16 +95,27 @@ export const MegaMenu = ({
                       (child) =>
                         child.showInNav !== false && (
                           <li key={child.id} className="flex-1 py-3 mb-6 px-4">
-                            <a className="mb-4 block text-lg font-semibold tracking-tight" href={child.href}>
-                              {child.title}
-                            </a>
+                            {child.href ? (
+                              <a
+                                className="mb-4 block text-lg font-semibold tracking-tight"
+                                href={withSiteBaseUrl(child.href)}
+                              >
+                                {child.title}
+                              </a>
+                            ) : (
+                              <span className="mb-4 block text-lg font-semibold tracking-tight">{child.title}</span>
+                            )}
                             {child.kind === 'group' && child.items.length > 0 && (
                               <ul className="menu border-l border-base-muted-light py-0 w-full">
                                 {child.items.map((subChild) => (
                                   <li key={subChild.id}>
-                                    <a href={subChild.href} onClick={onClose}>
-                                      {renderInlineMarkdown(subChild.title)}
-                                    </a>
+                                    {subChild.href ? (
+                                      <a href={withSiteBaseUrl(subChild.href)} onClick={onClose}>
+                                        {renderInlineMarkdown(subChild.title)}
+                                      </a>
+                                    ) : (
+                                      <span>{renderInlineMarkdown(subChild.title)}</span>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

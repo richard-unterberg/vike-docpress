@@ -23,8 +23,6 @@ If you need a polished general-purpose docpress replacement today, this is not t
 
 The engine currently owns the core docs runtime:
 
-- typed docs config via `defineDocsConfig()`
-- typed docs graph via `defineDocsGraph()`
 - docs graph validation and resolution
 - generated Vike routes from MDX content
 - shared docs layout pieces such as navbar, sidebar, table of contents, pagination, and meta head wiring
