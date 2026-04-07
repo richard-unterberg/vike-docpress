@@ -1,18 +1,20 @@
 import nivel from '@unterberg/nivel/vike'
 import type { Config } from 'vike/types'
 import vikeReact from 'vike-react/config'
-import docs from './+docs'
+import { config as docsConfig } from './+docs'
 
 export { config }
 
-const themePreference = docs.theme?.defaultPreference ?? 'light'
+const themePreference = docsConfig.theme?.defaultPreference ?? 'light'
 const dataTheme =
-  themePreference === 'dark' ? (docs.theme?.dark ?? 'consumer-dark') : (docs.theme?.light ?? 'consumer-light')
+  themePreference === 'dark'
+    ? (docsConfig.theme?.dark ?? 'consumer-dark')
+    : (docsConfig.theme?.light ?? 'consumer-light')
 
 const config: Config = {
   ...nivel,
-  title: docs.siteTitle,
-  description: docs.siteDescription ?? `${docs.siteTitle} documentation`,
+  title: docsConfig.siteTitle,
+  description: docsConfig.siteDescription ?? `${docsConfig.siteTitle} documentation`,
   extends: [vikeReact],
   htmlAttributes: { 'data-theme': dataTheme },
   passToClient: ['docs'],

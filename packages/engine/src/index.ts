@@ -34,8 +34,6 @@ export {
   UniversalMdxProvider,
   useUniversalMdxRuntime,
 } from './mdx/components/UniversalMdxProvider.js'
-export { defineDocsConfig } from './docs/defineDocsConfig.js'
-export { defineDocsGraph } from './docs/defineDocsGraph.js'
 export {
   baseAssets,
   nivelAssetUrl,
