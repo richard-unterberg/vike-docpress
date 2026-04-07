@@ -2,6 +2,7 @@ import { defineDocsConfig } from '@unterberg/nivel'
 import { docsGraph } from '../docs/docs.graph'
 
 export default defineDocsConfig({
+  graph: docsGraph,
   siteTitle: 'telefunc',
   siteDescription: 'telefunc documentation',
   basePath: '/docs',
@@ -12,6 +13,11 @@ export default defineDocsConfig({
   },
   footer: {
     pagination: true,
+  },
+  algolia: {
+    appId: 'NONXS2JSTL',
+    apiKey: '9bf6a6f9bc168ca425e8e19a62cd8ba1',
+    indexName: 'telefunc',
   },
   brand: {
     text: 'Telefunc',
@@ -46,5 +52,4 @@ export default defineDocsConfig({
       },
     ],
   },
-  graph: docsGraph,
 })

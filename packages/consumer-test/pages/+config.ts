@@ -1,4 +1,4 @@
-import nivel from '@unterberg/nivel/config'
+import nivel from '@unterberg/nivel/vike'
 import type { Config } from 'vike/types'
 import vikeReact from 'vike-react/config'
 import docs from './+docs'
@@ -15,5 +15,6 @@ const config: Config = {
   description: docs.siteDescription ?? `${docs.siteTitle} documentation`,
   extends: [vikeReact],
   htmlAttributes: { 'data-theme': dataTheme },
+  passToClient: ['docs'],
   prerender: true,
 }
