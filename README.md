@@ -25,7 +25,7 @@ Recommended consumer split:
 The engine provides:
 
 - `defineDocsConfig()` and `defineDocsGraph()` identity helpers for typed authoring, with a lean config-time entry at `@unterberg/nivel/config`
-- `createNivelVikeConfig()` for the standard Vike setup
+- `@unterberg/nivel/vike` as the engine-owned Vike config you spread into the consumer's normal `+config.ts`
 - `nivel prepare` for docs page code generation
 - `nivel init` for scaffolding the visible consumer shell files and package scripts
 

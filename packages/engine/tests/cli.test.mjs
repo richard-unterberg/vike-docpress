@@ -53,6 +53,11 @@ test('nivel init creates visible consumer files and standard scripts', () => {
   assert.equal(fs.existsSync(path.join(rootDir, 'docs', 'docs.graph.ts')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'global.d.ts')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'styles', 'global.css')), false)
+  const configSource = fs.readFileSync(path.join(rootDir, 'pages', '+config.ts'), 'utf8')
+  assert.match(configSource, /import nivel from '@unterberg\/nivel\/vike'/)
+  assert.match(configSource, /extends: \[vikeReact\]/)
+  assert.match(configSource, /prerender: true/)
+  assert.match(configSource, /prefetchStaticAssets/)
 })
 
 test('nivel init does not overwrite existing files without --force', () => {

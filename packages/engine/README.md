@@ -60,7 +60,7 @@ Only `(nivel-generated)` stays engine-generated.
 
 ## Standard Vike Config
 
-Use the helper from `@unterberg/nivel/vike` for the standard Vike setup:
+Keep `pages/+config.ts` looking like normal Vike config and spread in the engine-owned config from `@unterberg/nivel/vike`:
 
 ```ts
 // pages/+docs.ts
@@ -77,15 +77,35 @@ export default defineDocsConfig({
 
 ```ts
 // pages/+config.ts
-import { createNivelVikeConfig } from '@unterberg/nivel/vike'
+import nivel from '@unterberg/nivel/vike'
+import type { Config } from 'vike/types'
+import vikeReact from 'vike-react/config'
 import docsConfig from './+docs'
 
 export { config }
 
-const config = createNivelVikeConfig(docsConfig)
+const themePreference = docsConfig.theme?.defaultPreference ?? 'light'
+const dataTheme =
+  themePreference === 'dark'
+    ? (docsConfig.theme?.dark ?? 'consumer-dark')
+    : (docsConfig.theme?.light ?? 'consumer-light')
+
+const config: Config = {
+  ...nivel,
+  extends: [vikeReact],
+  title: docsConfig.siteTitle,
+  description: docsConfig.siteDescription ?? `${docsConfig.siteTitle} documentation`,
+  htmlAttributes: { 'data-theme': dataTheme },
+  passToClient: ['docs'],
+
+  // User-facing Vike levers stay visible here.
+  prerender: true,
+  // ssr: true,
+  // prefetchStaticAssets: 'viewport',
+}
 ```
 
-`createNivelVikeConfig()` owns the standard `title`, `description`, Vike React extension, default `data-theme`, `passToClient`, and `prerender` wiring. Consumers can still spread or override it locally if they need extra Vike config.
+The engine still owns the MDX, Vite, route-generation, and runtime wiring. The consumer keeps the normal Vike entry file and can adjust visible levers such as `prerender`, `ssr`, and prefetch-related settings directly in `+config.ts`.
 
 ## CLI
 
