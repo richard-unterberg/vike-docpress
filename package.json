@@ -13,7 +13,6 @@
   "scripts": {
     "preview": "pnpm --filter @unterberg/nivel build && pnpm --filter ./packages/consumer-test build && pnpm --filter ./packages/consumer-test exec vike preview",
     "dev": "pnpm --filter @unterberg/nivel build && pnpm --filter ./packages/consumer-test dev",
-    "dev:source": "pnpm --filter @unterberg/nivel dev & pnpm --filter ./packages/consumer-test dev:source",
     "build": "pnpm --filter @unterberg/nivel build && pnpm --filter ./packages/consumer-test build",
     "typecheck": "pnpm --filter @unterberg/nivel build && pnpm --filter @unterberg/nivel typecheck && pnpm --filter ./packages/consumer-test typecheck",
     "lint": "biome lint --write .",
@@ -26,6 +25,6 @@
     "@biomejs/biome": "2.4.10",
     "knip": "^6.0.13",
     "lefthook": "^2.1.4",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }
