@@ -2,6 +2,7 @@ import { usePageContext } from 'vike-react/usePageContext'
 import type { DocsGlobalContextData } from '../../docs/types.js'
 
 type DocsPageContext = {
+  docs?: DocsGlobalContextData
   globalContext?: {
     docs?: DocsGlobalContextData
   }

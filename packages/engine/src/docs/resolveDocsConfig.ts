@@ -5,17 +5,18 @@ import type {
   DocsConfig,
   DocsFooterConfig,
   DocsHeadConfig,
-  DocsPartnerConfig,
   DocsPageNode,
+  DocsPartnerConfig,
   DocsSectionNode,
   DocsSidebarNode,
   ResolvedDocsAlgoliaConfig,
   ResolvedDocsBrandConfig,
   ResolvedDocsConfig,
-  ResolvedDocsPartnerConfig,
   ResolvedDocsPage,
+  ResolvedDocsPartnerConfig,
   ResolvedDocsPartnersConfig,
   ResolvedDocsSection,
+  ResolvedDocsSocialConfig,
   ResolvedNavbarItem,
   ResolvedSidebarNode,
   ThemePreference,
@@ -262,6 +263,13 @@ const resolvePartner = (partner: DocsPartnerConfig): ResolvedDocsPartnerConfig =
   }
 }
 
+const resolveSocialConfig = (social: DocsConfig['social']): ResolvedDocsSocialConfig => {
+  // keep the order from the config
+  return {
+    ...social,
+  }
+}
+
 const resolvePartnersConfig = (partners: DocsConfig['partners']): ResolvedDocsPartnersConfig => {
   return {
     primary: (partners?.primary ?? []).map(resolvePartner),
@@ -454,6 +462,7 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
     brand: resolveBrandConfig(config.brand, config.siteTitle),
     head: resolveHeadConfig(config.head),
     partners: resolvePartnersConfig(config.partners),
+    social: resolveSocialConfig(config.social),
     algolia: resolveAlgoliaConfig(config.algolia),
     pages,
     sections,

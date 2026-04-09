@@ -39,6 +39,14 @@ export type DocsPartnersConfig = {
   gold?: DocsPartnerConfig[]
 }
 
+export type DocsSocialConfig = {
+  github?: string
+  discord?: string
+  x?: string
+  bluesky?: string
+  linkedin?: string
+}
+
 export type DocsAlgoliaFieldsConfig = {
   href?: string
   title?: string
@@ -109,6 +117,7 @@ export type DocsConfig = {
   graph: DocsGraph
   theme?: DocsThemeConfig
   footer?: DocsFooterConfig
+  social?: DocsSocialConfig
   brand?: DocsBrandConfig
   head?: DocsHeadConfig
   partners?: DocsPartnersConfig
@@ -122,6 +131,8 @@ export type ResolvedDocsBrandConfig = {
   logoDark?: string
   logoAlt: string
 }
+
+export type ResolvedDocsSocialConfig = DocsSocialConfig
 
 export type ResolvedDocsPartnerConfig = {
   name: string
@@ -212,6 +223,7 @@ export type ResolvedDocsConfig = {
   footer: Required<DocsFooterConfig>
   brand: ResolvedDocsBrandConfig
   head: ResolvedDocsHeadConfig
+  social: ResolvedDocsSocialConfig
   partners: ResolvedDocsPartnersConfig
   algolia: ResolvedDocsAlgoliaConfig | null
   pages: ResolvedDocsPage[]
@@ -223,7 +235,17 @@ export type DocPageLinkData = Pick<ResolvedDocsPage, 'id' | 'title' | 'href' | '
 
 export type DocsGlobalContextData = Pick<
   ResolvedDocsConfig,
-  'siteTitle' | 'basePath' | 'theme' | 'footer' | 'brand' | 'head' | 'partners' | 'algolia' | 'pages' | 'navbarItems'
+  | 'siteTitle'
+  | 'basePath'
+  | 'theme'
+  | 'footer'
+  | 'brand'
+  | 'head'
+  | 'partners'
+  | 'algolia'
+  | 'pages'
+  | 'navbarItems'
+  | 'social'
 > & {
   sidebarSections: ResolvedDocsConfig['sections']
 }

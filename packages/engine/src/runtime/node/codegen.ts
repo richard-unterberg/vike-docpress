@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { DocPageData, DocPageLinkData, DocsConfig, DocsGlobalContextData } from '../../docs/types.js'
 import { extractDocHeadings } from '../../docs/docHeadings.js'
 import { getResolvedPageById, resolveDocsConfig } from '../../docs/resolveDocsConfig.js'
+import type { DocPageData, DocPageLinkData, DocsConfig, DocsGlobalContextData } from '../../docs/types.js'
 
 const GENERATED_DIRNAME = '(nivel-generated)'
 
@@ -202,6 +202,7 @@ export const syncGeneratedDocsPages = (options: { rootDir: string; docsConfig: D
     brand: resolved.brand,
     head: resolved.head,
     partners: resolved.partners,
+    social: resolved.social,
     algolia: resolved.algolia,
     pages: resolved.pages,
     navbarItems: resolved.navbarItems,

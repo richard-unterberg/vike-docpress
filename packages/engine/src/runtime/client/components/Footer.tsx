@@ -1,6 +1,7 @@
 import { Bug, Pencil } from 'lucide-react'
 import type { ResolvedDocsBrandConfig } from '../../../docs/types.js'
 import { Brand } from './Brand.js'
+import SocialIcons from './SocialLinks.js'
 
 interface DocsFooterProps {
   brand?: ResolvedDocsBrandConfig
@@ -18,7 +19,7 @@ export const DocsFooter = ({ brand }: DocsFooterProps) => {
         </a>
       </div>
       <div className="flex justify-between items-center">
-        {/* Social Icons Here */}
+        <SocialIcons />
         <div className="flex gap-2 items-center">{brand && <Brand brand={brand} noText />}</div>
       </div>
     </footer>

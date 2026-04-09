@@ -3,8 +3,8 @@ import { TableOfContentsIcon } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 import { useData } from 'vike-react/useData'
-import type { DocHeading, DocPageData, ResolvedDocsPartnersConfig } from '../../../docs/types.js'
 import { createHeadingSlugger, normalizeHeadingTitle } from '../../../docs/docHeadings.js'
+import type { DocHeading, DocPageData, ResolvedDocsPartnersConfig } from '../../../docs/types.js'
 
 const getCurrentHash = () => {
   try {

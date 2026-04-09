@@ -16,6 +16,7 @@ import { getDocsGlobalContext } from '../../docsGlobalContext.js'
 import { Brand } from '../Brand.js'
 import { LayoutComponent } from '../LayoutComponent.js'
 import { Search } from '../Search.js'
+import SocialIcons from '../SocialLinks.js'
 import { ThemeSwitch } from '../ThemeSwitch.js'
 import { MegaMenu } from './MegaMenu/index.js'
 import { useNavbarScroll } from './useNavbarScroll.js'
@@ -119,6 +120,7 @@ export const Navbar = ({ brand, algolia, navbarItems, theme, sections }: NavbarP
               </nav>
               <div className="flex flex-1 items-center justify-end gap-2">
                 <Search algolia={algolia} />
+                <SocialIcons />
                 <ThemeSwitch theme={theme} />
               </div>
             </div>
@@ -154,6 +156,7 @@ export const Navbar = ({ brand, algolia, navbarItems, theme, sections }: NavbarP
                 <Search algolia={algolia} />
               </nav>
               <div className="flex w-78 flex-1 items-center justify-end gap-2 lg:flex-none">
+                <SocialIcons />
                 <ThemeSwitch theme={theme} />
               </div>
             </div>
