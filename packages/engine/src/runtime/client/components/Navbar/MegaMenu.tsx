@@ -1,9 +1,9 @@
 import { cmMerge } from '@classmatejs/react'
 import { useEffect, useState } from 'react'
-import type { ResolvedDocsSection } from '../../../../../docs/types.js'
-import { withSiteBaseUrl } from '../../../../../shared/assets.js'
-import { renderInlineMarkdown } from '../../../../../shared/renderInlineMarkdown.js'
-import { LayoutComponent } from '../../LayoutComponent.js'
+import type { ResolvedDocsSection } from '../../../../docs/types.js'
+import { withSiteBaseUrl } from '../../../../shared/assets.js'
+import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown.js'
+import { LayoutComponent } from '../LayoutComponent.js'
 
 export const MegaMenu = ({
   isActive,

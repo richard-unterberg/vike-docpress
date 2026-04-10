@@ -18,7 +18,7 @@ import { LayoutComponent } from '../LayoutComponent.js'
 import { Search, SearchTrigger } from '../Search.js'
 import SocialIcons from '../SocialLinks.js'
 import { ThemeSwitch } from '../ThemeSwitch.js'
-import { MegaMenu } from './MegaMenu/index.js'
+import { MegaMenu } from './MegaMenu.js'
 
 interface NavbarProps {
   brand: ResolvedDocsBrandConfig
