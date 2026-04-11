@@ -13,6 +13,7 @@ const Page = () => {
   return (
     <div className="landing-code-samples">
       <div className="overflow-x-clip min-h-[calc(100svh-20*var(--spacing))] flex flex-col justify-center py-16 w-full">
+        <div className="absolute top-0 min-w-300 left-1/2 w-full h-svh bg-radial-[at_50%_50%] from-primary-muted-light/30 dark:from-primary-muted-light/30 to-55% translate-x-[-50%] pointer-events-none" />
         <LayoutComponent className="relative">
           <div className="text-center mx-auto z-2 relative">
             {/* <div className="flex rounded-field justify-center w-fit mx-auto shadow border border-base-muted-medium/50 overflow-hidden">

@@ -18,7 +18,7 @@ const FeatureBox = cm.div`
   bg-base-200
   p-6 rounded-box
   prose-headings:text-xl
-  shadow
+
   border-base-muted-light
   border
 `

@@ -1,5 +1,5 @@
 import cm, { cmMerge } from '@classmatejs/react'
-import { TableOfContentsIcon } from 'lucide-react'
+import { Flame, TableOfContentsIcon } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useState } from 'react'
 import { useData } from 'vike-react/useData'
@@ -235,7 +235,11 @@ const Adbar = ({ partners }: { partners: ResolvedDocsPartnersConfig }) => {
   }
 
   return (
-    <>
+    <aside>
+      <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-base-muted">
+        <Flame className="h-3 w-3" />
+        Partners
+      </p>
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-3 opacity-90">
         {partners.primary.map((partner) => (
           <AdbarItem key={partner.name} className="col-span-full">
@@ -252,17 +256,7 @@ const Adbar = ({ partners }: { partners: ResolvedDocsPartnersConfig }) => {
           </AdbarItem>
         ))}
       </ul>
-      <AdbarItem className="col-span-full p-2 text-left mt-3 block!">
-        <strong className="text-sm tracking-tighter leading-tight mb-1 block">Your company name here! 💎 </strong>
-        <p className="text-xs text-base-muted">
-          Hey, this is a classic text ad here!{' '}
-          <a href="#adlink" className="text-info">
-            link
-          </a>{' '}
-          to some thing
-        </p>
-      </AdbarItem>
-    </>
+    </aside>
   )
 }
 

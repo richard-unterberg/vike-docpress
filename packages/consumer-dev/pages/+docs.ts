@@ -40,21 +40,10 @@ const docsConfig = defineDocsConfig({
   partners: {
     primary: [
       {
-        name: 'Tencent Cloud',
-        href: 'https://www.tencentcloud.com',
-        logoLight: 'partners/tencent.svg',
-      },
-    ],
-    gold: [
-      {
-        name: 'Telefunc',
-        href: '#',
-        logoLight: 'partners/telefunc.svg',
-      },
-      {
-        name: 'Void(0)',
-        href: '#',
-        logoLight: 'partners/void-0.svg',
+        name: 'Tencent Edge One',
+        href: 'https://edgeone.ai/',
+        logoLight: 'partners/tencent_edgeone_dark.webp',
+        logoDark: 'partners/tencent_edgeone_light.webp',
       },
     ],
   },
