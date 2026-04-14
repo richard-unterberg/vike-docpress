@@ -35,13 +35,13 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      - name: Engine Tests
+        run: cd packages/engine && pnpm test
+
       - name: Build Page
         env:
           PAGES_BASE_PATH: /${{ github.event.repository.name }}
         run: pnpm --filter ./packages/consumer-dev build
-
-      - name: Run Engine Tests
-        run: cd packages/engine && pnpm test
 
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
