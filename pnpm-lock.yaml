@@ -124,13 +124,13 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       vike:
-        specifier: ^0.4.256
+        specifier: '>=0.4.0'
         version: 0.4.256(react-streaming@0.4.17(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3))
       vike-react:
-        specifier: ^0.6.21
+        specifier: '>=0.6'
         version: 0.6.21(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vike@0.4.256(react-streaming@0.4.17(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(vite@7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)))
       vite:
-        specifier: ^7.3.1
+        specifier: '>=6'
         version: 7.3.1(@types/node@24.12.0)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0)(yaml@2.8.3)
       zustand:
         specifier: ^5.0.12
