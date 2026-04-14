@@ -9,5 +9,6 @@ updates:
       time: "09:00"
       timezone: "Europe/Berlin"
     exclude-paths:
-      - "packages/consumer-dev/**"
       - "tests/**"
+      # - "packages/consumer-dev/**"
+
