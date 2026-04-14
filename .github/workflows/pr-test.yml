@@ -33,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: pnpm --filter @unterberg/nivel typecheck && pnpm --filter ./packages/consumer-dev typecheck
+        run: pnpm typecheck
 
       - name: Build Page
         env:
