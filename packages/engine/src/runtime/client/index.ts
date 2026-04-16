@@ -6,8 +6,6 @@ export { UserSettingsSync } from './components/UserSettingsSync.js'
 export { DocsPage } from './DocsPage.js'
 export { DocsRouteLayout } from './DocsRouteLayout.js'
 export {
-  useDocsRouteActions,
-  useDocsRouteStore,
   useDocsSearchActions,
   useDocsSearchStore,
   useDocsSidebarActions,
@@ -15,9 +13,6 @@ export {
 } from './store/runtime-store.js'
 export { useDocsUserSettingsStore } from './store/settings-store.js'
 export type {
-  DocsRouteActions,
-  DocsRouteSlice,
-  DocsRouteState,
   DocsSearchActions,
   DocsSearchSlice,
   DocsSearchState,

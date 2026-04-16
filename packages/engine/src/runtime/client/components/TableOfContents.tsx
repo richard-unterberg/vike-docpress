@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { createHeadingSlugger, normalizeHeadingTitle } from '../../../docs/docHeadings.js'
 import type { DocHeading, ResolvedDocsPartnersConfig } from '../../../docs/types.js'
 import { useDocsGlobalContext } from '../docsGlobalContext.js'
-import { useDocsRouteStore } from '../store/runtime-store.js'
 
 const getCurrentHash = () => {
   try {
@@ -117,10 +116,8 @@ export const TableOfContents = ({
   tableOfContents: tableOfContentsProp = false,
 }: TableOfContentsProps) => {
   const { partners } = useDocsGlobalContext()
-  const headings = useDocsRouteStore((state) => state.headings)
-  const tableOfContents = useDocsRouteStore((state) => state.tableOfContents)
-  const effectiveRouteHeadings = headings.length > 0 ? headings : headingsProp
-  const effectiveTableOfContents = tableOfContents || tableOfContentsProp
+  const effectiveRouteHeadings = headingsProp
+  const effectiveTableOfContents = tableOfContentsProp
   const [activeHeadingId, setActiveHeadingId] = useState('')
   const [domHeadings, setDomHeadings] = useState<DocHeading[]>(effectiveRouteHeadings)
   const effectiveHeadings = domHeadings.length > 0 ? domHeadings : effectiveRouteHeadings

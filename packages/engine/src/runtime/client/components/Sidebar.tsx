@@ -1,11 +1,13 @@
 import { cmMerge } from '@classmatejs/react'
 import type { ReactNode } from 'react'
 import { memo, useEffect, useRef } from 'react'
+import { usePageContext } from 'vike-react/usePageContext'
+import { getActiveSectionByPathname } from '../../../docs/resolveDocsConfig.js'
 import type { ResolvedDocsSection, ResolvedSidebarGroup, ResolvedSidebarNode } from '../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../shared/renderInlineMarkdown.js'
 import { useDocsGlobalContext } from '../docsGlobalContext.js'
-import { useDocsRouteStore, useDocsSidebarActions, useDocsSidebarStore } from '../store/runtime-store.js'
+import { useDocsSidebarActions, useDocsSidebarStore } from '../store/runtime-store.js'
 import {
   containsActiveHref,
   getGroupHref,
@@ -210,9 +212,11 @@ interface SidebarProps {
 export const Sidebar = memo(
   ({ currentHref: currentHrefProp = '', activeSectionId: activeSectionIdProp = '' }: SidebarProps) => {
     const scrollContainerRef = useRef<HTMLDivElement | null>(null)
-    const currentHref = useDocsRouteStore((state) => state.currentHref) || currentHrefProp
-    const activeSectionId = useDocsRouteStore((state) => state.currentSectionId ?? '') || activeSectionIdProp
-    const { sidebarSections } = useDocsGlobalContext()
+    const { urlPathname } = usePageContext()
+    const currentHref = currentHrefProp || urlPathname
+    const docs = useDocsGlobalContext()
+    const activeSectionId = activeSectionIdProp || getActiveSectionByPathname(docs, currentHref)?.id || ''
+    const { sidebarSections } = docs
 
     return (
       <aside className="hidden basis-76 shrink-0 lg:block">

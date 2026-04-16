@@ -4,7 +4,6 @@ import type { DocPageData } from '../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../shared/renderInlineMarkdown.js'
 import { useDocsGlobalContext } from '../docsGlobalContext.js'
-import { useDocsRouteStore } from '../store/runtime-store.js'
 
 interface PaginationCardProps {
   item: NonNullable<DocPageData['previousPage']>
@@ -52,8 +51,8 @@ export const DocsPagination = ({
   nextPage: nextPageProp = null,
 }: DocsPaginationProps) => {
   const paginationEnabled = useDocsGlobalContext().footer.pagination
-  const previousPage = useDocsRouteStore((state) => state.previousPage) ?? previousPageProp
-  const nextPage = useDocsRouteStore((state) => state.nextPage) ?? nextPageProp
+  const previousPage = previousPageProp
+  const nextPage = nextPageProp
 
   if (!paginationEnabled) {
     return null

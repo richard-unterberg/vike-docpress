@@ -6,7 +6,7 @@ import { getActiveSectionByPathname } from '../../../../docs/resolveDocsConfig.j
 import { withSiteBaseUrl } from '../../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown.js'
 import { useDocsGlobalContext } from '../../docsGlobalContext.js'
-import { useDocsRouteStore, useDocsSearchActions } from '../../store/runtime-store.js'
+import { useDocsSearchActions } from '../../store/runtime-store.js'
 import { Brand } from '../Brand.js'
 import { LayoutComponent } from '../LayoutComponent.js'
 import { Search, SearchTrigger } from '../Search.js'
@@ -17,13 +17,11 @@ import { MegaMenu } from './MegaMenu.js'
 export const Navbar = memo(() => {
   const docs = useDocsGlobalContext()
   const { urlPathname, urlParsed } = usePageContext()
-  const activeSectionId = useDocsRouteStore((state) => state.currentSectionId)
   const isLandingPage = urlParsed.pathname === '/'
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false)
   const megaMenuCloseTimeoutRef = useRef<number | null>(null)
   const sections = docs.sidebarSections
-  const activeSection =
-    sections.find((section) => section.id === activeSectionId) ?? getActiveSectionByPathname(docs, urlPathname)
+  const activeSection = getActiveSectionByPathname(docs, urlPathname)
   const [hoveredSectionId, setHoveredSectionId] = useState<string | undefined>(activeSection?.id ?? sections[0]?.id)
   const { toggle: toggleSearch } = useDocsSearchActions()
 
@@ -71,7 +69,7 @@ export const Navbar = memo(() => {
   return (
     <>
       <StyledNavbar $border={isLandingPage}>
-        <LayoutComponent className="h-full hidden md:block">
+        <LayoutComponent className="h-full">
           {isLandingPage ? (
             <div className="relative z-3 flex h-full items-center justify-between py-4">
               <div className="flex flex-1 items-center gap-4">
@@ -170,9 +168,9 @@ export const Navbar = memo(() => {
           isLandingPage={isLandingPage}
         />
       </StyledNavbar>
-      <StyledNavbar $border={false} className="block md:hidden ">
+      {/* <StyledNavbar $border={false} className="block md:hidden ">
         MOBILE
-      </StyledNavbar>
+      </StyledNavbar> */}
       <Search />
     </>
   )
