@@ -122,7 +122,7 @@ interface SidebarItemListProps {
 const SidebarItemList = ({ items, currentHref }: SidebarItemListProps) => {
   const visibleItems = getVisibleNavItems(items)
 
-  return <ul className="menu w-full">{renderSidebarItems(visibleItems, currentHref)}</ul>
+  return <ul className="menu lg:w-[97%]">{renderSidebarItems(visibleItems, currentHref)}</ul>
 }
 
 interface SidebarNestedGroupProps {
