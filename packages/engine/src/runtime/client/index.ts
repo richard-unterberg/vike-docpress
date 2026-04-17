@@ -3,8 +3,8 @@ export { LayoutComponent } from './components/LayoutComponent.js'
 export { MetaHead } from './components/MetaHead/index.js'
 export { ProseContainer } from './components/ProseContainer.js'
 export { UserSettingsSync } from './components/UserSettingsSync.js'
+export { DocsLayout as DocsRouteLayout } from './DocsLayout.js'
 export { DocsPage } from './DocsPage.js'
-export { DocsRouteLayout } from './DocsRouteLayout.js'
 export {
   useDocsSearchActions,
   useDocsSearchStore,

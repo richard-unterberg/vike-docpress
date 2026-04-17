@@ -84,7 +84,9 @@ const NumberedHeading = ({ index, label }: { index: number; label: string }) => 
 
 const QuickStartProse = cm.extend(ProseContainer)`
   prose-headings:my-0 
-  prose-headings:mb-4 
+  prose-headings:mb-4
+  prose-p:last:mb-0
+  prose-section:last:mb-0
   prose-img:my-0
   prose-h3:lg:text-2xl
   prose-h3:text-lg
@@ -103,4 +105,5 @@ const StyledHeadingNumber = cm.span`
 
 const StyledOuter = cm.div`
   lg:pr-10
+  *:last-child:mb-0
 `

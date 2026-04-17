@@ -30,7 +30,7 @@ const useDebouncedValue = (value: string, delayMs: number) => {
   return debouncedValue
 }
 
-export const SearchTrigger = memo(() => {
+const _SearchTrigger = memo(() => {
   const docs = useDocsGlobalContext()
   const { open, setQuery } = useDocsSearchActions()
   const query = useDocsSearchStore((state) => state.query)

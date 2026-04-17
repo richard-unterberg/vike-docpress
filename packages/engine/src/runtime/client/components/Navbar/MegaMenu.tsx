@@ -54,10 +54,7 @@ export const MegaMenu = ({
 
   return (
     <div
-      className={cmMerge(
-        'fixed top-13 left-0 z-3 w-full pt-3',
-        isActive ? 'pointer-events-auto' : 'pointer-events-none',
-      )}
+      className={cmMerge('fixed top-14 left-0 z-3 w-full', isActive ? 'pointer-events-auto' : 'pointer-events-none')}
       onPointerEnter={() => onOpen(visibleSectionId)}
       onPointerLeave={onClose}
     >

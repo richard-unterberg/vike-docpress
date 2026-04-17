@@ -25,7 +25,7 @@ export const DocsPage = ({ Content }: DocsPageProps) => {
       })}
     >
       <ProseContainer data-doc-content="">
-        <h1 className="scroll-mt-24">{renderInlineMarkdown(page.title)}</h1>
+        <h1 className="scroll-mt-32 xl:scroll-mt-24">{renderInlineMarkdown(page.title)}</h1>
         <Content />
       </ProseContainer>
     </UniversalMdxProvider>

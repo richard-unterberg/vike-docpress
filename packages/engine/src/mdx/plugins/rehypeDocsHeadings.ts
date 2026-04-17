@@ -1,7 +1,7 @@
 // attention: no HMR is active for this file, changes require a full engine pre-build -> dev / preview
 import { visit } from 'unist-util-visit'
-import type { ElementContentNode, ElementNode, HtmlRootNode } from '../ast.js'
 import { createHeadingSlugger, normalizeHeadingTitle } from '../../docs/docHeadings.js'
+import type { ElementContentNode, ElementNode, HtmlRootNode } from '../ast.js'
 
 const headingTags = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
 
@@ -59,10 +59,11 @@ export const rehypeDocsHeadings = () => {
       }
 
       const classNames = getClassNames(node.properties.className)
-      if (!classNames.includes('scroll-mt-24')) {
+      if (!classNames.includes('scroll-mt-32')) {
         node.properties.className = [
           ...classNames,
-          'scroll-mt-24',
+          'scroll-mt-32',
+          'xl:scroll-mt-24',
           'flex gap-2 items-center',
           'group',
           'relative',

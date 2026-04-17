@@ -2,7 +2,7 @@ import { cmMerge } from '@classmatejs/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { Navbar } from './components/Navbar/index.js'
+import NavbarNew from './components/Navbar/index.js'
 import { UserSettingsSync } from './components/UserSettingsSync.js'
 import { DocsGlobalContextProvider, type DocsPageContext, getDocsFromGlobalContext } from './docsGlobalContext.js'
 import { createDocsRuntimeStore, DocsRuntimeStoreProvider } from './store/runtime-store.js'
@@ -28,8 +28,8 @@ export const AppLayout = ({ children, header }: AppLayoutProps) => {
         <QueryClientProvider client={queryClient}>
           <UserSettingsSync theme={docs.theme} />
           <div className="min-h-screen bg-base-100 text-base-content">
-            {header ?? <Navbar />}
-            <div className={cmMerge(isLandingPage ? '' : 'pt-16')}>{children}</div>
+            {header ?? <NavbarNew />}
+            <div className={cmMerge(isLandingPage ? '' : 'pt-14')}>{children}</div>
           </div>
         </QueryClientProvider>
       </DocsGlobalContextProvider>

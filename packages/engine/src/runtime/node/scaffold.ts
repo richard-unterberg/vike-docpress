@@ -200,6 +200,11 @@ const getGlobalStyleTemplate = () => {
     '    @apply prose-blockquote:bg-base-200;',
     '    @apply prose-blockquote:py-2;',
     '  }',
+    '',
+    '  .prose-container :where(p, li, blockquote, td, th, a) {',
+    '    overflow-wrap: anywhere;',
+    '    word-break: break-word;',
+    '  }',
     '}',
     '',
   ].join('\n')

@@ -1,196 +1,30 @@
 import cm, { cmMerge } from '@classmatejs/react'
 import { Flame, TableOfContentsIcon } from 'lucide-react'
 import type { Dispatch, SetStateAction } from 'react'
-import { useEffect, useState } from 'react'
-import { createHeadingSlugger, normalizeHeadingTitle } from '../../../docs/docHeadings.js'
 import type { DocHeading, ResolvedDocsPartnersConfig } from '../../../docs/types.js'
 import { useDocsGlobalContext } from '../docsGlobalContext.js'
-
-const getCurrentHash = () => {
-  try {
-    return decodeURIComponent(window.location.hash)
-  } catch {
-    return window.location.hash
-  }
-}
-
-const getHeadingElements = () => {
-  const root = document.querySelector('[data-doc-content]')
-  if (!(root instanceof HTMLElement)) {
-    return []
-  }
-
-  return Array.from(root.querySelectorAll('h2, h3, h4')).filter(
-    (element): element is HTMLHeadingElement => element instanceof HTMLHeadingElement,
-  )
-}
-
-const areHeadingsEqual = (left: DocHeading[], right: DocHeading[]) => {
-  if (left.length !== right.length) {
-    return false
-  }
-
-  return left.every((heading, index) => {
-    const other = right[index]
-    return (
-      other !== undefined && heading.depth === other.depth && heading.id === other.id && heading.title === other.title
-    )
-  })
-}
-
-const syncHeadingsFromDom = (setDomHeadings: Dispatch<SetStateAction<DocHeading[]>>) => {
-  const root = document.querySelector('[data-doc-content]')
-  if (!(root instanceof HTMLElement)) {
-    return
-  }
-
-  const slugify = createHeadingSlugger()
-  const nextHeadings = Array.from(root.querySelectorAll('h2, h3, h4'))
-    .map((element) => {
-      const title = normalizeHeadingTitle(element.textContent ?? '')
-      if (!title) {
-        return null
-      }
-
-      element.classList.add('scroll-mt-24')
-
-      const id = element.id || slugify(title)
-      if (!element.id) {
-        element.id = id
-      }
-
-      return {
-        depth: Number(element.tagName.slice(1)),
-        id,
-        title,
-      } satisfies DocHeading
-    })
-    .filter((heading): heading is DocHeading => heading !== null)
-
-  setDomHeadings((currentHeadings) => {
-    if (areHeadingsEqual(currentHeadings, nextHeadings)) {
-      return currentHeadings
-    }
-
-    return nextHeadings
-  })
-}
-
-const updateActiveHeadingFromScroll = (setActiveHeadingId: (value: string) => void) => {
-  const headingElements = getHeadingElements()
-  if (headingElements.length === 0) {
-    return
-  }
-
-  const activationOffset = 144
-  let nextActiveHeadingId = headingElements[0]?.id ?? ''
-
-  for (const heading of headingElements) {
-    if (!heading.id) {
-      continue
-    }
-
-    if (heading.getBoundingClientRect().top <= activationOffset) {
-      nextActiveHeadingId = heading.id
-      continue
-    }
-
-    break
-  }
-
-  const lastHeading = headingElements.at(-1)
-  if (lastHeading?.id && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
-    nextActiveHeadingId = lastHeading.id
-  }
-
-  setActiveHeadingId(nextActiveHeadingId)
-}
 
 interface TableOfContentsProps {
   headings?: DocHeading[]
   tableOfContents?: boolean
+  activeHeadingId?: string
+  setActiveHeadingId?: Dispatch<SetStateAction<string>>
 }
 
 export const TableOfContents = ({
   headings: headingsProp = [],
   tableOfContents: tableOfContentsProp = false,
+  activeHeadingId = '',
+  setActiveHeadingId = () => undefined,
 }: TableOfContentsProps) => {
   const { partners } = useDocsGlobalContext()
-  const effectiveRouteHeadings = headingsProp
+  const effectiveHeadings = headingsProp
   const effectiveTableOfContents = tableOfContentsProp
-  const [activeHeadingId, setActiveHeadingId] = useState('')
-  const [domHeadings, setDomHeadings] = useState<DocHeading[]>(effectiveRouteHeadings)
-  const effectiveHeadings = domHeadings.length > 0 ? domHeadings : effectiveRouteHeadings
-
-  useEffect(() => {
-    let scrollFrame = 0
-
-    const syncActiveHeading = () => {
-      if (scrollFrame) {
-        return
-      }
-
-      scrollFrame = window.requestAnimationFrame(() => {
-        scrollFrame = 0
-        updateActiveHeadingFromScroll(setActiveHeadingId)
-      })
-    }
-
-    const updateHash = () => {
-      const currentHash = getCurrentHash().replace(/^#/, '')
-      if (currentHash !== '') {
-        setActiveHeadingId(currentHash)
-        return
-      }
-
-      syncActiveHeading()
-    }
-
-    updateHash()
-    queueMicrotask(() => {
-      syncHeadingsFromDom(setDomHeadings)
-      syncActiveHeading()
-    })
-
-    window.addEventListener('hashchange', updateHash)
-    window.addEventListener('scroll', syncActiveHeading, { passive: true })
-    window.addEventListener('resize', syncActiveHeading)
-
-    return () => {
-      if (scrollFrame) {
-        window.cancelAnimationFrame(scrollFrame)
-      }
-
-      window.removeEventListener('hashchange', updateHash)
-      window.removeEventListener('scroll', syncActiveHeading)
-      window.removeEventListener('resize', syncActiveHeading)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    setDomHeadings((currentHeadings) => {
-      if (areHeadingsEqual(currentHeadings, effectiveRouteHeadings)) {
-        return currentHeadings
-      }
-
-      return effectiveRouteHeadings
-    })
-    setActiveHeadingId('')
-
-    queueMicrotask(() => {
-      syncHeadingsFromDom(setDomHeadings)
-      updateActiveHeadingFromScroll(setActiveHeadingId)
-    })
-  }, [effectiveRouteHeadings])
 
   return (
     <aside className={cmMerge(effectiveTableOfContents ? 'w-64' : 'w-32', 'hidden shrink-0 xl:block')}>
-      <div className="sticky top-16">
-        <div className="relative h-[calc(100svh-16*var(--spacing))] overflow-y-auto overflow-x-hidden pt-10 pb-8">
+      <div className="sticky top-14">
+        <div className="relative h-[calc(100svh-14*var(--spacing))] overflow-y-auto overflow-x-hidden pt-10 pb-8">
           {effectiveTableOfContents
             ? effectiveHeadings.length > 0 && (
                 <>
@@ -200,7 +34,7 @@ export const TableOfContents = ({
                   </p>
                   <nav aria-label="On this page" className="mb-12">
                     <ul>
-                      {effectiveHeadings.map((heading, index) => (
+                      {effectiveHeadings.map((heading) => (
                         <li key={heading.id}>
                           <a
                             href={`#${heading.id}`}
@@ -209,13 +43,9 @@ export const TableOfContents = ({
                             className={cmMerge(
                               'cursor-pointer block border-l border-base-muted-light py-1.5 text-sm text-base-muted hover:border-primary-muted hover:text-base-content',
                               heading.depth > 2 ? 'pl-6' : 'pl-4',
-                              activeHeadingId
-                                ? activeHeadingId === heading.id
-                                  ? 'border-l-2 border-primary font-semibold text-base-content'
-                                  : ''
-                                : index === 0
-                                  ? 'border-l-2 border-primary font-semibold text-base-content'
-                                  : '',
+                              activeHeadingId === heading.id
+                                ? 'border-l-2 border-primary font-semibold text-base-content'
+                                : '',
                             )}
                           >
                             {heading.title}

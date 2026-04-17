@@ -1,0 +1,83 @@
+import cm, { cmMerge } from '@classmatejs/react'
+import { ChevronDown, TextSearch } from 'lucide-react'
+import { withSiteBaseUrl } from '../../../../shared/assets'
+import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown'
+import { useDocsGlobalContext } from '../../docsGlobalContext'
+import { Brand } from '../Brand'
+import AsideButtons from './AsideButtons'
+
+const StyledNav = cm.nav`
+  gap-4
+  flex-1 lg:pl-6 xl:pl-10 items-center justify-center
+`
+
+const StyledNavList = cm.ul`
+  inline-flex items-center gap-2 font-semibold 
+`
+
+interface LandingPageNavbarProps {
+  scheduleMegaMenuClose?: () => void
+  openMegaMenu: (id?: string) => void
+  toggleSearch: () => void
+  closeMegaMenu?: () => void
+}
+
+const LandingPageNavbar = ({
+  closeMegaMenu,
+  openMegaMenu,
+  scheduleMegaMenuClose,
+  toggleSearch,
+}: LandingPageNavbarProps) => {
+  const docs = useDocsGlobalContext()
+
+  return (
+    <div className="flex flex-1 gap-4 pt-3">
+      <div className="min-w-40">
+        <Brand brand={docs.brand} />
+      </div>
+      <StyledNav aria-label="Primary" className=" flex-1 flex">
+        <StyledNavList className=" justify-end">
+          {docs.navbarItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={withSiteBaseUrl(item.href)}
+                className={'block'}
+                onPointerEnter={() => openMegaMenu(item.id)}
+                onPointerLeave={scheduleMegaMenuClose}
+                onFocus={() => openMegaMenu(item.id)}
+                onBlur={scheduleMegaMenuClose}
+                onClick={closeMegaMenu}
+              >
+                <span
+                  className={cmMerge(
+                    'btn btn-ghost text-base lg:text-lg btn-sm lg:min-w-30 px-2 whitespace-nowrap tracking-tight',
+                  )}
+                >
+                  {renderInlineMarkdown(item.title)}
+                  <ChevronDown className="h-4 w-4 shrink-0" />
+                </span>
+              </a>
+            </li>
+          ))}
+          {docs.algolia ? (
+            <li>
+              <button
+                type="button"
+                onClick={toggleSearch}
+                className="btn btn-ghost btn-sm text-base lg:text-lg lg:min-w-30 px-2 whitespace-nowrap tracking-tight"
+              >
+                Search
+                <TextSearch className="h-4 w-4" />
+              </button>
+            </li>
+          ) : null}
+        </StyledNavList>
+      </StyledNav>
+      <div className="min-w-40">
+        <AsideButtons />
+      </div>
+    </div>
+  )
+}
+
+export default LandingPageNavbar
