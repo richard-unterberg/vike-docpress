@@ -27,7 +27,7 @@ export const MegaMenu = ({
   const [contentHeight, setContentHeight] = useState(0)
 
   useEffect(() => {
-    if (!visibleSectionId || visibleSectionElement === null) {
+    if (!isActive || !visibleSectionId || visibleSectionElement === null) {
       return
     }
 
@@ -50,7 +50,7 @@ export const MegaMenu = ({
     return () => {
       resizeObserver.disconnect()
     }
-  }, [visibleSectionElement, visibleSectionId])
+  }, [visibleSectionElement, visibleSectionId, isActive])
 
   return (
     <div
