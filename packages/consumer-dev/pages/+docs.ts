@@ -1,10 +1,11 @@
-import { defineDocsConfig } from '@unterberg/nivel/config'
+import type { DocsConfig } from '@unterberg/nivel'
 import { docsGraph } from '../docs/docs.graph'
 
-const docsConfig = defineDocsConfig({
+const docsConfig = {
   graph: docsGraph,
   siteTitle: 'telefunc',
   siteDescription: 'telefunc documentation',
+  siteUrl: 'https://telefunc.com',
   basePath: '/',
   contentDir: 'docs',
   theme: {
@@ -47,6 +48,6 @@ const docsConfig = defineDocsConfig({
       },
     ],
   },
-})
+} satisfies DocsConfig
 
 export default docsConfig

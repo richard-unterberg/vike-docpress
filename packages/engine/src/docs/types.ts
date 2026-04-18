@@ -112,6 +112,7 @@ export type DocsGraph = {
 export type DocsConfig = {
   siteTitle: string
   siteDescription?: string
+  siteUrl?: string
   basePath: string
   contentDir?: string
   graph: DocsGraph

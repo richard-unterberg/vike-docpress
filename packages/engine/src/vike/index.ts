@@ -8,6 +8,7 @@ import type { DocsConfig } from '../docs/types.js'
 import { getCodeBlockMdxPlugins } from '../mdx/code-blocks/index.js'
 import { rehypeDocsHeadings } from '../mdx/plugins/rehypeDocsHeadings.js'
 import { nivelPagesPlugin } from '../runtime/node/index.js'
+import { createNivelSitemapPlugins } from './sitemap.js'
 
 process.env.VIKE_CRAWL ??= JSON.stringify({ git: false })
 
@@ -29,6 +30,13 @@ const viteConfig: UserConfig = {
   ssr: {
     noExternal: ['@unterberg/nivel'],
   },
+}
+
+const getConsumerViteConfig = (docsConfig: DocsConfig) => {
+  return {
+    ...viteConfig,
+    plugins: [...(viteConfig.plugins ?? []), ...createNivelSitemapPlugins(docsConfig)],
+  } satisfies UserConfig
 }
 
 const getDefaultConsumerDataTheme = (docsConfig: DocsConfig) => {
@@ -66,5 +74,6 @@ export const createNivelVikeConfig = (docsConfig: DocsConfig) => {
       'data-theme': getDefaultConsumerDataTheme(docsConfig),
     },
     prerender: true,
+    vite: getConsumerViteConfig(docsConfig) as Record<string, unknown>,
   } as Config
 }

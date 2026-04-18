@@ -22,6 +22,8 @@ pnpm add -D vite typescript @types/react @types/react-dom
 
 `vike` and `vite` are peer dependencies. The package exposes a local `nivel` binary after install.
 
+Set `siteUrl` in `pages/+docs.ts` to enable automatic `sitemap.xml` and `robots.txt` generation. V1 includes canonical docs routes from the docs graph plus normal filesystem-routed consumer pages. Consumer routes remapped only through custom `+route.ts` files are not included automatically.
+
 ## Quick Start
 
 Scaffold a consumer:
@@ -108,6 +110,7 @@ const docsConfig = defineDocsConfig({
   graph: docsGraph,
   siteTitle: 'My Docs',
   siteDescription: 'Documentation site powered by @unterberg/nivel.',
+  siteUrl: 'https://docs.example.com',
   basePath: '/docs',
 })
 
@@ -117,25 +120,14 @@ export default docsConfig
 `pages/+config.ts`
 
 ```ts
-import nivel from '@unterberg/nivel/vike'
+import { createNivelVikeConfig } from '@unterberg/nivel/vike'
 import type { Config } from 'vike/types'
-import vikeReact from 'vike-react/config'
 import docsConfig from './+docs'
 
 export { config }
 
-const themePreference = docsConfig.theme?.defaultPreference ?? 'light'
-const dataTheme =
-  themePreference === 'dark'
-    ? (docsConfig.theme?.dark ?? 'consumer-dark')
-    : (docsConfig.theme?.light ?? 'consumer-light')
-
 const config: Config = {
-  ...nivel,
-  extends: [vikeReact],
-  title: docsConfig.siteTitle,
-  description: docsConfig.siteDescription ?? `${docsConfig.siteTitle} documentation`,
-  htmlAttributes: { 'data-theme': dataTheme },
+  ...createNivelVikeConfig(docsConfig),
   prerender: true,
 }
 ```

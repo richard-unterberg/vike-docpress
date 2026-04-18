@@ -16,7 +16,7 @@ npm run dev
 The fixture keeps the consumer shell files visible in `pages/`, but uses the recommended helper APIs:
 
 - `defineDocsConfig()` and `defineDocsGraph()` from `@unterberg/nivel/config` for authored config
-- `@unterberg/nivel/vike` spread into a normal-looking `pages/+config.ts`
+- `createNivelVikeConfig(docsConfig)` from `@unterberg/nivel/vike` for engine-owned Vike wiring
 - `nivel prepare` for generated docs routes
 
 Tailwind and CSS remain hand-authored in the consumer.
