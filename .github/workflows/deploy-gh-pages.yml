@@ -9,12 +9,17 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout Repository
@@ -41,13 +46,16 @@ jobs:
       - name: Build Page
         run: pnpm --filter ./packages/consumer-dev build
 
+      - name: Upload GitHub Pages Artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./packages/consumer-dev/dist/client
+
       - name: Deploy to GitHub Pages
         if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/consumer-dev/dist/client
-          cname: nivel-docs.de
+        id: deployment
+        uses: actions/deploy-pages@v4
 
       - name: Purge Bunny Pull Zone Cache
         if: github.ref == 'refs/heads/master'
