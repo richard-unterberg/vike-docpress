@@ -1,11 +1,34 @@
 import { cmMerge } from '@classmatejs/react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { usePageContext } from 'vike-react/usePageContext'
 import { getDocsIconMapKey } from '../../../../docs/icons.js'
 import type { ResolvedDocsSection } from '../../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown.js'
-import { LayoutComponent } from '../LayoutComponent.js'
 import { useDocsGlobalContext } from '../../docsGlobalContext.js'
+import { LayoutComponent } from '../LayoutComponent.js'
+
+const findActiveItemId = (section: ResolvedDocsSection | undefined, currentHref: string): string | undefined => {
+  if (!section) {
+    return undefined
+  }
+
+  for (const item of section.items) {
+    if (item.href === currentHref) {
+      return item.id
+    }
+
+    if (item.kind === 'group') {
+      for (const child of item.items) {
+        if (child.href === currentHref) {
+          return child.id
+        }
+      }
+    }
+  }
+
+  return undefined
+}
 
 export const MegaMenu = ({
   isActive,
@@ -25,9 +48,19 @@ export const MegaMenu = ({
   isLandingPage: boolean
 }) => {
   const docs = useDocsGlobalContext()
+  const { urlPathname } = usePageContext()
   const visibleSectionId = hoveredSectionId ?? activeSectionId ?? sections[0]?.id
   const [visibleSectionElement, setVisibleSectionElement] = useState<HTMLDivElement | null>(null)
   const [contentHeight, setContentHeight] = useState(0)
+
+  const activeItemId = useMemo(
+    () =>
+      findActiveItemId(
+        sections.find((section) => section.id === visibleSectionId),
+        urlPathname,
+      ),
+    [sections, visibleSectionId, urlPathname],
+  )
 
   useEffect(() => {
     if (!isActive || !visibleSectionId || visibleSectionElement === null) {
@@ -104,7 +137,10 @@ export const MegaMenu = ({
                         <li key={child.id} className="flex-1 py-3 mb-6 px-4">
                           {child.href ? (
                             <a
-                              className="mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight"
+                              className={cmMerge(
+                                'mb-4 flex items-center gap-2 text-lg font-semibold tracking-tight',
+                                activeItemId === child.id && 'text-primary!',
+                              )}
                               href={withSiteBaseUrl(child.href)}
                             >
                               {ChildIcon ? <ChildIcon className="size-4 shrink-0" aria-hidden="true" /> : null}
@@ -124,7 +160,14 @@ export const MegaMenu = ({
                                 return (
                                   <li key={subChild.id}>
                                     {subChild.href ? (
-                                      <a href={withSiteBaseUrl(subChild.href)} onClick={onClose}>
+                                      <a
+                                        className={cmMerge(
+                                          'text-base-muted hover:text-base-content',
+                                          activeItemId === subChild.id && 'text-primary! font-semibold',
+                                        )}
+                                        href={withSiteBaseUrl(subChild.href)}
+                                        onClick={onClose}
+                                      >
                                         <span className="flex items-center gap-2">
                                           {SubChildIcon ? (
                                             <SubChildIcon className="size-4 shrink-0" aria-hidden="true" />

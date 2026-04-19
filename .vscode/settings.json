@@ -6,6 +6,9 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
   // dont show (nivel-generated) files in the search results, but still show them in the file explorer
   "search.exclude": {
     "**/nivel-generated/**": true
