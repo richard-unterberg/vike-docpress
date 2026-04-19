@@ -7,6 +7,16 @@ const fail = (message) => {
   process.exit(1)
 }
 
+const readResponsePayload = async (response) => {
+  const contentType = response.headers.get('content-type') ?? ''
+
+  if (contentType.includes('application/json')) {
+    return await response.json()
+  }
+
+  return await response.text()
+}
+
 if (!apiKey) {
   fail('Missing BUNNY_API_KEY.')
 }
@@ -21,6 +31,8 @@ if (!cacheTag) {
 
 const runPullZonePurge = async () => {
   const requestUrl = `https://api.bunny.net/pullzone/${encodeURIComponent(pullZoneId)}/purgeCache`
+  console.log(`Calling Bunny purge endpoint for pull zone ${pullZoneId} with cache tag "${cacheTag}".`)
+
   const response = await fetch(requestUrl, {
     method: 'POST',
     headers: {
@@ -30,18 +42,16 @@ const runPullZonePurge = async () => {
     body: JSON.stringify({ CacheTag: cacheTag }),
   })
 
+  const payload = await readResponsePayload(response)
+
   if (!response.ok) {
-    const responseText = await response.text()
-    fail(`Bunny pull-zone purge failed with ${response.status} ${response.statusText}: ${responseText}`)
+    fail(
+      `Bunny pull-zone purge failed with ${response.status} ${response.statusText}: ${typeof payload === 'string' ? payload : JSON.stringify(payload)}`,
+    )
   }
 
-  const responseText = await response.text()
-
-  console.log(
-    responseText
-      ? `Purged Bunny cache tag "${cacheTag}" for pull zone ${pullZoneId}: ${responseText}`
-      : `Purged Bunny cache tag "${cacheTag}" for pull zone ${pullZoneId}.`,
-  )
+  console.log(`Bunny purge response status: ${response.status} ${response.statusText}`)
+  console.log(`Bunny purge response payload: ${typeof payload === 'string' ? payload : JSON.stringify(payload)}`)
 }
 
 await runPullZonePurge()
