@@ -164,10 +164,12 @@ test('syncGeneratedDocsPages reads custom contentDir and emits custom route file
     assert.equal(introRoute, 'export default "/guide/intro"\n')
     assert.equal(aliasRoute, 'export default "/guide/start"\n')
     assert.match(globalContext, /"basePath": "\/guide"/)
-    assert.match(
-      globalContext,
-      /import \{ BadgeDollarSign, BookOpen, FileText, FolderOpen, SquareTerminal \} from '@unterberg\/nivel\/icons'/,
-    )
+    assert.doesNotMatch(globalContext, /@unterberg\/nivel\/icons/)
+    assert.match(globalContext, /const BadgeDollarSign = createDocsIcon\(/)
+    assert.match(globalContext, /const BookOpen = createDocsIcon\(/)
+    assert.match(globalContext, /const FileText = createDocsIcon\(/)
+    assert.match(globalContext, /const FolderOpen = createDocsIcon\(/)
+    assert.match(globalContext, /const SquareTerminal = createDocsIcon\(/)
     assert.match(globalContext, /"section:docs": BookOpen/)
     assert.match(globalContext, /"group:getting-started": FolderOpen/)
     assert.match(globalContext, /"page:intro": FileText/)

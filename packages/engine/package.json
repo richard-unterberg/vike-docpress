@@ -72,10 +72,11 @@
     "./tailwind-sources.css": "./tailwind-sources.css"
   },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "node --import tsx --test tests/*.test.mjs tests/*.test.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "generate:icons": "node ./scripts/generate-icons-entry.mjs",
+    "build": "pnpm generate:icons && tsup",
+    "dev": "pnpm generate:icons && tsup --watch",
+    "test": "pnpm generate:icons && node --import tsx --test tests/*.test.mjs tests/*.test.ts",
+    "typecheck": "pnpm generate:icons && tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@brillout/shiki-transformers": "^4.0.2",

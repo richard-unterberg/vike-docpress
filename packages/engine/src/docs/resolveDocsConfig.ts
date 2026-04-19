@@ -23,7 +23,7 @@ import type {
 } from './types.js'
 import { assertDocsIconName } from './icons.js'
 
-export const isExternalHref = (value: string) => {
+const isExternalHref = (value: string) => {
   return /^(?:[a-z]+:)?\/\//i.test(value) || value.startsWith('mailto:') || value.startsWith('tel:')
 }
 
@@ -492,49 +492,4 @@ export const getResolvedPageById = (config: { pages: ResolvedDocsPage[] }, pageI
     throw new Error(`Unknown docs page id "${pageId}".`)
   }
   return page
-}
-
-export const getResolvedSectionById = (
-  config: { sections?: ResolvedDocsSection[]; sidebarSections?: ResolvedDocsSection[] },
-  sectionId: string,
-) => {
-  const sections = config.sections ?? config.sidebarSections ?? []
-  return sections.find((section) => section.id === sectionId) ?? null
-}
-
-export const getResolvedPageByPathname = (config: { pages: ResolvedDocsPage[] }, pathname: string) => {
-  const normalizedPathname = normalizePathname(pathname)
-
-  return (
-    config.pages.find((page) => {
-      if (normalizePathname(page.href) === normalizedPathname) {
-        return true
-      }
-
-      return page.aliasHrefs.some((aliasHref) => normalizePathname(aliasHref) === normalizedPathname)
-    }) ?? null
-  )
-}
-
-export const getActiveSectionByPathname = (
-  config: { pages: ResolvedDocsPage[]; sections?: ResolvedDocsSection[]; sidebarSections?: ResolvedDocsSection[] },
-  pathname: string,
-) => {
-  const activePage = getResolvedPageByPathname(config, pathname)
-
-  if (!activePage) {
-    return null
-  }
-
-  return getResolvedSectionById(config, activePage.sectionId)
-}
-
-export const isSamePagePathname = (page: Pick<ResolvedDocsPage, 'href' | 'aliasHrefs'>, pathname: string) => {
-  const normalizedPathname = normalizePathname(pathname)
-
-  if (normalizePathname(page.href) === normalizedPathname) {
-    return true
-  }
-
-  return page.aliasHrefs.some((aliasHref) => normalizePathname(aliasHref) === normalizedPathname)
 }

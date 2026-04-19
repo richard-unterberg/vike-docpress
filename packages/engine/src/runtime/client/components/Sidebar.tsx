@@ -2,8 +2,8 @@ import { cmMerge } from '@classmatejs/react'
 import type { ReactNode } from 'react'
 import { memo, useEffect, useRef } from 'react'
 import type { LucideIcon } from 'lucide-react'
-import { getDocsIconMapKey } from '../../../docs/icons.js'
-import { getActiveSectionByPathname } from '../../../docs/resolveDocsConfig.js'
+import { getDocsIconMapKey } from '../../../docs/iconKeys.js'
+import { getActiveSectionByPathname } from '../../../docs/runtime.js'
 import type {
   DocsIconMap,
   ResolvedDocsSection,

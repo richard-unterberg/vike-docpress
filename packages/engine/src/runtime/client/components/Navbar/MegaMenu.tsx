@@ -1,7 +1,7 @@
 import { cmMerge } from '@classmatejs/react'
 import { useEffect, useMemo, useState } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { getDocsIconMapKey } from '../../../../docs/icons.js'
+import { getDocsIconMapKey } from '../../../../docs/iconKeys.js'
 import type { ResolvedDocsSection } from '../../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown.js'

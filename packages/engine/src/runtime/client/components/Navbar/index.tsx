@@ -1,7 +1,7 @@
 import cm from '@classmatejs/react'
 import { useEffect, useState } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
-import { getActiveSectionByPathname } from '../../../../docs/resolveDocsConfig'
+import { getActiveSectionByPathname } from '../../../../docs/runtime'
 import { useDocsGlobalContext } from '../../docsGlobalContext'
 import { useDocsSearchActions } from '../../store/runtime-store'
 import { LayoutComponent } from '../LayoutComponent'

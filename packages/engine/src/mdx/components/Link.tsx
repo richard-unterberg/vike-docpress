@@ -1,6 +1,6 @@
 import { cmMerge } from '@classmatejs/react'
 import type { ComponentPropsWithoutRef, ReactNode } from 'react'
-import { isExternalHref } from '../../docs/resolveDocsConfig.js'
+import { isExternalHref } from '../../docs/runtime.js'
 import { withSiteBaseUrl } from '../../shared/assets.js'
 import { useUniversalMdxRuntime } from './UniversalMdxProvider.js'
 

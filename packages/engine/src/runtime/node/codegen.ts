@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { extractDocHeadings } from '../../docs/docHeadings.js'
 import { getResolvedPageById, resolveDocsConfig } from '../../docs/resolveDocsConfig.js'
@@ -10,9 +11,18 @@ import type {
   DocsIconName,
   ResolvedSidebarNode,
 } from '../../docs/types.js'
-import { getDocsIconMapKey } from '../../docs/icons.js'
+import { getDocsIconMapKey } from '../../docs/iconKeys.js'
 
 const GENERATED_DIRNAME = '(nivel-generated)'
+const require = createRequire(import.meta.url)
+const lucidePackageRoot = path.dirname(require.resolve('lucide-react/package.json'))
+const lucideEsmEntryPath = path.join(lucidePackageRoot, 'dist', 'esm', 'lucide-react.js')
+const lucideEsmIconsDirectoryPath = path.join(lucidePackageRoot, 'dist', 'esm', 'icons')
+
+type GeneratedDocsIconNode = [tagName: string, attrs: Record<string, string>][]
+
+let lucideIconModuleNameByExportName: Map<string, string> | null = null
+const lucideIconNodeByName = new Map<DocsIconName, GeneratedDocsIconNode>()
 
 const writeFileIfChanged = (filePath: string, source: string) => {
   const current = fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf8') : null
@@ -139,6 +149,123 @@ const getGeneratedIconMapSource = (entries: IconEntry[]) => {
   return ['{', ...entries.map(({ iconKey, iconName }) => `  ${JSON.stringify(iconKey)}: ${iconName},`), '}'].join('\n')
 }
 
+const getLucideIconModuleNameByExportName = () => {
+  if (lucideIconModuleNameByExportName) {
+    return lucideIconModuleNameByExportName
+  }
+
+  const lucideEntrySource = fs.readFileSync(lucideEsmEntryPath, 'utf8')
+  const exportMap = new Map<string, string>()
+  const exportPattern = /export\s+\{\s*([\s\S]*?)\s*\}\s+from\s+'\.\/icons\/([^']+)\.js';/g
+
+  for (const match of lucideEntrySource.matchAll(exportPattern)) {
+    const exportsSource = match[1]
+    const moduleName = match[2]
+
+    if (!exportsSource || !moduleName) {
+      continue
+    }
+
+    for (const exportPart of exportsSource.split(',').map((value) => value.trim())) {
+      const exportMatch = /^default as (\w+)$/.exec(exportPart)
+
+      if (!exportMatch?.[1]) {
+        continue
+      }
+
+      exportMap.set(exportMatch[1], moduleName)
+    }
+  }
+
+  lucideIconModuleNameByExportName = exportMap
+  return exportMap
+}
+
+const getDocsIconNode = (iconName: DocsIconName) => {
+  const cachedIconNode = lucideIconNodeByName.get(iconName)
+
+  if (cachedIconNode) {
+    return cachedIconNode
+  }
+
+  const moduleName = getLucideIconModuleNameByExportName().get(iconName)
+
+  if (!moduleName) {
+    throw new Error(`Unable to resolve lucide-react module for docs icon "${iconName}".`)
+  }
+
+  const iconModuleSource = fs.readFileSync(path.join(lucideEsmIconsDirectoryPath, `${moduleName}.js`), 'utf8')
+  const iconNodeMatch = /const __iconNode = (\[[\s\S]*?\]);\s*const /.exec(iconModuleSource)
+
+  if (!iconNodeMatch?.[1]) {
+    throw new Error(`Unable to read lucide-react icon node for docs icon "${iconName}".`)
+  }
+
+  const iconNode = Function(`"use strict"; return (${iconNodeMatch[1]})`)() as GeneratedDocsIconNode
+  lucideIconNodeByName.set(iconName, iconNode)
+  return iconNode
+}
+
+const getGeneratedIconDefinitionsSource = (iconNames: DocsIconName[]) => {
+  if (iconNames.length === 0) {
+    return []
+  }
+
+  const definitions = iconNames.flatMap((iconName) => {
+    return [`const ${iconName} = createDocsIcon(${JSON.stringify(getDocsIconNode(iconName))})`, '']
+  })
+
+  return [
+    "import { createElement, forwardRef, type SVGProps } from 'react'",
+    '',
+    'type DocsGeneratedIconProps = SVGProps<SVGSVGElement> & {',
+    '  size?: string | number',
+    '  absoluteStrokeWidth?: boolean',
+    '}',
+    '',
+    'type DocsGeneratedIconNode = [tagName: string, attrs: Record<string, string>][]',
+    '',
+    'const docsGeneratedIconSvgAttrs = {',
+    "  xmlns: 'http://www.w3.org/2000/svg',",
+    "  fill: 'none',",
+    "  viewBox: '0 0 24 24',",
+    "  stroke: 'currentColor',",
+    '  strokeWidth: 2,',
+    "  strokeLinecap: 'round',",
+    "  strokeLinejoin: 'round',",
+    '} as const',
+    '',
+    'const createDocsIcon = (iconNode: DocsGeneratedIconNode) => {',
+    '  return forwardRef<SVGSVGElement, DocsGeneratedIconProps>(',
+    '    ({ color = "currentColor", size = 24, strokeWidth = 2, absoluteStrokeWidth, children, ...props }, ref) => {',
+    "      const resolvedSize = typeof size === 'number' ? size : Number(size)",
+    '      const resolvedStrokeWidth =',
+    '        absoluteStrokeWidth && Number.isFinite(resolvedSize) && resolvedSize > 0',
+    '          ? (Number(strokeWidth) * 24) / resolvedSize',
+    '          : strokeWidth',
+    '',
+    '      return createElement(',
+    "        'svg',",
+    '        {',
+    '          ...docsGeneratedIconSvgAttrs,',
+    '          ...props,',
+    '          ref,',
+    '          width: size,',
+    '          height: size,',
+    '          stroke: color,',
+    '          strokeWidth: resolvedStrokeWidth,',
+    '        },',
+    '        ...iconNode.map(([tagName, attrs]) => createElement(tagName, attrs)),',
+    '        children,',
+    '      )',
+    '    },',
+    '  )',
+    '}',
+    '',
+    ...definitions,
+  ]
+}
+
 const getGeneratedGlobalContextSource = (data: DocsGlobalContextSerializableData) => {
   const iconEntries = data.sidebarSections.flatMap((section) => {
     const sectionIconEntries = section.icon
@@ -151,7 +278,7 @@ const getGeneratedGlobalContextSource = (data: DocsGlobalContextSerializableData
 
   return [
     "import type { DocsGlobalContextData, DocsGlobalContextSerializableData, DocsIconMap } from '@unterberg/nivel'",
-    ...(iconImports.length > 0 ? [`import { ${iconImports.join(', ')} } from '@unterberg/nivel/icons'`] : []),
+    ...getGeneratedIconDefinitionsSource(iconImports),
     '',
     `const docsGlobalContextSerializableData: DocsGlobalContextSerializableData = ${serializeData(data)}`,
     '',

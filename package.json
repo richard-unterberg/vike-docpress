@@ -19,7 +19,7 @@
     "typecheck": "pnpm --filter @unterberg/nivel build && pnpm --filter @unterberg/nivel typecheck && pnpm --filter ./packages/consumer-dev typecheck",
     "lint": "biome lint --write .",
     "format": "biome format --write .",
-    "check:knip": "pnpm knip",
+    "check:knip": "pnpm --filter @unterberg/nivel generate:icons && pnpm knip",
     "deploy:npm": "node ./scripts/deployNpm.mjs",
     "test:engine": "cd packages/engine && pnpm test",
     "prepare": "lefthook install",

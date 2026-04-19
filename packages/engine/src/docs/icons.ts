@@ -3,8 +3,6 @@ import * as lucideIcons from 'lucide-react'
 
 type LucideModule = typeof import('lucide-react')
 
-type DocsIconKind = 'group' | 'page' | 'section'
-
 export type DocsIconName = {
   [Key in keyof LucideModule]: LucideModule[Key] extends LucideIcon ? Key : never
 }[keyof LucideModule]
@@ -30,10 +28,6 @@ const docsIconNameSet = new Set<string>(docsIconNames)
 
 const isDocsIconName = (value: string): value is DocsIconName => {
   return docsIconNameSet.has(value)
-}
-
-export const getDocsIconMapKey = (kind: DocsIconKind, id: string) => {
-  return `${kind}:${id}`
 }
 
 export const assertDocsIconName = (value: string, context: string) => {

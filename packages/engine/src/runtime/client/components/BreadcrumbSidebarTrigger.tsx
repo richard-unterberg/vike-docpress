@@ -1,6 +1,6 @@
 import { ChevronLast, ChevronsRight } from 'lucide-react'
 import { useCallback } from 'react'
-import { getActiveSectionByPathname } from '../../../docs/resolveDocsConfig.js'
+import { getActiveSectionByPathname } from '../../../docs/runtime.js'
 import type { ResolvedSidebarNode } from '../../../docs/types.js'
 import { renderInlineMarkdown } from '../../../shared/renderInlineMarkdown.js'
 import { useDocsGlobalContext } from '../docsGlobalContext.js'

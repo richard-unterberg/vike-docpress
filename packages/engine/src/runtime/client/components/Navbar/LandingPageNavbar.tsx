@@ -1,7 +1,7 @@
 import cm, { cmMerge } from '@classmatejs/react'
 import { ChevronDown, Menu, TextSearch } from 'lucide-react'
 import { useCallback } from 'react'
-import { getDocsIconMapKey } from '../../../../docs/icons.js'
+import { getDocsIconMapKey } from '../../../../docs/iconKeys.js'
 import { withSiteBaseUrl } from '../../../../shared/assets'
 import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown'
 import { useDocsGlobalContext } from '../../docsGlobalContext'

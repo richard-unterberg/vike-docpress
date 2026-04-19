@@ -9,9 +9,9 @@ import {
   getActiveSectionByPathname,
   getResolvedPageByPathname,
   getResolvedSectionById,
-  resolveDocsHref,
   isSamePagePathname,
-} from '../../docs/resolveDocsConfig.js'
+  resolveDocsHref,
+} from '../../docs/runtime.js'
 import { docsCodeBlockChoiceStore } from './store/settings-store.js'
 
 const isExternalHref = (href: string) => {
