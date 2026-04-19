@@ -64,6 +64,10 @@ jobs:
           BUNNY_PULL_ZONE_ID: ${{ secrets.BUNNY_PULL_ZONE_ID }}
         run: pnpm purge:bunny
 
+      - name: Sleep to Ensure Cache Purge Propagates
+        if: github.ref == 'refs/heads/master'
+        run: sleep 10
+
       - name: Warm Bunny Cache from Sitemap
         if: github.ref == 'refs/heads/master'
         env:
