@@ -1,6 +1,5 @@
 const apiKey = process.env.BUNNY_API_KEY?.trim()
 const pullZoneId = process.env.BUNNY_PULL_ZONE_ID?.trim()
-const cacheTag = process.env.BUNNY_CACHE_TAG?.trim()
 
 const fail = (message) => {
   console.error(message)
@@ -25,21 +24,15 @@ if (!pullZoneId) {
   fail('Missing BUNNY_PULL_ZONE_ID.')
 }
 
-if (!cacheTag) {
-  fail('Missing BUNNY_CACHE_TAG.')
-}
-
 const runPullZonePurge = async () => {
   const requestUrl = `https://api.bunny.net/pullzone/${encodeURIComponent(pullZoneId)}/purgeCache`
-  console.log(`Calling Bunny purge endpoint for pull zone ${pullZoneId} with cache tag "${cacheTag}".`)
+  console.log(`Calling Bunny purge endpoint for pull zone ${pullZoneId}.`)
 
   const response = await fetch(requestUrl, {
     method: 'POST',
     headers: {
       AccessKey: apiKey,
-      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ CacheTag: cacheTag }),
   })
 
   const payload = await readResponsePayload(response)
