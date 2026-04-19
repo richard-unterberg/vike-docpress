@@ -102,6 +102,8 @@ test('root route bases and docs-local href resolution avoid malformed slashes', 
 })
 
 test('basePath and contentDir validation fail fast for invalid values', () => {
+  assert.equal(resolveDocsConfig(createDocsConfig()).robots, true)
+  assert.equal(resolveDocsConfig(createDocsConfig({ robots: false })).robots, false)
   assert.equal(resolveDocsConfig(createDocsConfig({ basePath: '/guide/' })).basePath, '/guide')
   assert.equal(resolveDocsConfig(createDocsConfig({ contentDir: './docs/content' })).contentDir, 'docs/content')
   assert.throws(() => resolveDocsConfig(createDocsConfig({ basePath: 'guide' })))
@@ -163,6 +165,7 @@ test('syncGeneratedDocsPages reads custom contentDir and emits custom route file
 
     assert.equal(introRoute, 'export default "/guide/intro"\n')
     assert.equal(aliasRoute, 'export default "/guide/start"\n')
+    assert.match(globalContext, /"robots": true/)
     assert.match(globalContext, /"basePath": "\/guide"/)
     assert.doesNotMatch(globalContext, /@unterberg\/nivel\/icons/)
     assert.match(globalContext, /const BadgeDollarSign = createDocsIcon\(/)

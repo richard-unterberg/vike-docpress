@@ -212,6 +212,10 @@ const resolveFooterConfig = (footer: DocsFooterConfig | undefined) => {
   }
 }
 
+const resolveRobotsConfig = (robots: DocsConfig['robots']) => {
+  return robots ?? true
+}
+
 const resolveBrandConfig = (brand: DocsBrandConfig | undefined, siteTitle: string): ResolvedDocsBrandConfig => {
   const text = brand?.text ?? siteTitle
 
@@ -471,6 +475,7 @@ export const resolveDocsConfig = (config: DocsConfig): ResolvedDocsConfig => {
   return {
     siteTitle: config.siteTitle,
     siteDescription: config.siteDescription ?? null,
+    robots: resolveRobotsConfig(config.robots),
     basePath: normalizedBasePath,
     contentDir: normalizedContentDir,
     theme: resolveThemeConfig(config.theme),

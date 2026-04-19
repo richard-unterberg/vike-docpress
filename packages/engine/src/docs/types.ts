@@ -120,6 +120,7 @@ export type DocsConfig = {
   siteTitle: string
   siteDescription?: string
   siteUrl?: string
+  robots?: boolean
   basePath: string
   contentDir?: string
   graph: DocsGraph
@@ -228,6 +229,7 @@ export type ResolvedNavbarItem = {
 export type ResolvedDocsConfig = {
   siteTitle: string
   siteDescription: string | null
+  robots: boolean
   basePath: string
   contentDir: string
   theme: Required<DocsThemeConfig>
@@ -249,6 +251,7 @@ export type DocsIconMap = Partial<Record<string, LucideIcon>>
 export type DocsGlobalContextSerializableData = Pick<
   ResolvedDocsConfig,
   | 'siteTitle'
+  | 'robots'
   | 'basePath'
   | 'theme'
   | 'footer'

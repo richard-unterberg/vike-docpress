@@ -6,6 +6,7 @@ const docsConfig = {
   siteTitle: 'telefunc',
   siteDescription: 'telefunc documentation',
   siteUrl: 'https://nivel-docs.de',
+  robots: false,
   basePath: '/',
   contentDir: 'docs',
   theme: {

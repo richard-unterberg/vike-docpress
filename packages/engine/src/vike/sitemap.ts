@@ -157,8 +157,12 @@ const getSitemapXml = (entries: SitemapEntry[]) => {
   ].join('\n')
 }
 
-const getRobotsTxtContent = (siteUrl: string) => {
-  return ['User-agent: *', 'Disallow: /cdn-cgi/', `Sitemap: ${siteUrl}/${SITEMAP_FILENAME}`].join('\n')
+const getRobotsTxtContent = (options: { siteUrl: string; allowCrawlers: boolean }) => {
+  if (!options.allowCrawlers) {
+    return ['User-agent: *', 'Disallow: /'].join('\n')
+  }
+
+  return ['User-agent: *', 'Disallow: /cdn-cgi/', `Sitemap: ${options.siteUrl}/${SITEMAP_FILENAME}`].join('\n')
 }
 
 const getSitemapArtifacts = (options: { rootDir: string; docsConfig: DocsConfig }) => {
@@ -198,7 +202,10 @@ const getSitemapArtifacts = (options: { rootDir: string; docsConfig: DocsConfig 
   })
 
   return {
-    robotsTxt: getRobotsTxtContent(siteUrl),
+    robotsTxt: getRobotsTxtContent({
+      siteUrl,
+      allowCrawlers: options.docsConfig.robots ?? true,
+    }),
     sitemapXml: getSitemapXml(sitemapEntries),
   }
 }

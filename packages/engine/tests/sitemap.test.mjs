@@ -109,6 +109,36 @@ test('sitemap output uses canonical docs URLs and robots references the correct 
   }
 })
 
+test('robots false disallows all crawlers and omits sitemap discovery hints', async () => {
+  const rootDir = createTempRoot()
+
+  try {
+    writeFile(path.join(rootDir, 'docs', 'content', 'intro', 'content.mdx'), '# Intro\n')
+
+    await withCwd(rootDir, async () => {
+      const config = createNivelVikeConfig({
+        basePath: '/docs',
+        graph: createDocsGraph(),
+        robots: false,
+        siteTitle: 'My Docs',
+        siteUrl: 'https://docs.example.com/base',
+      })
+      const sitemapPlugin = getPlugin(config, 'nivel-sitemap-plugin')
+
+      await runCloseBundle(sitemapPlugin)
+    })
+
+    const robots = fs.readFileSync(path.join(rootDir, 'dist', 'client', 'robots.txt'), 'utf8')
+
+    assert.match(robots, /^User-agent: \*$/m)
+    assert.match(robots, /^Disallow: \/$/m)
+    assert.doesNotMatch(robots, /Disallow: \/cdn-cgi\//)
+    assert.doesNotMatch(robots, /Sitemap:/)
+  } finally {
+    fs.rmSync(rootDir, { force: true, recursive: true })
+  }
+})
+
 test('sitemap generation fails when docs canonical URLs clash with consumer filesystem pages', async () => {
   const rootDir = createTempRoot()
 

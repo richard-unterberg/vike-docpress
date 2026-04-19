@@ -22,7 +22,7 @@ pnpm add -D vite typescript @types/react @types/react-dom
 
 `vike` and `vite` are peer dependencies. The package exposes a local `nivel` binary after install.
 
-Set `siteUrl` in `pages/+docs.ts` to enable automatic `sitemap.xml` and `robots.txt` generation. V1 includes canonical docs routes from the docs graph plus normal filesystem-routed consumer pages. Consumer routes remapped only through custom `+route.ts` files are not included automatically.
+Set `siteUrl` in `pages/+docs.ts` to enable automatic `sitemap.xml` and `robots.txt` generation. Set `robots: false` to emit `noindex, nofollow` and a disallow-all `robots.txt`. V1 includes canonical docs routes from the docs graph plus normal filesystem-routed consumer pages. Consumer routes remapped only through custom `+route.ts` files are not included automatically.
 
 ## Quick Start
 
@@ -111,6 +111,7 @@ const docsConfig = {
   siteTitle: 'My Docs',
   siteDescription: 'Documentation site powered by @unterberg/nivel.',
   siteUrl: 'https://docs.example.com',
+  // robots: false,
   basePath: '/docs',
 } satisfies DocsConfig
 

@@ -394,6 +394,7 @@ export const syncGeneratedDocsPages = (options: { rootDir: string; docsConfig: D
 
   const globalContextData: DocsGlobalContextSerializableData = {
     siteTitle: resolved.siteTitle,
+    robots: resolved.robots,
     basePath: resolved.basePath,
     theme: resolved.theme,
     footer: resolved.footer,
