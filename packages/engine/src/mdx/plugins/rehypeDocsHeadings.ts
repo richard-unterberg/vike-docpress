@@ -97,7 +97,7 @@ export const rehypeDocsHeadings = () => {
               'stroke-linecap': 'round',
               'stroke-linejoin': 'round',
               'aria-hidden': 'true',
-              className: ['w-4 h-4 hidden group-hover:block group-focus-within:block translate-x-5'],
+              className: ['size-4 hidden group-hover:block group-focus-within:block translate-x-5'],
             },
             children: [
               createLinkIconLine(4, 9, 20, 9),

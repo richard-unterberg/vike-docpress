@@ -29,7 +29,7 @@ export const TableOfContents = ({
             ? effectiveHeadings.length > 0 && (
                 <>
                   <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-base-muted">
-                    <TableOfContentsIcon className="h-3 w-3" />
+                    <TableOfContentsIcon className="size-3" />
                     On this page
                   </p>
                   <nav aria-label="On this page" className="mb-12">
@@ -72,7 +72,7 @@ const Adbar = ({ partners }: { partners: ResolvedDocsPartnersConfig }) => {
   return (
     <aside>
       <p className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-base-muted">
-        <Flame className="h-3 w-3" />
+        <Flame className="size-3" />
         Partners
       </p>
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(5.5rem,1fr))] gap-3 opacity-90">

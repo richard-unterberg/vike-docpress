@@ -38,7 +38,7 @@ const TableOfContentsMobile = ({
               {pageTitle}
             </span>
             <span className="label flex" aria-hidden="true">
-              <TableOfContents className="w-4 h-4" />
+              <TableOfContents className="size-4" />
             </span>
             <select
               id={selectId}

@@ -32,9 +32,9 @@ const PaginationCard = ({ item, direction, isOffset }: PaginationCardProps) => {
             isPrevious ? 'justify-start' : 'justify-end',
           )}
         >
-          {isPrevious && <ChevronLeft className="h-4 w-4" />}
+          {isPrevious && <ChevronLeft className="size-4" />}
           <span>{isPrevious ? 'Previous' : 'Next'}</span>
-          {!isPrevious && <ChevronRight className="h-4 w-4" />}
+          {!isPrevious && <ChevronRight className="size-4" />}
         </div>
       </div>
     </a>

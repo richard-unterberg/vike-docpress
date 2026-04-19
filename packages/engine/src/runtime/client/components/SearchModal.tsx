@@ -233,7 +233,7 @@ const SearchSuggestionBox = ({
             </span>
           ) : normalizedQuery ? null : (
             <span className="flex items-center gap-1">
-              <MessageCircleQuestion className="h-3 w-3 shrink-0" />
+              <MessageCircleQuestion className="size-3 shrink-0" />
               Type at least {MIN_QUERY_LENGTH} characters.
             </span>
           )}
@@ -241,7 +241,7 @@ const SearchSuggestionBox = ({
         {normalizedQuery ? (
           isError ? (
             <div className="flex items-center gap-2 rounded-box border border-warning/40 bg-base-100 p-4 text-sm text-base-muted shadow-md shadow-primary-muted-light">
-              <TriangleAlert className="h-4 w-4 shrink-0 text-warning" />
+              <TriangleAlert className="size-4 shrink-0 text-warning" />
               Search is temporarily unavailable.
             </div>
           ) : !canSearch ? (
@@ -262,7 +262,7 @@ const SearchSuggestionBox = ({
                         <div className="font-bold text-base-content">{result.title}</div>
                         {result.sectionTitle ? (
                           <div className="flex items-center gap-1 text-sm text-base-muted-medium">
-                            <ArrowRightFromLine className="h-3 w-3" /> {result.sectionTitle}
+                            <ArrowRightFromLine className="size-3" /> {result.sectionTitle}
                           </div>
                         ) : null}
                       </div>

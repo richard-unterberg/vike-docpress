@@ -70,7 +70,7 @@ const LandingPageNavbar = ({
                     {renderInlineMarkdown(item.title)}
                     <ChevronDown
                       className={cmMerge(
-                        'h-4 w-4 shrink-0 transition-transform duration-200',
+                        'size-4 shrink-0 transition-transform duration-200',
                         isMegaMenuItemActive ? 'rotate-180' : 'rotate-0',
                       )}
                     />
@@ -87,7 +87,7 @@ const LandingPageNavbar = ({
                 className="btn btn-ghost btn-sm text-base lg:text-lg lg:min-w-30 px-2 whitespace-nowrap tracking-tight"
               >
                 Search
-                <TextSearch className="h-4 w-4" />
+                <TextSearch className="size-4" />
               </button>
             </li>
           ) : null}

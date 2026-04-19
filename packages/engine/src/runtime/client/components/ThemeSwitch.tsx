@@ -15,8 +15,8 @@ export const ThemeSwitch = ({ theme }: { theme: Required<DocsThemeConfig> }) => 
       onClick={() => setThemePreference(effectiveThemePreference === 'light' ? 'dark' : 'light')}
       className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-base-muted-light bg-base-200"
     >
-      <Sun className="h-4 w-4 dark:hidden" />
-      <Moon className="hidden h-4 w-4 dark:block" />
+      <Sun className="size-4 dark:hidden" />
+      <Moon className="hidden size-4 dark:block" />
     </button>
   )
 }

@@ -30,7 +30,7 @@ export const Features = () => {
         <FeatureBox>
           <FeatureHeading>
             <span className="h-fit">
-              <img src={`${baseAssets}brands/typescript.svg`} alt="TypeScript" className="w-5 h-5" />
+              <img src={`${baseAssets}brands/typescript.svg`} alt="TypeScript" className="size-5" />
               <span className="sr-only">TypeScript</span>
             </span>
             Type-Safe by definition

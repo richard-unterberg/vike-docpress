@@ -1,3 +1,5 @@
+import type { LucideIcon } from 'lucide-react'
+
 export type DocsCollapsible = {
   isDefaultOpen?: boolean
 }
@@ -101,6 +103,7 @@ export type DocsSectionNode = {
   navTitle?: string
   href?: string
   items: DocsSidebarNode[]
+  icon?: LucideIcon
 }
 
 export type DocsSidebarNode = DocsGroupNode | DocsPageNode
