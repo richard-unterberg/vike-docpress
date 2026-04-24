@@ -29,12 +29,6 @@ const linkWorkspaceEngine = (rootDir) => {
   fs.symlinkSync(path.join(repoRoot, 'packages', 'engine'), path.join(targetDir, 'nivel'))
 }
 
-const createDocsContent = (rootDir) => {
-  const filePath = path.join(rootDir, 'docs', 'content', 'getting-started', 'content.mdx')
-  fs.mkdirSync(path.dirname(filePath), { recursive: true })
-  fs.writeFileSync(filePath, '# Getting started\n')
-}
-
 test('nivel init creates visible consumer files and standard scripts', () => {
   const rootDir = createTempRoot({
     name: 'consumer-app',
@@ -64,6 +58,7 @@ test('nivel init creates visible consumer files and standard scripts', () => {
   assert.equal(fs.existsSync(path.join(rootDir, 'pages', '+Wrapper.tsx')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'pages', '+docs.ts')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'docs', 'docs.graph.ts')), true)
+  assert.equal(fs.existsSync(path.join(rootDir, 'docs', 'content', 'getting-started', 'content.mdx')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'global.d.ts')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'styles', 'global.css')), true)
   assert.equal(fs.existsSync(path.join(rootDir, 'styles', 'theme.css')), true)
@@ -144,7 +139,6 @@ test('nivel prepare warns when the Tailwind bootstrap contract is missing', () =
   const initResult = runCli(['init', '--root', rootDir], repoRoot)
   assert.equal(initResult.status, 0, initResult.stderr)
 
-  createDocsContent(rootDir)
   fs.rmSync(path.join(rootDir, 'styles', 'global.css'))
 
   const result = runCli(['prepare', '--root', rootDir], repoRoot)

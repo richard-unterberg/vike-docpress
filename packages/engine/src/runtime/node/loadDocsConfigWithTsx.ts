@@ -1,16 +1,9 @@
-import { pathToFileURL } from 'node:url'
-import { register } from 'tsx/esm/api'
+import { require as tsxRequire } from 'tsx/cjs/api'
 import { loadDocsConfig } from './loadDocsConfig.js'
 
 export const loadDocsConfigWithTsx = async (rootDir: string) => {
-  const unregister = register()
-
-  try {
-    return await loadDocsConfig({
-      rootDir,
-      loadModule: async (modulePath) => import(pathToFileURL(modulePath).href),
-    })
-  } finally {
-    await unregister()
-  }
+  return loadDocsConfig({
+    rootDir,
+    loadModule: async (modulePath) => tsxRequire(modulePath, import.meta.url),
+  })
 }

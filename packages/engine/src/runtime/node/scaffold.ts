@@ -92,6 +92,21 @@ const getDocsGraphTemplate = () => {
   ].join('\n')
 }
 
+const getGettingStartedTemplate = () => {
+  return [
+    '# Getting Started',
+    '',
+    'This page is scaffolded by `nivel init` and wired through `docs/docs.graph.ts`.',
+    '',
+    '## Next steps',
+    '',
+    '- Update `pages/+docs.ts` with your site metadata.',
+    '- Expand `docs/docs.graph.ts` with your docs structure.',
+    '- Replace this page with your real getting-started guide.',
+    '',
+  ].join('\n')
+}
+
 const getConfigTemplate = () => {
   return [
     "import { createNivelVikeConfig } from '@unterberg/nivel/vike'",
@@ -356,6 +371,7 @@ const getManagedFileEntries = () => {
     ['vite.config.ts', getViteConfigTemplate()],
     ['pages/+docs.ts', getDocsConfigTemplate()],
     ['docs/docs.graph.ts', getDocsGraphTemplate()],
+    ['docs/content/getting-started/content.mdx', getGettingStartedTemplate()],
     ['pages/+config.ts', getConfigTemplate()],
     ['pages/+Head.tsx', getHeadTemplate()],
     ['pages/+Layout.tsx', getLayoutTemplate()],
