@@ -1,6 +1,6 @@
 import fs from 'node:fs'
-import { createRequire } from 'node:module'
 import path from 'node:path'
+import * as lucideIcons from 'lucide-react'
 import { extractDocHeadings } from '../../docs/docHeadings.js'
 import { getDocsIconMapKey } from '../../docs/iconKeys.js'
 import { getResolvedPageById, resolveDocsConfig } from '../../docs/resolveDocsConfig.js'
@@ -14,16 +14,17 @@ import type {
 } from '../../docs/types.js'
 
 const GENERATED_DIRNAME = '(nivel-generated)'
-const require = createRequire(import.meta.url)
-const lucidePackageRoot = path.dirname(require.resolve('lucide-react/package.json'))
-const lucideIconsDirectoryCandidates = [
-  path.join(lucidePackageRoot, 'dist', 'esm', 'icons'),
-  path.join(lucidePackageRoot, 'dist', 'icons'),
-]
 
 type GeneratedDocsIconNode = [tagName: string, attrs: Record<string, string>][]
+type LucideIconComponent = {
+  render: (props: Record<string, unknown>, ref: null) => LucideIconElement
+}
+type LucideIconElement = {
+  props?: {
+    iconNode?: GeneratedDocsIconNode
+  }
+}
 
-let lucideIconsDirectoryPath: string | null = null
 const lucideIconNodeByName = new Map<DocsIconName, GeneratedDocsIconNode>()
 
 const writeFileIfChanged = (filePath: string, source: string) => {
@@ -151,40 +152,6 @@ const getGeneratedIconMapSource = (entries: IconEntry[]) => {
   return ['{', ...entries.map(({ iconKey, iconName }) => `  ${JSON.stringify(iconKey)}: ${iconName},`), '}'].join('\n')
 }
 
-const getLucideIconsDirectoryPath = () => {
-  if (lucideIconsDirectoryPath) {
-    return lucideIconsDirectoryPath
-  }
-
-  for (const candidatePath of lucideIconsDirectoryCandidates) {
-    if (fs.existsSync(candidatePath)) {
-      lucideIconsDirectoryPath = candidatePath
-      return candidatePath
-    }
-  }
-
-  throw new Error('Unable to locate lucide-react icons directory.')
-}
-
-const toLucideIconKey = (value: string) => {
-  return value
-    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .replace(/([A-Za-z])([0-9])/g, '$1-$2')
-    .toLowerCase()
-}
-
-const getLucideIconKeyCandidates = (iconName: DocsIconName) => {
-  const rawCandidates = [
-    iconName,
-    iconName.replace(/^Lucide/, ''),
-    iconName.replace(/Icon$/, ''),
-    iconName.replace(/^Lucide/, '').replace(/Icon$/, ''),
-  ]
-
-  return [...new Set(rawCandidates.filter(Boolean).map(toLucideIconKey))]
-}
-
 const getDocsIconNode = (iconName: DocsIconName) => {
   const cachedIconNode = lucideIconNodeByName.get(iconName)
 
@@ -192,22 +159,17 @@ const getDocsIconNode = (iconName: DocsIconName) => {
     return cachedIconNode
   }
 
-  const modulePath = getLucideIconKeyCandidates(iconName)
-    .map((iconKey) => path.join(getLucideIconsDirectoryPath(), `${iconKey}.js`))
-    .find((candidatePath) => fs.existsSync(candidatePath))
-
-  if (!modulePath) {
-    throw new Error(`Unable to resolve lucide-react module for docs icon "${iconName}".`)
+  const iconComponent = lucideIcons[iconName as keyof typeof lucideIcons] as unknown as LucideIconComponent | undefined
+  if (!iconComponent || typeof iconComponent !== 'object' || !('render' in iconComponent)) {
+    throw new Error(`Unable to resolve lucide-react export for docs icon "${iconName}".`)
   }
 
-  const iconModuleSource = fs.readFileSync(modulePath, 'utf8')
-  const iconNodeMatch = /const __iconNode = (\[[\s\S]*?\]);\s*const /.exec(iconModuleSource)
-
-  if (!iconNodeMatch?.[1]) {
+  const iconElement = iconComponent.render({}, null) as LucideIconElement
+  const iconNode = iconElement.props?.iconNode
+  if (!iconNode) {
     throw new Error(`Unable to read lucide-react icon node for docs icon "${iconName}".`)
   }
 
-  const iconNode = Function(`"use strict"; return (${iconNodeMatch[1]})`)() as GeneratedDocsIconNode
   lucideIconNodeByName.set(iconName, iconNode)
   return iconNode
 }
