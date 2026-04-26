@@ -1,14 +1,14 @@
 export { MermaidDiagram }
 
 import { cmMerge } from '@classmatejs/react'
-import mermaid from 'mermaid'
 import { useEffect, useId, useState } from 'react'
 
 let isMermaidInitialized = false
+let mermaidModulePromise: Promise<typeof import('mermaid').default> | null = null
 const MERMAID_SVG_CLASS_NAME = 'nivel-mermaid-svg'
 const MERMAID_ROOT_CLASS_NAME = 'nivel-mermaid'
 
-const MERMAID_THEME_CSS = `
+const MERMAID_SVG_OVERRIDE_CSS = `
 .${MERMAID_SVG_CLASS_NAME} {
   font-family: var(--font-sans);
 }
@@ -53,22 +53,30 @@ const MERMAID_THEME_CSS = `
 }
 `
 
-const ensureMermaidInitialized = () => {
+const loadMermaid = async () => {
+  mermaidModulePromise ??= import('mermaid').then((module) => module.default)
+  return mermaidModulePromise
+}
+
+const ensureMermaidInitialized = async () => {
+  const mermaid = await loadMermaid()
+
   if (isMermaidInitialized) {
-    return
+    return mermaid
   }
 
   mermaid.initialize({
     startOnLoad: false,
     suppressErrorRendering: true,
     theme: 'base',
-    themeCSS: MERMAID_THEME_CSS,
   })
   isMermaidInitialized = true
+
+  return mermaid
 }
 
-const addClassNameToSvg = (svg: string) => {
-  return svg.replace(/<svg\b([^>]*?)>/, (match, attributes: string) => {
+const decorateSvg = (svg: string) => {
+  const svgWithClassName = svg.replace(/<svg\b([^>]*?)>/, (match, attributes: string) => {
     const classMatch = attributes.match(/\sclass="([^"]*)"/)
     if (classMatch) {
       const mergedClassNames = `${classMatch[1]} ${MERMAID_SVG_CLASS_NAME}`.trim()
@@ -77,6 +85,8 @@ const addClassNameToSvg = (svg: string) => {
 
     return `<svg${attributes} class="${MERMAID_SVG_CLASS_NAME}" data-mermaid-graphic="">`
   })
+
+  return svgWithClassName.replace('</svg>', `<style>${MERMAID_SVG_OVERRIDE_CSS}</style></svg>`)
 }
 
 const MermaidDiagram = ({ className, source }: { className?: string; source: string }) => {
@@ -89,14 +99,14 @@ const MermaidDiagram = ({ className, source }: { className?: string; source: str
 
     const renderDiagram = async () => {
       try {
-        ensureMermaidInitialized()
+        const mermaid = await ensureMermaidInitialized()
         const { svg: renderedSvg } = await mermaid.render(`nivel-mermaid-${diagramId}`, source)
 
         if (!isActive) {
           return
         }
 
-        setSvg(addClassNameToSvg(renderedSvg))
+        setSvg(decorateSvg(renderedSvg))
         setError(null)
       } catch (renderError) {
         if (!isActive) {
