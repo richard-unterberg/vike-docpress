@@ -66,7 +66,7 @@ const LandingPageNavbar = ({
                 >
                   <span
                     className={cmMerge(
-                      'btn btn-ghost text-base lg:text-lg btn-sm lg:min-w-30 px-2 whitespace-nowrap tracking-tight',
+                      'btn btn-ghost text-base btn-sm lg:min-w-30 px-2 whitespace-nowrap tracking-tight',
                     )}
                   >
                     {ItemIcon ? <ItemIcon className="size-4 shrink-0" aria-hidden="true" /> : null}
@@ -87,7 +87,7 @@ const LandingPageNavbar = ({
               <button
                 type="button"
                 onClick={toggleSearch}
-                className="btn btn-ghost btn-sm text-base lg:text-lg lg:min-w-30 px-2 whitespace-nowrap tracking-tight"
+                className="btn btn-ghost btn-sm text-base lg:min-w-30 px-2 whitespace-nowrap tracking-tight"
               >
                 Search
                 <TextSearch className="size-4" />
