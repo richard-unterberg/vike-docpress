@@ -43,9 +43,7 @@ export const TableOfContents = ({
                             className={cmMerge(
                               'cursor-pointer block border-l border-base-muted-light py-1.5 text-sm text-base-muted hover:border-primary-muted hover:text-base-content',
                               heading.depth > 2 ? 'pl-6' : 'pl-4',
-                              activeHeadingId === heading.id
-                                ? 'border-l-2 border-primary font-semibold text-base-content'
-                                : '',
+                              activeHeadingId === heading.id ? 'border-l-2 border-primary text-base-content' : '',
                             )}
                           >
                             {heading.title}

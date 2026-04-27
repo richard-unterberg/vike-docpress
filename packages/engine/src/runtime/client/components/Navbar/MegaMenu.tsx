@@ -2,7 +2,7 @@ import { cmMerge } from '@classmatejs/react'
 import { useEffect, useMemo, useState } from 'react'
 import { usePageContext } from 'vike-react/usePageContext'
 import { getDocsIconMapKey } from '../../../../docs/iconKeys.js'
-import type { ResolvedDocsSection } from '../../../../docs/types.js'
+import type { ResolvedDocsSection, ResolvedSidebarPage } from '../../../../docs/types.js'
 import { withSiteBaseUrl } from '../../../../shared/assets.js'
 import { renderInlineMarkdown } from '../../../../shared/renderInlineMarkdown.js'
 import { useDocsGlobalContext } from '../../docsGlobalContext.js'
@@ -156,23 +156,25 @@ export const MegaMenu = ({
                             <ul className="menu border-l border-base-muted-light py-0 w-full">
                               {child.items.map((subChild) => {
                                 const SubChildIcon = docs.docsIconMap[getDocsIconMapKey(subChild.kind, subChild.id)]
+                                // @todo: this is not clean, since it can be also a group -> we should create a separate type for items in the mega menu
+                                const typedChild = subChild as ResolvedSidebarPage
 
                                 return (
-                                  <li key={subChild.id}>
-                                    {subChild.href ? (
+                                  <li key={typedChild.id}>
+                                    {typedChild.href ? (
                                       <a
                                         className={cmMerge(
                                           'text-base-muted hover:text-base-content',
-                                          activeItemId === subChild.id && 'text-primary! font-semibold',
+                                          activeItemId === typedChild.id && 'text-primary! font-semibold',
                                         )}
-                                        href={withSiteBaseUrl(subChild.href)}
+                                        href={withSiteBaseUrl(typedChild.href)}
                                         onClick={onClose}
                                       >
                                         <span className="flex items-center gap-2">
                                           {SubChildIcon ? (
                                             <SubChildIcon className="size-4 shrink-0" aria-hidden="true" />
                                           ) : null}
-                                          <span>{renderInlineMarkdown(subChild.title)}</span>
+                                          <span>{renderInlineMarkdown(typedChild?.navTitle || typedChild.title)}</span>
                                         </span>
                                       </a>
                                     ) : (
@@ -180,7 +182,7 @@ export const MegaMenu = ({
                                         {SubChildIcon ? (
                                           <SubChildIcon className="size-4 shrink-0" aria-hidden="true" />
                                         ) : null}
-                                        <span>{renderInlineMarkdown(subChild.title)}</span>
+                                        <span>{renderInlineMarkdown(typedChild?.navTitle || typedChild.title)}</span>
                                       </span>
                                     )}
                                   </li>
