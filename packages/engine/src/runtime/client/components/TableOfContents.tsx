@@ -41,9 +41,9 @@ export const TableOfContents = ({
                             aria-current={activeHeadingId === heading.id ? 'location' : undefined}
                             onClick={() => setActiveHeadingId(heading.id)}
                             className={cmMerge(
-                              'cursor-pointer block border-l border-base-muted-light py-1.5 text-sm text-base-muted hover:border-primary-muted hover:text-base-content',
+                              'cursor-pointer block border-l-2 border-base-muted-light py-1.5 text-sm text-base-muted hover:border-primary-muted hover:text-base-content',
                               heading.depth > 2 ? 'pl-6' : 'pl-4',
-                              activeHeadingId === heading.id ? 'border-l-2 border-primary text-base-content' : '',
+                              activeHeadingId === heading.id ? 'border-primary text-base-content' : '',
                             )}
                           >
                             {heading.title}
