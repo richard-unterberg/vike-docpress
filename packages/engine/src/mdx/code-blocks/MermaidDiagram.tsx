@@ -150,12 +150,10 @@ const MermaidDiagram = ({ className, source }: { className?: string; source: str
         data-mermaid-diagram=""
         data-mermaid-status="loading"
       >
-        <div className="rounded-box border border-base-muted-light bg-base-muted-superlight/70 px-4 py-10 text-center text-sm text-base-content/70">
+        <div className="px-4 py-10 text-center text-sm flex gap-2 items-center justify-center">
+          <span className="loading loading-spinner loading-md"></span>
           Rendering diagram...
         </div>
-        <pre className="doc-code-pre m-0 overflow-x-auto bg-base-200! p-4 text-sm">
-          <code>{source}</code>
-        </pre>
       </div>
     )
   }
