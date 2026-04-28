@@ -1,0 +1,12 @@
+```mermaid render=true
+flowchart TD
+  Section["Section"]
+  Group["Group"]
+  SubGroup["Group"]
+  Page["Page"]
+
+  Section -->|contains| Group
+  Section -->|contains| Page
+  Group -->|contains| SubGroup
+  Group -->|contains| Page
+```

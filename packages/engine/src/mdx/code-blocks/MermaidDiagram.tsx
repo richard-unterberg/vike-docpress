@@ -29,28 +29,17 @@ const getMermaidSvgOverrideCss = (diagramId: string) => `
 #${diagramId} .nodeLabel *,
 #${diagramId} .cluster-label text,
 #${diagramId} .label text {
-  fill: var(--nivel-mermaid-node-text, var(--color-base-content));
+  background-color: transparent;
+  fill: transparent;
   color: var(--nivel-mermaid-node-text, var(--color-base-content));
 }
 
 #${diagramId} .edgeLabel,
 #${diagramId} .edgeLabel *,
 #${diagramId} .edgeLabel span,
-#${diagramId} .edgeLabel p,
-#${diagramId} .label foreignObject,
-#${diagramId} .label div,
-#${diagramId} .label div span,
-#${diagramId} .label div p {
+#${diagramId} .edgeLabel p {
   background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
   color: var(--nivel-mermaid-edge-label-text, var(--nivel-mermaid-node-text, var(--color-base-content)));
-}
-
-#${diagramId} .edgeLabel .labelBkg,
-#${diagramId} .label .labelBkg,
-#${diagramId} .label rect {
-  background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
-  fill: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
-  background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
 }
 
 #${diagramId} .edgePath .path,
