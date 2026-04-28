@@ -41,13 +41,14 @@ const getMermaidSvgOverrideCss = (diagramId: string) => `
 #${diagramId} .label div,
 #${diagramId} .label div span,
 #${diagramId} .label div p {
-  fill: var(--nivel-mermaid-edge-label-text, var(--nivel-mermaid-node-text, var(--color-base-content)));
+  background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
   color: var(--nivel-mermaid-edge-label-text, var(--nivel-mermaid-node-text, var(--color-base-content)));
 }
 
 #${diagramId} .edgeLabel .labelBkg,
 #${diagramId} .label .labelBkg,
 #${diagramId} .label rect {
+  background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
   fill: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
   background-color: var(--nivel-mermaid-edge-label-fill, var(--color-base-100));
 }
