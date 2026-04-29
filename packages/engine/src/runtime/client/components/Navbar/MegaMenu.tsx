@@ -364,8 +364,6 @@ const MegaMenuGroupColumn = ({
   const visibleItems = getVisibleGroupItems(item)
   const GroupIcon = docsIconMap[getDocsIconMapKey('group', item.id)]
   const isActive = groupHref === currentHref || containsActiveHref(item.items, currentHref)
-  const isCollapsible = item.collapsible !== undefined
-  const isOpen = openGroupId === item.id
 
   if (!item.title) {
     return (
@@ -393,7 +391,7 @@ const MegaMenuGroupColumn = ({
       href={groupHref ?? undefined}
       icon={GroupIcon}
       isActive={isActive}
-      className={cmMerge(!isCollapsible && 'mb-4', 'text-lg font-semibold tracking-tight')}
+      className="mb-4 text-lg font-semibold tracking-tight"
       onClose={onClose}
     />
   )
@@ -411,44 +409,6 @@ const MegaMenuGroupColumn = ({
         depth={1}
       />
     ) : null
-
-  if (isCollapsible) {
-    return (
-      <li className="mb-6 flex-1 px-4 py-3">
-        <ul className="w-full p-0">
-          <li>
-            <details
-              open={isOpen}
-              onToggle={(event) => {
-                if (event.target !== event.currentTarget) {
-                  return
-                }
-
-                if (!event.nativeEvent.isTrusted) {
-                  return
-                }
-
-                const isOpening = event.currentTarget.open
-                if (isOpening) {
-                  onOpenGroupChange(item.id)
-                  onContentHeightChange(true)
-                  return
-                }
-
-                if (openGroupId === item.id) {
-                  onOpenGroupChange(null)
-                  onContentHeightChange(false)
-                }
-              }}
-            >
-              <summary className="rounded-field mb-4 flex min-h-0 items-center px-0 py-1.5">{title}</summary>
-              {nestedItems}
-            </details>
-          </li>
-        </ul>
-      </li>
-    )
-  }
 
   return (
     <li className="mb-6 flex-1 px-4 py-3">
