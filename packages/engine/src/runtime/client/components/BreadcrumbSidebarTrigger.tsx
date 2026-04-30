@@ -1,3 +1,4 @@
+import { cmMerge } from '@classmatejs/react'
 import { ChevronLast, ChevronsRight } from 'lucide-react'
 import { useCallback } from 'react'
 import { getActiveSectionByPathname } from '../../../docs/runtime.js'
@@ -55,14 +56,14 @@ const BreadcrumbSidebarTrigger = ({ currentHref }: { currentHref: string }) => {
   }, [])
 
   return (
-    <button className="cursor-pointer min-w-0 max-w-full block" type="button" onClick={handleClick}>
+    <button className="cursor-pointer min-w-0 max-w-full block " type="button" onClick={handleClick}>
       <span className="flex items-center gap-1 min-w-0 overflow-hidden lg:hidden">
         <ChevronLast className="size-4 shrink-0 text-primary" />
         <span className="flex items-center gap-1">
           {breadcrumbItems.map((item, index) => (
             <span key={item.id} className="contents">
               {index > 0 ? <ChevronsRight className="size-4 shrink-0 text-base-muted-medium" /> : null}
-              <span className={index === 0 ? 'font-semibold truncate' : 'text-sm truncate'}>
+              <span className={cmMerge(index === 0 && 'font-semibold', 'text-sm truncate')}>
                 {renderInlineMarkdown(item.title, { codeClassName: 'text-sm!' })}
               </span>
             </span>

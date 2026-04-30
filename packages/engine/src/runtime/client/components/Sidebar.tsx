@@ -59,7 +59,7 @@ const SidebarPageLink = ({ title, href, currentHref, icon: Icon }: SidebarPageLi
         href={withSiteBaseUrl(href)}
         className={cmMerge(
           'rounded-field py-2 text-base-muted hover:text-base-content justify-start hover:bg-base-200',
-          href === currentHref && 'text-primary! font-semibold bg-base-200',
+          href === currentHref && 'text-primary! bg-base-200',
         )}
       >
         <span className="flex items-center gap-2">
@@ -92,14 +92,9 @@ interface SidebarGroupTitleProps {
 
 const SidebarGroupTitle = ({ title, href, isActive, allowNavigation = false, icon: Icon }: SidebarGroupTitleProps) => {
   const content = (
-    <span className="flex items-center gap-2">
+    <span className="flex items-center gap-2 font-base">
       {Icon ? <Icon className="size-4 shrink-0" aria-hidden="true" /> : null}
-      <span
-        className={cmMerge(
-          allowNavigation ? 'font-medium' : 'font-semibold',
-          isActive && allowNavigation && 'text-primary!',
-        )}
-      >
+      <span className={cmMerge(isActive && allowNavigation && 'text-primary!')}>
         {title ? renderInlineMarkdown(title, { codeClassName: 'text-sm!' }) : null}
       </span>
     </span>
@@ -111,7 +106,7 @@ const SidebarGroupTitle = ({ title, href, isActive, allowNavigation = false, ico
         href={withSiteBaseUrl(href)}
         className={cmMerge(
           'flex items-center gap-2 rounded-field py-2 text-base-muted hover:text-base-content no-underline',
-          isActive && 'text-primary! font-semibold',
+          isActive && 'text-primary!',
         )}
       >
         {content}
